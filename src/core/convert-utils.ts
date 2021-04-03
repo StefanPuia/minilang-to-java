@@ -42,6 +42,7 @@ export default class ConvertUtils {
     }
 
     public static importMap: Record<string, string> = {
+        "com.stannah.base.utils.MiscUtils": "MiscUtils",
         "java.lang.Long": "Long",
         "java.sql.Date": "Date",
         "java.sql.Time": "Time",
@@ -69,20 +70,27 @@ export default class ConvertUtils {
             "NewList": "new ArrayList<>()",
             "NewMap": "new HashMap<>()"
         } as Record<string, string>;
-        return valueMap[val] ?? "null";
+        return valueMap[val] ?? `"${val}"` ?? "null";
     }
 
-    public static parseFieldGetter(field: string = "") {
-        const { parameter } = field.match(/^parameters\.(?<parameter>\w.+)$/)?.groups ?? {};
-        if (parameter) {
-            return `parameters.get("${parameter}")`;
+    public static parseFieldGetter(field: string | undefined) {
+        if (typeof field === "undefined") {
+            return field;
         }
+        const { mapName, fieldName } = field.match(/^(?<mapName>\w.+?)\.(?<fieldName>\w.+)$/)?.groups ?? {};
+        if (mapName && fieldName) {
+            return `${mapName}.get("${fieldName}")`;
+        }
+        return field;
     }
-    public static parseFieldSetter(field: string = "", value: any) {
-        const { parameter } = field.match(/^parameters\.(?<parameter>\w.+)$/)?.groups ?? {};
-        if (parameter) {
-            return `parameters.set("${parameter}", ${value})`;
+    public static parseFieldSetter(field: string | undefined, value: any) {
+        if (typeof field === "undefined") {
+            return field;
         }
-        return null;
+        const { mapName, fieldName } = field.match(/^(?<mapName>\w.+?)\.(?<fieldName>\w.+)$/)?.groups ?? {};
+        if (mapName && fieldName) {
+            return `${mapName}.set("${fieldName}", ${value})`;
+        }
+        return `${field} = ${value}`;
     }
 }

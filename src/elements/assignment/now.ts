@@ -33,7 +33,7 @@ export class Now extends SetterElement {
     }
     protected getType(): string {
         if (this.attributes.type) {
-            return ConvertUtils.importMap[this.attributes.type] ?? "Timestamp";
+            return ConvertUtils.unqualify(this.attributes.type) ?? "Timestamp";
         }
         return "Timestamp";
     }

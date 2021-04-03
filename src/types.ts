@@ -29,7 +29,19 @@ export interface ValidChild {
 }
 
 export interface ValidChildren {
-    [tag: string]: ValidChild
-};
+    [tag: string]: ValidChild;
+}
 
 export type VariableContext = string[];
+
+export type Operator =
+    | "equals"
+    | "not-equals"
+    | "less"
+    | "less-equals"
+    | "greater"
+    | "greater-equals"
+    | "contains"
+    | "is-null"
+    | "is-not-null"
+    | "is-empty";

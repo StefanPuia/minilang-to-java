@@ -11,6 +11,10 @@ import { IfEmpty } from "../elements/conditional/if-empty";
 import { UnparsedElement } from "./unparsed";
 import { IfNotEmpty } from "../elements/conditional/if-not-empty";
 import { CallClassMethod } from "../elements/call/call-class-method";
+import { AddError } from "../elements/assignment/add-error";
+import { FailMessage } from "../elements/assignment/fail-message";
+import { FailProperty } from "../elements/assignment/fail-property";
+import { IfCompare } from "../elements/conditional/if-compare";
 
 export class ElementFactory {
     public static parse(self: XMLSchemaAnyElement, converter: Converter, parent?: Tag): Tag {
@@ -31,6 +35,12 @@ export class ElementFactory {
                 return new NowTimestamp(self, converter, parent);
             case "now-date-to-env":
                 return new NowDateToEnv(self, converter, parent);
+            case "add-error":
+                return new AddError(self, converter, parent);
+            case "fail-message":
+                return new FailMessage(self, converter, parent);
+            case "fail-property":
+                return new FailProperty(self, converter, parent);
 
             // conditions
             case "if-empty":
@@ -39,6 +49,8 @@ export class ElementFactory {
                 return new IfNotEmpty(self, converter, parent);
             case "else":
                 return new UnparsedElement(self, converter, parent);
+            case "if-compare":
+                return new IfCompare(self, converter, parent);
 
             // caller
             case "call-class-method":
