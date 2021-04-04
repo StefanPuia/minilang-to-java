@@ -4,9 +4,12 @@ import { SetterElement } from "./setter";
 
 export class Set extends SetterElement {
     protected attributes = this.attributes as SetAttributes;
+    protected getField(): string {
+        return this.attributes.field;
+    }
 
     public convert(): string[] {
-        return this.wrapIfConditions([this.wrapConvert(this.getWrappedAssigned())]);
+        return this.wrapIfConditions([...this.wrapConvert(this.getWrappedAssigned())]);
     }
 
     private getConditions() {

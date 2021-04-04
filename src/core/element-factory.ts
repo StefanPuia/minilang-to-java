@@ -15,6 +15,8 @@ import { AddError } from "../elements/assignment/add-error";
 import { FailMessage } from "../elements/assignment/fail-message";
 import { FailProperty } from "../elements/assignment/fail-property";
 import { IfCompare } from "../elements/conditional/if-compare";
+import { EntityOne } from "../elements/entity/entity-one";
+import { FieldMap } from "../elements/entity/field-map";
 
 export class ElementFactory {
     public static parse(self: XMLSchemaAnyElement, converter: Converter, parent?: Tag): Tag {
@@ -55,6 +57,12 @@ export class ElementFactory {
             // caller
             case "call-class-method":
                 return new CallClassMethod(self, converter, parent);
+
+            // entity
+            case "entity-one":
+                return new EntityOne(self, converter, parent);
+            case "field-map":
+                return new FieldMap(self, converter, parent);
 
             //
             default:

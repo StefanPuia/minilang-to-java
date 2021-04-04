@@ -2,6 +2,10 @@ import ConvertUtils from "../../core/convert-utils";
 import { BaseSetterAttributes, SetterElement } from "./setter";
 
 export class Now extends SetterElement {
+    protected getField(): string {
+        return this.attributes.field;
+    }
+
     protected attributes = this.attributes as NowAttributes;
 
     private getAssigned(): string {
@@ -39,7 +43,7 @@ export class Now extends SetterElement {
     }
 
     public convert(): string[] {
-        return [this.wrapConvert(this.getAssigned())];
+        return [...this.wrapConvert(this.getAssigned())];
     }
 }
 

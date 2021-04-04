@@ -53,10 +53,13 @@ export default class ConvertUtils {
         "java.util.Date": "java.util.Date",
         "org.ofbiz.base.util.UtilDateTime": "UtilDateTime",
         "org.ofbiz.base.util.UtilValidate": "UtilValidate",
-    }
+        "org.ofbiz.base.entity.GenericValue": "GenericValue",
+        "java.util.Map": "Map",
+        "java.util.HashMap": "HashMap",
+    };
 
     public static qualify(unqualified: string) {
-        return Object.entries(this.importMap).find(entry => entry[1] === unqualified)?.[0];
+        return Object.entries(this.importMap).find((entry) => entry[1] === unqualified)?.[0];
     }
 
     public static unqualify(qualified: string) {
@@ -66,9 +69,9 @@ export default class ConvertUtils {
 
     public static parseValue(val: string) {
         const valueMap = {
-            "null": "null",
-            "NewList": "new ArrayList<>()",
-            "NewMap": "new HashMap<>()"
+            null: "null",
+            NewList: "new ArrayList<>()",
+            NewMap: "new HashMap<>()",
         } as Record<string, string>;
         return valueMap[val] ?? `"${val}"` ?? "null";
     }
@@ -77,20 +80,37 @@ export default class ConvertUtils {
         if (typeof field === "undefined") {
             return field;
         }
-        const { mapName, fieldName } = field.match(/^(?<mapName>\w.+?)\.(?<fieldName>\w.+)$/)?.groups ?? {};
+        const { mapName, fieldName } =
+            field.match(/^(?<mapName>\w.+?)\.(?<fieldName>\w.+)$/)?.groups ?? {};
         if (mapName && fieldName) {
             return `${mapName}.get("${fieldName}")`;
         }
         return field;
     }
+
+    public static hasSetter(field: string | undefined) {
+        if (typeof field === "undefined") {
+            return false;
+        }
+        const { mapName, fieldName } = this.mapMatch(field);
+        return mapName && fieldName;
+    }
+
     public static parseFieldSetter(field: string | undefined, value: any) {
         if (typeof field === "undefined") {
             return field;
         }
-        const { mapName, fieldName } = field.match(/^(?<mapName>\w.+?)\.(?<fieldName>\w.+)$/)?.groups ?? {};
+        const { mapName, fieldName } = this.mapMatch(field);
         if (mapName && fieldName) {
             return `${mapName}.set("${fieldName}", ${value})`;
         }
         return `${field} = ${value}`;
+    }
+
+    public static mapMatch(field: string) {
+        const { mapName, fieldName } =
+            field.match(/^(?<mapName>\w.+?)\.(?<fieldName>\w.+)$/)?.groups ?? {};
+
+        return { mapName, fieldName };
     }
 }

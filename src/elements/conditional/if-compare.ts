@@ -1,3 +1,4 @@
+import ConvertUtils from "../../core/convert-utils";
 import { Operator, XMLSchemaElementAttributes } from "../../types";
 import { ConditionElement } from "./condition";
 
@@ -7,11 +8,11 @@ export class IfCompare extends ConditionElement {
     public convert(): string[] {
         return [
             `if (${this.getComparison(
-                this.attributes.field,
+                ConvertUtils.parseFieldGetter(this.attributes.field) ?? this.attributes.field,
                 this.attributes.operator,
-                this.attributes.value
+                ConvertUtils.parseValue(this.attributes.value)
             )}) {`,
-            ...this.convertChildren(),
+            ...this.convertChildren().map(this.prependIndentationMapper),
             ...this.getElseBlock(),
         ];
     }

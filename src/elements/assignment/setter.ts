@@ -5,14 +5,16 @@ import { Tag } from "../../core/tag";
 import { XMLSchemaAnyElement, XMLSchemaElementAttributes } from "../../types";
 
 export abstract class SetterElement extends ElementTag {
-    protected attributes = this.attributes as BaseSetterAttributes;
     protected declared = false;
+    protected mapName: string | undefined;
 
     constructor(tag: XMLSchemaAnyElement, converter: Converter, parent?: Tag) {
         super(tag, converter, parent);
-        this.declared = parent?.getVariableContext()?.includes(this.attributes.field) ?? false;
+        const { mapName } = ConvertUtils.mapMatch(this.getField());
+        this.mapName = mapName;
+        this.declared = parent?.getVariableContext()?.includes(mapName ?? this.getField()) ?? false;
         if (!this.declared) {
-            parent?.getVariableContext()?.push(this.attributes.field);
+            parent?.getVariableContext()?.push(mapName ?? this.getField());
         }
     }
 
@@ -21,20 +23,27 @@ export abstract class SetterElement extends ElementTag {
         return `${declaration}${assign}`;
     }
 
-    protected wrapConvert(assign: string) {
-        const hasSetter = ConvertUtils.parseFieldSetter(
-            this.attributes.field,
-            assign
-        );
+    private getMapDeclaration() {
+        if (this.mapName && !this.declared) {
+            this.converter.addImport("Map");
+            this.converter.addImport("HashMap");
+            return [`Map ${this.mapName} = new HashMap();`];
+        }
+        return [];
+    }
 
-        return (
-            (hasSetter ||
-                this.wrapDeclaration(`${this.attributes.field} = ${assign}`)) +
-            ";"
-        );
+    protected wrapConvert(assign: string): string[] {
+        const hasSetter = ConvertUtils.hasSetter(this.getField());
+        const setter = ConvertUtils.parseFieldSetter(this.getField(), assign);
+
+        return [
+            ...this.getMapDeclaration(),
+            `${hasSetter ? setter : this.wrapDeclaration(`${this.getField()} = ${assign}`)};`,
+        ];
     }
 
     protected abstract getType(): string;
+    protected abstract getField(): string;
 }
 
 export interface BaseSetterAttributes extends XMLSchemaElementAttributes {
