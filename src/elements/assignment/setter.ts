@@ -14,9 +14,20 @@ export abstract class SetterElement extends ElementTag {
         if (typeof field !== "undefined") {
             const { mapName } = ConvertUtils.mapMatch(field);
             this.mapName = mapName;
-            this.declared = parent?.getVariableContext()?.includes(mapName ?? field) ?? false;
-            if (!this.declared) {
-                parent?.getVariableContext()?.push(mapName ?? field);
+            const context = parent?.getVariableContext();
+            this.declared = !!context?.[mapName ?? field];
+            if (context) {
+                if (!this.declared) {
+                    const { type, params } = this.getBaseType();
+                    context[mapName ?? field] = {
+                        name: mapName ?? field,
+                        count: 1,
+                        type,
+                        typeParams: params,
+                    };
+                } else if (context[mapName ?? field]) {
+                    context[mapName ?? field].count++;
+                }
             }
         }
     }
@@ -54,8 +65,21 @@ export abstract class SetterElement extends ElementTag {
 
         return [
             ...this.getMapDeclaration(),
-            `${hasSetter ? setter : this.wrapDeclaration(`${this.getField()} = ${assign}`)};`,
+            `${
+                hasSetter
+                    ? setter
+                    : this.wrapDeclaration(`${this.getField()}${assign ? ` = ${assign}` : ""}`)
+            };`,
         ];
+    }
+
+    public getBaseType(): { type: string; params: string[] } {
+        const { type, params } =
+            (this.getType() ?? "").match(/^(?<type>\w+)(?:\<(?<params>.+?)\>)?$/)?.groups ?? {};
+        return {
+            type: type ?? this.getType(),
+            params: params && params.replace(/\s/g, "").split(",") || [],
+        };
     }
 
     public abstract getType(): string | undefined;

@@ -1,3 +1,4 @@
+import ConvertUtils from "../../core/convert-utils";
 import { ElementTag } from "../../core/element-tag";
 import { Operator } from "../../types";
 import { Else } from "./else";
@@ -14,6 +15,7 @@ export abstract class ConditionElement extends ElementTag {
     }
 
     protected getComparison(field: string, operator: Operator, value: string) {
+        const primitive = ConvertUtils.isPrimitive(value);
         switch (operator) {
             case "is-null":
                 return `${field} == null`;
@@ -25,17 +27,21 @@ export abstract class ConditionElement extends ElementTag {
             case "contains":
                 return `${field}.contains(${value})`;
             case "equals":
-                return `${value}.equals(${field})`;
+                if (value === "true") return field;
+                if (value === "false") return `!${field}`;
+                return primitive ? `${field} == ${value}` : `${value}.equals(${field})`;
             case "not-equals":
-                return `!${value}.equals(${field})`;
+                if (value === "true") return `!${field}`;
+                if (value === "false") return field;
+                return primitive ? `${field} != ${value}` : `!${value}.equals(${field})`;
             case "greater":
-                return `${field} > ${value}`;
+                return primitive ? `${field} > ${value}` : `${value}.compareTo(${field}) > 0`;
             case "greater-equals":
-                return `${field} >= ${value}`;
+                return primitive ? `${field} >= ${value}` : `${value}.compareTo(${field}) >= 0`;
             case "less":
-                return `${field} < ${value}`;
+                return primitive ? `${field} < ${value}` : `${value}.compareTo(${field}) < 0`;
             case "less-equals":
-                return `${field} <= ${value}`;
+                return primitive ? `${field} <= ${value}` : `${value}.compareTo(${field}) <= 0`;
         }
     }
 }

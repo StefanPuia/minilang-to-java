@@ -10,7 +10,10 @@ export class IfCompare extends ConditionElement {
             `if (${this.getComparison(
                 ConvertUtils.parseFieldGetter(this.attributes.field) ?? this.attributes.field,
                 this.attributes.operator,
-                ConvertUtils.parseValue(this.attributes.value)
+                this.converter.parseValueOrInitialize(
+                    this.getFieldType(),
+                    this.attributes.value
+                ) ?? this.converter.parseValue(this.attributes.value)
             )}) {`,
             ...this.convertChildren().map(this.prependIndentationMapper),
             ...this.getElseBlock(),
@@ -19,6 +22,11 @@ export class IfCompare extends ConditionElement {
 
     protected getUnsupportedAttributes() {
         return ["format"];
+    }
+
+    protected getFieldType() {
+        const variable = this.parent?.getVariableContext()?.[this.attributes.field];
+        return variable?.type ?? this.attributes.type;
     }
 }
 

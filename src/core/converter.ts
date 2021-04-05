@@ -20,13 +20,11 @@ export class Converter {
 
     private convert() {
         const parsed = ConvertUtils.parseXML(this.source);
-        const converted = parsed.elements
-            .map((parsed) => ElementFactory.parse(parsed, this)?.convert().join("\n") ?? "")
-            .join("\n");
+        const converted = ElementFactory.parseWithRoot(parsed, this);
         return [
             this.getImports(),
             this.newLine(),
-            converted,
+            ...converted,
             this.newLine(),
             this.getErrors(),
             this.getWarnings(),
@@ -106,6 +104,35 @@ export class Converter {
             case MethodMode.SERVICE:
                 return "_returnMap";
         }
+    }
+
+    public parseValue(val: string) {
+        switch (val) {
+            case "null":
+                return "null";
+            case "NewList":
+                this.addImport("ArrayList");
+                return "new ArrayList<>()";
+            case "NewMap":
+                this.addImport("HashMap");
+                return "new HashMap<>()";
+            default:
+                return val ? `"${val}"` : "null";
+        }
+    }
+
+    public parseValueOrInitialize(type?: string, value?: string): string | undefined {
+        switch (type) {
+            case "List":
+                this.addImport("ArrayList");
+                return "new ArrayList<>()";
+            case "Boolean":
+                if (value && ["true", "false"].includes(value)) {
+                    return value;
+                }
+                break;
+        }
+        if (value) return this.parseValue(value);
     }
 }
 

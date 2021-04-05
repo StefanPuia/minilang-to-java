@@ -3,7 +3,7 @@ import { MethodMode, StringBoolean, ValidChildren, VariableContext, XMLSchemaEle
 
 export class SimpleMethod extends ElementTag {
     protected attributes: SimpleMethodAttributes = this.attributes;
-    private variableContext: VariableContext = [];
+    private variableContext: VariableContext = {};
 
     public getValidChildren(): ValidChildren {
         return {};

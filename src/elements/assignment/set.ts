@@ -46,12 +46,15 @@ export class Set extends SetterElement {
         const from = ConvertUtils.parseFieldGetter(
             this.attributes.from ?? this.attributes["from-field"]
         );
-        const value = this.attributes.value;
+        const value = this.converter.parseValueOrInitialize(
+            this.getBaseType().type,
+            this.attributes.value
+        );
 
         if (from && value) {
-            return `${from} ? ${from} : "${ConvertUtils.parseValue(value)}"`;
+            return `${from} ? ${from} : ${value}`;
         }
-        return from ?? ConvertUtils.parseValue(value ?? "");
+        return from ?? value ?? "";
     }
 
     private getWrappedAssigned() {

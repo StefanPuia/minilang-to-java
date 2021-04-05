@@ -3,6 +3,7 @@ import { ClearField } from "../elements/assignment/clear-field";
 import { FailMessage } from "../elements/assignment/fail-message";
 import { FailProperty } from "../elements/assignment/fail-property";
 import { Field } from "../elements/assignment/field";
+import { FieldToList } from "../elements/assignment/field-to-list";
 import { FieldToResult } from "../elements/assignment/field-to-result";
 import { NowDateToEnv } from "../elements/assignment/now-date-to-env";
 import { NowTimestamp } from "../elements/assignment/now-timestamp";
@@ -22,9 +23,11 @@ import { IfEmpty } from "../elements/conditional/if-empty";
 import { IfNotEmpty } from "../elements/conditional/if-not-empty";
 import { EntityOne } from "../elements/entity/entity-one";
 import { FieldMap } from "../elements/entity/field-map";
+import { Iterate } from "../elements/loops/iterate";
+import { Root } from "../elements/root/root";
 import { SimpleMethod } from "../elements/root/simple-method";
 import { SimpleMethods } from "../elements/root/simple-methods";
-import { XMLSchemaAnyElement } from "../types";
+import { XMLSchema, XMLSchemaAnyElement } from "../types";
 import { Converter } from "./converter";
 import { Tag } from "./tag";
 import { UnparsedElement } from "./unparsed";
@@ -63,6 +66,8 @@ export class ElementFactory {
                 return new StringTag(self, converter, parent);
             case "field-to-result":
                 return new FieldToResult(self, converter, parent);
+            case "field-to-list":
+                return new FieldToList(self, converter, parent);
 
             // conditions
             case "if-empty":
@@ -73,6 +78,10 @@ export class ElementFactory {
                 return new UnparsedElement(self, converter, parent);
             case "if-compare":
                 return new IfCompare(self, converter, parent);
+
+            // loops
+            case "iterate":
+                return new Iterate(self, converter, parent);
 
             // caller
             case "call-class-method":
@@ -123,5 +132,17 @@ export class ElementFactory {
             converter,
             parent
         );
+    }
+    
+    public static parseWithRoot(parsed: XMLSchema, converter: Converter) {
+        return new Root(
+            {
+                type: "element",
+                elements: parsed.elements,
+                name: "!root",
+                attributes: {},
+            },
+            converter
+        ).convert();
     }
 }

@@ -32,7 +32,15 @@ export interface ValidChildren {
     [tag: string]: ValidChild;
 }
 
-export type VariableContext = string[];
+type Variable = {
+    name: string;
+    count: number;
+    type?: string;
+    typeParams: string[]
+};
+export type VariableContext = {
+    [name: string]: Variable;
+};
 
 export type Operator =
     | "equals"
@@ -49,5 +57,5 @@ export type Operator =
 export enum MethodMode {
     GENERIC,
     EVENT,
-    SERVICE
+    SERVICE,
 }

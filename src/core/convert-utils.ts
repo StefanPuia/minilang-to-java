@@ -70,15 +70,6 @@ export default class ConvertUtils {
         return className ?? qualified;
     }
 
-    public static parseValue(val: string) {
-        const valueMap = {
-            null: "null",
-            NewList: "new ArrayList<>()",
-            NewMap: "new HashMap<>()",
-        } as Record<string, string>;
-        return valueMap[val] ?? `"${val}"` ?? "null";
-    }
-
     public static parseFieldGetter(field: string | undefined) {
         if (typeof field === "undefined") {
             return field;
@@ -120,5 +111,16 @@ export default class ConvertUtils {
             field.match(/^(?<mapName>\w.+?)\.(?<fieldName>\w.+)$/)?.groups ?? {};
 
         return { mapName, fieldName };
+    }
+
+    public static isPrimitive(value?: string) {
+        if (!value) return false;
+        if (["true", "false"].includes(value)) {
+            return true;
+        }
+        if (!isNaN(parseFloat(value))) {
+            return true;
+        }
+        return false;
     }
 }

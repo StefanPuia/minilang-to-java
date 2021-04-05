@@ -23,7 +23,7 @@ export class FieldMap extends ElementTag {
     }
 
     private getFromValue() {
-        return ConvertUtils.parseValue(this.attributes.value ?? "");
+        return this.converter.parseValue(this.attributes.value ?? "");
     }
 }
 
