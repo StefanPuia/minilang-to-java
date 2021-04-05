@@ -5,6 +5,7 @@ import { FailProperty } from "../elements/assignment/fail-property";
 import { Field } from "../elements/assignment/field";
 import { FieldToList } from "../elements/assignment/field-to-list";
 import { FieldToResult } from "../elements/assignment/field-to-result";
+import { FirstFromList } from "../elements/assignment/first-from-list";
 import { NowDateToEnv } from "../elements/assignment/now-date-to-env";
 import { NowTimestamp } from "../elements/assignment/now-timestamp";
 import { Set } from "../elements/assignment/set";
@@ -23,6 +24,7 @@ import { IfEmpty } from "../elements/conditional/if-empty";
 import { IfNotEmpty } from "../elements/conditional/if-not-empty";
 import { EntityOne } from "../elements/entity/entity-one";
 import { FieldMap } from "../elements/entity/field-map";
+import { MakeValue } from "../elements/entity/make-value";
 import { Iterate } from "../elements/loops/iterate";
 import { Root } from "../elements/root/root";
 import { SimpleMethod } from "../elements/root/simple-method";
@@ -68,6 +70,8 @@ export class ElementFactory {
                 return new FieldToResult(self, converter, parent);
             case "field-to-list":
                 return new FieldToList(self, converter, parent);
+            case "first-from-list":
+                return new FirstFromList(self, converter, parent);
 
             // conditions
             case "if-empty":
@@ -112,6 +116,8 @@ export class ElementFactory {
                 return new EntityOne(self, converter, parent);
             case "field-map":
                 return new FieldMap(self, converter, parent);
+            case "make-value":
+                return new MakeValue(self, converter, parent);
 
             //
             default:

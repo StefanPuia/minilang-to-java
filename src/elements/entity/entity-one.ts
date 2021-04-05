@@ -1,5 +1,5 @@
-import { StringBoolean, XMLSchemaElementAttributes } from "../../types";
-import { EntityElement } from "./entity";
+import { StringBoolean } from "../../types";
+import { EntityElement, EntityElementAttributes } from "./entity";
 
 export class EntityOne extends EntityElement {
     protected attributes = this.attributes as EntityOneAttributes;
@@ -50,9 +50,7 @@ export class EntityOne extends EntityElement {
     }
 }
 
-interface EntityOneAttributes extends XMLSchemaElementAttributes {
-    "entity-name": string;
-    "value-field": string;
+interface EntityOneAttributes extends EntityElementAttributes {
     "use-cache": string;
     "auto-field-map": StringBoolean;
     "delegator-name": string;
