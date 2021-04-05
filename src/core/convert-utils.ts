@@ -51,11 +51,14 @@ export default class ConvertUtils {
         "java.time.LocalDateTime": "LocalDateTime",
         "java.time.LocalTime": "LocalTime",
         "java.util.Date": "java.util.Date",
-        "org.ofbiz.base.util.UtilDateTime": "UtilDateTime",
-        "org.ofbiz.base.util.UtilValidate": "UtilValidate",
-        "org.ofbiz.base.entity.GenericValue": "GenericValue",
-        "java.util.Map": "Map",
         "java.util.HashMap": "HashMap",
+        "java.util.Map": "Map",
+        "javax.servlet.http.HttpServletRequest": "HttpServletRequest",
+        "javax.servlet.http.HttpServletResponse": "HttpServletResponse",
+        "org.ofbiz.base.entity.GenericValue": "GenericValue",
+        "org.ofbiz.base.util.UtilDateTime": "UtilDateTime",
+        "org.ofbiz.base.util.UtilMisc": "UtilMisc",
+        "org.ofbiz.base.util.UtilValidate": "UtilValidate",
     };
 
     public static qualify(unqualified: string) {

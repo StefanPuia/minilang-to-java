@@ -1,4 +1,5 @@
 import { BaseErrorHandler } from "../handlers/error/base-error";
+import { ErrorHandlerFactory } from "../handlers/error/error-handler-factory";
 import { MethodMode } from "../types";
 import ConvertUtils from "./convert-utils";
 import { ElementFactory } from "./element-factory";
@@ -10,7 +11,7 @@ export class Converter {
     private imports: Set<string> = new Set();
     private errors: Message[] = [];
     private warnings: Message[] = [];
-    private readonly errorHandler: BaseErrorHandler = new BaseErrorHandler();
+    private errorHandler: BaseErrorHandler | undefined;
 
     private constructor(source: string, mode: MethodMode) {
         this.source = source;
@@ -87,6 +88,9 @@ export class Converter {
     }
 
     public getErrorHandler() {
+        if (!this.errorHandler) {
+            this.errorHandler = ErrorHandlerFactory.getHandler(this);
+        }
         return this.errorHandler;
     }
 
