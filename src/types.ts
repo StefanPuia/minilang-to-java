@@ -45,3 +45,9 @@ export type Operator =
     | "is-null"
     | "is-not-null"
     | "is-empty";
+
+export enum MethodMode {
+    GENERIC,
+    EVENT,
+    SERVICE
+}

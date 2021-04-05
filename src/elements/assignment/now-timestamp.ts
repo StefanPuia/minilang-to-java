@@ -3,7 +3,7 @@ import { BaseSetterAttributes, SetterElement } from "./setter";
 export class NowTimestamp extends SetterElement {
     protected attributes = this.attributes as BaseSetterAttributes;
 
-    protected getField(): string {
+    public getField(): string {
         return this.attributes.field;
     }
 
@@ -13,7 +13,7 @@ export class NowTimestamp extends SetterElement {
         return `Timestamp.valueOf(LocalDateTime.now())`;
     }
 
-    protected getType(): string {
+    public getType(): string {
         return "Timestamp";
     }
 

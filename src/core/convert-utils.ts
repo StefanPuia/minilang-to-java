@@ -102,7 +102,12 @@ export default class ConvertUtils {
         }
         const { mapName, fieldName } = this.mapMatch(field);
         if (mapName && fieldName) {
-            return `${mapName}.set("${fieldName}", ${value})`;
+            switch (mapName) {
+                case "request":
+                    return `request.setAttribute("${fieldName}", ${value})`;
+                default:
+                    return `${mapName}.set("${fieldName}", ${value})`;
+            }
         }
         return `${field} = ${value}`;
     }

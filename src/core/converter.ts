@@ -1,17 +1,20 @@
 import { BaseErrorHandler } from "../handlers/error/base-error";
+import { MethodMode } from "../types";
 import ConvertUtils from "./convert-utils";
 import { ElementFactory } from "./element-factory";
 
 export class Converter {
     private readonly source: string;
+    private readonly methodMode: MethodMode;
     private tabSize: number = 4;
     private imports: Set<string> = new Set();
     private errors: Message[] = [];
     private warnings: Message[] = [];
     private readonly errorHandler: BaseErrorHandler = new BaseErrorHandler();
 
-    private constructor(source: string) {
+    private constructor(source: string, mode: MethodMode) {
         this.source = source;
+        this.methodMode = mode;
     }
 
     private convert() {
@@ -50,8 +53,8 @@ export class Converter {
             .join("\n");
     }
 
-    public static convert(source: string) {
-        return new Converter(source).convert();
+    public static convert(source: string, mode: MethodMode) {
+        return new Converter(source, mode).convert();
     }
 
     public getIndentSpaces() {
@@ -73,12 +76,32 @@ export class Converter {
 
     public addImport(classPath?: string) {
         if (classPath) {
-            this.imports.add(ConvertUtils.qualify(classPath) ?? classPath);
+            const qualified = ConvertUtils.qualify(classPath) ?? classPath;
+            if (!this.imports.has(qualified)) {
+                if (qualified.indexOf(".") === -1) {
+                    this.appendMessage("WARNING", `No import mapped for "${qualified}"`);
+                }
+                this.imports.add(qualified);
+            }
         }
     }
 
     public getErrorHandler() {
         return this.errorHandler;
+    }
+
+    public getMethodMode() {
+        return this.methodMode;
+    }
+
+    public getReturnVariable() {
+        switch (this.methodMode) {
+            case MethodMode.EVENT:
+                return "request";
+            default:
+            case MethodMode.SERVICE:
+                return "_returnMap";
+        }
     }
 }
 

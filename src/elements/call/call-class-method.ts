@@ -1,13 +1,35 @@
 import ConvertUtils from "../../core/convert-utils";
 import { XMLSchemaElementAttributes } from "../../types";
+import { Field } from "../assignment/field";
+import { StringTag } from "../assignment/string";
 import { CallerElement } from "./caller";
 
 export class CallClassMethod extends CallerElement {
+    public getType() {
+        return "Object";
+    }
+    public getField() {
+        return this.attributes["ret-field"];
+    }
     protected attributes = this.attributes as CallClassMethodAttributes;
 
     public convert(): string[] {
         this.converter.addImport(this.attributes["class-name"]);
-        return [`${ConvertUtils.unqualify(this.attributes["class-name"])}.${this.attributes["method-name"]}()`];
+        return this.wrapConvert(
+            `${ConvertUtils.unqualify(this.attributes["class-name"])}.${
+                this.attributes["method-name"]
+            }(${this.getFields().join(", ")})`
+        );
+    }
+    private getFields() {
+        return [
+            ...this.parseChildren()
+                .filter((tag) => tag instanceof Field)
+                .map((tag) => (tag as Field).getField()),
+            ...this.parseChildren()
+                .filter((tag) => tag instanceof StringTag)
+                .map((tag) => (tag as StringTag).getValue()),
+        ];
     }
 }
 

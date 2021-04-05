@@ -1,10 +1,11 @@
 import ConvertUtils from "../../core/convert-utils";
+import { Converter } from "../../core/converter";
 import { StringBoolean, XMLSchemaElementAttributes } from "../../types";
 import { SetterElement } from "./setter";
 
 export class Set extends SetterElement {
     protected attributes = this.attributes as SetAttributes;
-    protected getField(): string {
+    public getField(): string {
         return this.attributes.field;
     }
 
@@ -33,7 +34,7 @@ export class Set extends SetterElement {
         return nested;
     }
 
-    protected getType() {
+    public getType() {
         return this.attributes.type ?? "Object";
     }
 

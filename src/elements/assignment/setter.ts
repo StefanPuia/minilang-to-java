@@ -10,21 +10,30 @@ export abstract class SetterElement extends ElementTag {
 
     constructor(tag: XMLSchemaAnyElement, converter: Converter, parent?: Tag) {
         super(tag, converter, parent);
-        const { mapName } = ConvertUtils.mapMatch(this.getField());
-        this.mapName = mapName;
-        this.declared = parent?.getVariableContext()?.includes(mapName ?? this.getField()) ?? false;
-        if (!this.declared) {
-            parent?.getVariableContext()?.push(mapName ?? this.getField());
+        const field = this.getField();
+        if (typeof field !== "undefined") {
+            const { mapName } = ConvertUtils.mapMatch(field);
+            this.mapName = mapName;
+            this.declared = parent?.getVariableContext()?.includes(mapName ?? field) ?? false;
+            if (!this.declared) {
+                parent?.getVariableContext()?.push(mapName ?? field);
+            }
         }
     }
 
-    protected wrapDeclaration(assign: string) {
-        const declaration = this.declared ? "" : `${this.getType()} `;
+    /**
+     * appends the class if the variable has not already been defined
+     */
+    public wrapDeclaration(assign: string) {
+        const declaration = this.declared || !this.getType() ? "" : `${this.getType()} `;
         return `${declaration}${assign}`;
     }
 
+    /**
+     * returns declaration line for map with new instance of a hashmap or nothing if variable does not match a map
+     */
     private getMapDeclaration() {
-        if (this.mapName && !this.declared) {
+        if (this.mapName && !this.declared && !["request"].includes(this.mapName)) {
             this.converter.addImport("Map");
             this.converter.addImport("HashMap");
             return [`Map ${this.mapName} = new HashMap();`];
@@ -32,7 +41,14 @@ export abstract class SetterElement extends ElementTag {
         return [];
     }
 
-    protected wrapConvert(assign: string): string[] {
+    /**
+     * creates a set statement (either with setter or assignment)
+     * adds the class if not declared
+     */
+    public wrapConvert(assign: string): string[] {
+        if (!this.getField()) {
+            return [assign];
+        }
         const hasSetter = ConvertUtils.hasSetter(this.getField());
         const setter = ConvertUtils.parseFieldSetter(this.getField(), assign);
 
@@ -42,8 +58,8 @@ export abstract class SetterElement extends ElementTag {
         ];
     }
 
-    protected abstract getType(): string;
-    protected abstract getField(): string;
+    public abstract getType(): string | undefined;
+    public abstract getField(): string | undefined;
 }
 
 export interface BaseSetterAttributes extends XMLSchemaElementAttributes {

@@ -2,7 +2,7 @@ import ConvertUtils from "../../core/convert-utils";
 import { BaseSetterAttributes, SetterElement } from "./setter";
 
 export class Now extends SetterElement {
-    protected getField(): string {
+    public getField(): string {
         return this.attributes.field;
     }
 
@@ -35,7 +35,7 @@ export class Now extends SetterElement {
                 return "Timestamp.valueOf(LocalDateTime.now())";
         }
     }
-    protected getType(): string {
+    public getType(): string {
         if (this.attributes.type) {
             return ConvertUtils.unqualify(this.attributes.type) ?? "Timestamp";
         }

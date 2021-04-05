@@ -1,5 +1,5 @@
 import { ElementTag } from "../../core/element-tag";
-import { StringBoolean, ValidChildren, VariableContext, XMLSchemaElementAttributes } from "../../types";
+import { MethodMode, StringBoolean, ValidChildren, VariableContext, XMLSchemaElementAttributes } from "../../types";
 
 export class SimpleMethod extends ElementTag {
     protected attributes: SimpleMethodAttributes = this.attributes;
@@ -11,10 +11,26 @@ export class SimpleMethod extends ElementTag {
 
     public convert(): string[] {
         return [
-            `public void ${this.attributes["method-name"]}() {`,
+            this.getMethodHeader(),
             ...this.convertChildren().map(this.prependIndentationMapper),
             "}",
         ];
+    }
+
+    private getMethodHeader() {
+        const name = this.attributes["method-name"];
+        switch(this.converter.getMethodMode()) {
+            case MethodMode.EVENT:
+                this.converter.addImport("HttpServletRequest");
+                this.converter.addImport("HttpServletResponse");
+                return `public String ${name}(final HttpServletRequest request, final HttpServletResponse response) {`;
+            
+            case MethodMode.SERVICE:
+                this.converter.addImport("Map");
+                this.converter.addImport("DispatchContext");
+                return `public Map<String, Object> ${name}(final DispatchContext dctx, final Map<String, Object> context) {`;
+        }
+        return `public void ${name}() {`
     }
 
     public getVariableContext() {

@@ -4,11 +4,11 @@ import { EntityElement } from "./entity";
 export class EntityOne extends EntityElement {
     protected attributes = this.attributes as EntityOneAttributes;
 
-    protected getType(): string {
+    public getType(): string {
         return "GenericValue";
     }
 
-    protected getField(): string {
+    public getField(): string {
         return this.attributes["value-field"];
     }
 
@@ -30,7 +30,15 @@ export class EntityOne extends EntityElement {
     }
 
     protected getWhereClause(): string[] {
-        return [`.where(`, ...this.getFromFieldMap().map(this.prependIndentationMapper), `)`];
+        return this.getFromFieldMap().map((line, index, array) => {
+            if (index === 0) {
+                line = `.where(${line}`;
+            }
+            if (index === array.length - 1) {
+                line = `${line})`;
+            }
+            return line;
+        });
     }
 
     protected getUseCache() {

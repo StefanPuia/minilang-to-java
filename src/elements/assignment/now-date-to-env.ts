@@ -4,7 +4,7 @@ import { BaseSetterAttributes, SetterElement } from "./setter";
 export class NowDateToEnv extends SetterElement {
     protected attributes = this.attributes as BaseSetterAttributes;
     
-    protected getField(): string {
+    public getField(): string {
         return this.attributes.field;
     }
 
@@ -14,7 +14,7 @@ export class NowDateToEnv extends SetterElement {
         return `Date.valueOf(LocalDate.now())`;
     }
 
-    protected getType(): string {
+    public getType(): string {
         return "Date";
     }
 
