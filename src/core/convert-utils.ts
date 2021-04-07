@@ -43,6 +43,7 @@ export default class ConvertUtils {
 
     public static importMap: Record<string, string> = {
         "com.stannah.base.utils.MiscUtils": "MiscUtils",
+        "com.stannah.external.hr.EmployeeUtils": "EmployeeUtils",
         "java.lang.Long": "Long",
         "java.sql.Date": "Date",
         "java.sql.Time": "Time",
@@ -53,6 +54,7 @@ export default class ConvertUtils {
         "java.util.ArrayList": "ArrayList",
         "java.util.Date": "java.util.Date",
         "java.util.HashMap": "HashMap",
+        "java.util.List": "List",
         "java.util.Map": "Map",
         "javax.servlet.http.HttpServletRequest": "HttpServletRequest",
         "javax.servlet.http.HttpServletResponse": "HttpServletResponse",
@@ -60,15 +62,19 @@ export default class ConvertUtils {
         "org.ofbiz.base.util.UtilMisc": "UtilMisc",
         "org.ofbiz.base.util.UtilValidate": "UtilValidate",
         "org.ofbiz.entity.Delegator": "Delegator",
+        "org.ofbiz.entity.GenericEntityException": "GenericEntityException",
         "org.ofbiz.entity.GenericValue": "GenericValue",
         "org.ofbiz.entity.util.EntityQuery": "EntityQuery",
         "org.ofbiz.service.DispatchContext": "DispatchContext",
+        "org.ofbiz.service.GenericServiceException": "GenericServiceException",
         "org.ofbiz.service.LocalDispatcher": "LocalDispatcher",
         "org.ofbiz.service.ServiceUtil": "ServiceUtil",
     };
 
     public static qualify(unqualified: string) {
-        return Object.entries(this.importMap).find((entry) => entry[1] === unqualified)?.[0];
+        return Object.entries(this.importMap).find(
+            (entry) => entry[1] === unqualified
+        )?.[0];
     }
 
     public static unqualify(qualified: string) {
@@ -81,7 +87,8 @@ export default class ConvertUtils {
             return field;
         }
         const { mapName, fieldName } =
-            field.match(/^(?<mapName>\w.+?)\.(?<fieldName>\w.+)$/)?.groups ?? {};
+            field.match(/^(?<mapName>\w.+?)\.(?<fieldName>\w.+)$/)?.groups ??
+            {};
         if (mapName && fieldName) {
             return `${mapName}.get("${fieldName}")`;
         }
@@ -114,7 +121,8 @@ export default class ConvertUtils {
 
     public static mapMatch(field: string) {
         const { mapName, fieldName } =
-            field.match(/^(?<mapName>\w.+?)\.(?<fieldName>\w.+)$/)?.groups ?? {};
+            field.match(/^(?<mapName>\w.+?)\.(?<fieldName>\w.+)$/)?.groups ??
+            {};
 
         return { mapName, fieldName };
     }

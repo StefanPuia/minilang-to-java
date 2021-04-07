@@ -26,6 +26,7 @@ export class CallService extends CallerElement {
         //     ...this.getAppendMessage("message-suffix"),
         //     ...this.getAppendMessage("default-message"),
         // ];
+        this.addException("GenericServiceException");
         return this.wrapFieldDeclaration(
             `dispatcher.runSync(${this.getParameters().join(
                 ", "

@@ -15,7 +15,7 @@ export abstract class SetterElement extends ElementTag {
             const { mapName } = ConvertUtils.mapMatch(field);
             this.mapName = mapName;
             this.declared = !!this.getVariableFromContext(mapName ?? field);
-            const { type, params } = this.getBaseType();
+            const { type, typeParams: params } = this.getBaseType();
             this.setVariableToContext({
                 name: mapName ?? field,
                 count: 1,
@@ -29,6 +29,14 @@ export abstract class SetterElement extends ElementTag {
      * appends the class if the variable has not already been defined
      */
     public wrapDeclaration(assign: string) {
+        const field = this.getField();
+        if (field && !this.mapName) {
+            this.setVariableToContext({
+                name: field,
+                count: 1,
+                ...this.getBaseType()
+            });
+        }
         const declaration =
             this.declared || !this.getType() ? "" : `${this.getType()} `;
         return `${declaration}${assign}`;
@@ -43,6 +51,12 @@ export abstract class SetterElement extends ElementTag {
             !this.declared &&
             !["request"].includes(this.mapName)
         ) {
+            this.setVariableToContext({
+                name: this.mapName,
+                type: "Map",
+                count: 1,
+                typeParams: ["String, Object"],
+            });
             this.converter.addImport("Map");
             this.converter.addImport("HashMap");
             return [`Map<String, Object> ${this.mapName} = new HashMap<>();`];
@@ -73,7 +87,7 @@ export abstract class SetterElement extends ElementTag {
         ];
     }
 
-    public getBaseType(): { type: string; params: string[] } {
+    public getBaseType(): { type: string; typeParams: string[] } {
         const field = this.getField();
         const selfType =
             (field && this.getVariableFromContext(field)?.type) ||
@@ -83,7 +97,7 @@ export abstract class SetterElement extends ElementTag {
                 ?.groups ?? {};
         return {
             type: type ?? selfType,
-            params: (params && params.replace(/\s/g, "").split(",")) || [],
+            typeParams: (params && params.replace(/\s/g, "").split(",")) || [],
         };
     }
 

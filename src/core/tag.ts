@@ -37,7 +37,7 @@ export abstract class Tag {
     }
 
     public setVariableToContext(variable: ContextVariable) {
-        ContextUtils.setVariableToContext(variable, this.getVariableContext());
+        this.parent?.setVariableToContext(variable);
     }
 
     protected parseChildren(): Tag[] {
@@ -103,6 +103,10 @@ export abstract class Tag {
                 );
             }
         }
+    }
+
+    protected addException(exceptionClass: string) {
+        this.parent?.addException(exceptionClass);
     }
 
     protected prependIndentationMapper(

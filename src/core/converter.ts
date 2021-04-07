@@ -38,11 +38,15 @@ export class Converter {
     }
 
     private getErrors() {
-        return this.errors.map(({ content }) => `// FIXME: ERROR: ${content}`).join("\n");
+        return this.errors
+            .map(({ content }) => `// FIXME: ERROR: ${content}`)
+            .join("\n");
     }
 
     private getWarnings() {
-        return this.warnings.map(({ content }) => `// WARNING: ${content}`).join("\n");
+        return this.warnings
+            .map(({ content }) => `// WARNING: ${content}`)
+            .join("\n");
     }
 
     private getImports() {
@@ -78,7 +82,10 @@ export class Converter {
             const qualified = ConvertUtils.qualify(classPath) ?? classPath;
             if (!this.imports.has(qualified)) {
                 if (qualified.indexOf(".") === -1) {
-                    this.appendMessage("WARNING", `No import mapped for "${qualified}"`);
+                    this.appendMessage(
+                        "WARNING",
+                        `No import mapped for "${qualified}"`
+                    );
                 }
                 this.imports.add(qualified);
             }
@@ -106,8 +113,9 @@ export class Converter {
         }
     }
 
-    public parseValue(val: string) {
+    public parseValue(val: string): string {
         const value = ConvertUtils.stripQuotes(val);
+        if (!value) return "null";
         switch (value) {
             case "null":
                 return "null";
@@ -117,12 +125,21 @@ export class Converter {
             case "NewMap":
                 this.addImport("HashMap");
                 return "new HashMap<>()";
-            default:
-                return value ? (value.indexOf('"') > -1 ? value : `"${value}"`) : "null";
         }
+        const scriptMatch = value.match(/^\$\{\s*groovy:(?<script>.+)\}$/);
+        if (scriptMatch) {
+            return scriptMatch?.groups?.script as string;
+        }
+        if (value.includes('"') || value.includes("(")) {
+            return value;
+        }
+        return `"${value}"`;
     }
 
-    public parseValueOrInitialize(type?: string, value?: string): string | undefined {
+    public parseValueOrInitialize(
+        type?: string,
+        value?: string
+    ): string | undefined {
         switch (type) {
             case "List":
                 this.addImport("ArrayList");

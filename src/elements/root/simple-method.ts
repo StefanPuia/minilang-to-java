@@ -1,4 +1,6 @@
 import { ElementTag } from "../../core/element-tag";
+import { ContextVariable } from "../../types";
+import { ContextUtils } from "../../core/context-utils";
 import {
     MethodMode,
     StringBoolean,
@@ -10,19 +12,30 @@ import {
 export class SimpleMethod extends ElementTag {
     protected attributes: SimpleMethodAttributes = this.attributes;
     private variableContext: VariableContext = {};
+    private exceptions: Set<string> = new Set();
 
     public getValidChildren(): ValidChildren {
         return {};
     }
 
     public convert(): string[] {
+        const children = [
+            ...this.getVariables(),
+            ...this.convertChildren(),
+            ...this.getReturn(),
+        ]
         return [
-            this.getMethodHeader(),
-            ...this.getVariables().map(this.prependIndentationMapper),
-            ...this.convertChildren().map(this.prependIndentationMapper),
-            ...this.getReturn().map(this.prependIndentationMapper),
+            `${this.getMethodHeader()} ${this.getThrows()}{`,
+            ...children.map(this.prependIndentationMapper),
             "}",
         ];
+    }
+
+    private getThrows() {
+        if (this.exceptions.size) {
+            return `throws ${Array.from(this.exceptions).join(", ")} `;
+        }
+        return "";
     }
 
     private getMethodHeader() {
@@ -31,14 +44,14 @@ export class SimpleMethod extends ElementTag {
             case MethodMode.EVENT:
                 this.addVarToContext("request", "HttpServletRequest");
                 this.addVarToContext("response", "HttpServletResponse");
-                return `public String ${name}(final HttpServletRequest request, final HttpServletResponse response) {`;
+                return `public String ${name}(final HttpServletRequest request, final HttpServletResponse response)`;
 
             case MethodMode.SERVICE:
                 this.addVarToContext("dctx", "DispatchContext");
                 this.addVarToContext("context", "Map", ["String", "Object"]);
-                return `public Map<String, Object> ${name}(final DispatchContext dctx, final Map<String, Object> context) {`;
+                return `public Map<String, Object> ${name}(final DispatchContext dctx, final Map<String, Object> context)`;
         }
-        return `public void ${name}() {`;
+        return `public void ${name}()`;
     }
 
     private getVariables(): string[] {
@@ -86,6 +99,10 @@ export class SimpleMethod extends ElementTag {
         return this.variableContext;
     }
 
+    public setVariableToContext(variable: ContextVariable) {
+        ContextUtils.setVariableToContext(variable, this.variableContext);
+    }
+
     private addVarToContext(
         name: string,
         type: string,
@@ -98,6 +115,11 @@ export class SimpleMethod extends ElementTag {
             typeParams,
             count: 1,
         };
+    }
+
+    protected addException(exceptionClass: string) {
+        this.converter.addImport(exceptionClass);
+        this.exceptions.add(exceptionClass);
     }
 }
 
