@@ -6,7 +6,11 @@ import { CallerElement } from "./caller";
 
 export class CallClassMethod extends CallerElement {
     public getType() {
-        return "Object";
+        return (
+            (this.attributes["ret-field"] &&
+                this.converter.guessFieldType(this.attributes["ret-field"])) ||
+            "Object"
+        );
     }
     public getField() {
         return this.attributes["ret-field"];
@@ -25,10 +29,10 @@ export class CallClassMethod extends CallerElement {
         return [
             ...this.parseChildren()
                 .filter((tag) => tag instanceof Field)
-                .map((tag) => (tag as Field).getField()),
+                .map((tag) => (tag as Field).convert()),
             ...this.parseChildren()
                 .filter((tag) => tag instanceof StringTag)
-                .map((tag) => (tag as StringTag).getValue()),
+                .map((tag) => (tag as StringTag).convert()),
         ];
     }
 }

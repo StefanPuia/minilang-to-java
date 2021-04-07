@@ -4,10 +4,10 @@ import { ResultTo } from "./result-to";
 export class ResultToField extends ResultTo {
     protected attributes = this.attributes as ResultToFieldAttributes;
 
-    public getType(): string | undefined {
-        return "Object";
+    public getType(): string {
+        return this.converter.guessFieldType(this.getField()) ?? "Object";
     }
-    public getField(): string | undefined {
+    public getField(): string {
         return this.attributes.field ?? this.getResultAttribute();
     }
     public convert(): string[] {
@@ -15,6 +15,9 @@ export class ResultToField extends ResultTo {
     }
     public getResultAttribute() {
         return this.attributes["result-name"];
+    }
+    public wrapConvert(assign: string, semicolon?: boolean): string[] {
+        return super.wrapConvert(`(${this.getType()}) ${assign}`, semicolon);
     }
 }
 

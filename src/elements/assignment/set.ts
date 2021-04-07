@@ -42,7 +42,11 @@ export class Set extends SetterElement {
     }
 
     public getType() {
-        return this.attributes.type ?? "Object";
+        return (
+            this.attributes.type ??
+            this.converter.guessFieldType(this.attributes.field, this.attributes.value) ??
+            "Object"
+        );
     }
 
     private getDefault() {

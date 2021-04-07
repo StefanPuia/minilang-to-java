@@ -36,8 +36,17 @@ export abstract class Tag {
         return this.getVariableContext()?.[variable];
     }
 
-    public setVariableToContext(variable: ContextVariable) {
-        this.parent?.setVariableToContext(variable);
+    public setVariableToContext(variable: {
+        name: string;
+        type?: string;
+        typeParams?: string[];
+        count?: number;
+    }) {
+        this.parent?.setVariableToContext({
+            typeParams: [],
+            count: 1,
+            ...variable,
+        });
     }
 
     protected parseChildren(): Tag[] {

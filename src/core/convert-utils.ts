@@ -82,13 +82,22 @@ export default class ConvertUtils {
         return className ?? qualified;
     }
 
+    public static requiresCast(field?: string, type?: string): boolean {
+        if (typeof field === "undefined") {
+            return false;
+        }
+        const { mapName } = this.mapMatch(field);
+        if (type === "Object") {
+            return false;
+        }
+        return ["parameters", "context"].includes(mapName);
+    }
+
     public static parseFieldGetter(field: string | undefined) {
         if (typeof field === "undefined") {
             return field;
         }
-        const { mapName, fieldName } =
-            field.match(/^(?<mapName>\w.+?)\.(?<fieldName>\w.+)$/)?.groups ??
-            {};
+        const { mapName, fieldName } = this.mapMatch(field);
         if (mapName && fieldName) {
             return `${mapName}.get("${fieldName}")`;
         }
@@ -140,6 +149,6 @@ export default class ConvertUtils {
     }
 
     public static stripQuotes(value: string) {
-        return value.replace(/^"(.+)"$/, "$1");
+        return (value ?? "").replace(/^"(.+)"$/, "$1");
     }
 }

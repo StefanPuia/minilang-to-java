@@ -15,6 +15,7 @@ export class EntityOne extends EntityElement {
     public convert(): string[] {
         this.converter.addImport("GenericValue");
         this.converter.addImport("EntityQuery");
+        this.setVariableToContext({ name: "delegator" });
         return [
             ...this.wrapConvert("EntityQuery.use(delegator)", false),
             ...this.getChainLines().map(this.prependIndentationMapper),

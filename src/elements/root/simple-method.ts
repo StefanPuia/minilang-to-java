@@ -19,14 +19,13 @@ export class SimpleMethod extends ElementTag {
     }
 
     public convert(): string[] {
-        const children = [
-            ...this.getVariables(),
-            ...this.convertChildren(),
-            ...this.getReturn(),
-        ]
+        this.addDefaultVariablesToContext();
+        const children = this.convertChildren();
         return [
             `${this.getMethodHeader()} ${this.getThrows()}{`,
-            ...children.map(this.prependIndentationMapper),
+            ...[...this.getVariables(), ...children, ...this.getReturn()].map(
+                this.prependIndentationMapper
+            ),
             "}",
         ];
     }
@@ -42,42 +41,47 @@ export class SimpleMethod extends ElementTag {
         const name = this.attributes["method-name"];
         switch (this.converter.getMethodMode()) {
             case MethodMode.EVENT:
-                this.addVarToContext("request", "HttpServletRequest");
-                this.addVarToContext("response", "HttpServletResponse");
+                this.addVarToContext("request", "HttpServletRequest", true);
+                this.addVarToContext("response", "HttpServletResponse", true);
                 return `public String ${name}(final HttpServletRequest request, final HttpServletResponse response)`;
 
             case MethodMode.SERVICE:
-                this.addVarToContext("dctx", "DispatchContext");
-                this.addVarToContext("context", "Map", ["String", "Object"]);
+                this.addVarToContext("dctx", "DispatchContext", true);
+                this.addVarToContext("context", "Map", true, [
+                    "String",
+                    "Object",
+                ]);
                 return `public Map<String, Object> ${name}(final DispatchContext dctx, final Map<String, Object> context)`;
         }
         return `public void ${name}()`;
     }
 
-    private getVariables(): string[] {
-        const addDelegatorDispatcherToContext = () => {
-            this.addVarToContext("dispatcher", "LocalDispatcher");
-            this.addVarToContext("delegator", "Delegator");
-            this.addVarToContext("parameters", "Map", ["String", "Object"]);
-        };
-        switch (this.converter.getMethodMode()) {
-            case MethodMode.EVENT:
-                addDelegatorDispatcherToContext();
-                return [
-                    `LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");`,
-                    `Delegator delegator = (Delegator) request.getAttribute("delegator");`,
-                    `Map<String, Object> parameters = request.getParameterMap();`,
-                ];
+    private addDefaultVariablesToContext() {
+        this.addVarToContext("dispatcher", "LocalDispatcher");
+        this.addVarToContext("delegator", "Delegator");
+        this.addVarToContext("parameters", "Map", false, ["String", "Object"]);
+        this.addVarToContext("userLogin", "GenericValue");
+        this.addVarToContext("locale", "Locale");
+    }
 
-            case MethodMode.SERVICE:
-                addDelegatorDispatcherToContext();
-                return [
-                    `LocalDispatcher dispatcher = dctx.getDispatcher();`,
-                    `Delegator delegator = dctx.getDelegator();`,
-                    `Map<String, Object> parameters = context;`,
-                ];
-        }
-        return [];
+    private getVariables(): string[] {
+        return [
+            ...this.converter
+                .getContextVariableHandler()
+                .getDelegator(this.getVariableContext()),
+            ...this.converter
+                .getContextVariableHandler()
+                .getDispatcher(this.getVariableContext()),
+            ...this.converter
+                .getContextVariableHandler()
+                .getParameters(this.getVariableContext()),
+            ...this.converter
+                .getContextVariableHandler()
+                .getUserLogin(this.getVariableContext()),
+            ...this.converter
+                .getContextVariableHandler()
+                .getLocale(this.getVariableContext()),
+        ];
     }
 
     private getReturn(): string[] {
@@ -106,14 +110,17 @@ export class SimpleMethod extends ElementTag {
     private addVarToContext(
         name: string,
         type: string,
+        addImport: boolean = false,
         typeParams: string[] = []
     ) {
-        this.converter.addImport(type);
+        if (addImport) {
+            this.converter.addImport(type);
+        }
         this.variableContext[name] = {
             name,
             type,
             typeParams,
-            count: 1,
+            count: 0,
         };
     }
 

@@ -12,9 +12,20 @@ export class Field extends SetterElement {
     }
 
     public convert(): string[] {
-        return [
-            ConvertUtils.parseFieldGetter(this.attributes.field) ?? this.attributes.field
-        ];
+        const getter = ConvertUtils.parseFieldGetter(this.attributes.field);
+        return [getter ? `${this.getCast()}${getter}` : this.attributes.field];
+    }
+
+    private getCast() {
+        if (
+            !ConvertUtils.requiresCast(
+                this.attributes.field,
+                this.attributes.type
+            )
+        ) {
+            return "";
+        }
+        return this.attributes.type ? `(${this.attributes.type}) ` : "";
     }
 }
 

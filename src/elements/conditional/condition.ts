@@ -19,7 +19,14 @@ export abstract class ConditionElement extends ElementTag {
     }
 
     public setVariableToContext(variable: ContextVariable) {
-        ContextUtils.setVariableToContext(variable, this.variableContext);
+        if (!this?.parent?.getVariableFromContext(variable.name)) {
+            ContextUtils.setVariableToContext(variable, this.variableContext);
+        } else {
+            ContextUtils.setVariableToContext(
+                variable,
+                this.parent?.getVariableContext()
+            );
+        }
     }
 
     protected getElseBlock(): string[] {

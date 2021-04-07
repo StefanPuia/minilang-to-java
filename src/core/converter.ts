@@ -3,6 +3,8 @@ import { ErrorHandlerFactory } from "../handlers/error/error-handler-factory";
 import { MethodMode } from "../types";
 import ConvertUtils from "./convert-utils";
 import { ElementFactory } from "./element-factory";
+import { BaseVariableHandler } from '../handlers/context/base-variables';
+import { ContextVariableFactory } from "../handlers/context/context-variable-factory";
 
 export class Converter {
     private readonly source: string;
@@ -12,6 +14,7 @@ export class Converter {
     private errors: Message[] = [];
     private warnings: Message[] = [];
     private errorHandler: BaseErrorHandler | undefined;
+    private contextVariableHandler: BaseVariableHandler | undefined;
 
     private constructor(source: string, mode: MethodMode) {
         this.source = source;
@@ -99,6 +102,13 @@ export class Converter {
         return this.errorHandler;
     }
 
+    public getContextVariableHandler() {
+        if (!this.contextVariableHandler) {
+            this.contextVariableHandler = ContextVariableFactory.getHandler(this);
+        }
+        return this.contextVariableHandler;
+    }
+
     public getMethodMode() {
         return this.methodMode;
     }
@@ -151,6 +161,19 @@ export class Converter {
                 break;
         }
         if (value) return this.parseValue(value);
+    }
+
+    public guessFieldType(field: string, val?: any) {
+        const value = ConvertUtils.stripQuotes(val);
+        if (field.startsWith("is") || field.startsWith("has")) {
+            if (value) {
+                if (["true", "false"].includes(value)) {
+                    return "Boolean";
+                }
+                return "String";
+            }
+            return "Boolean";
+        }
     }
 }
 

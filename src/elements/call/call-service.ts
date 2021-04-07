@@ -27,10 +27,11 @@ export class CallService extends CallerElement {
         //     ...this.getAppendMessage("default-message"),
         // ];
         this.addException("GenericServiceException");
+        this.setVariableToContext({ name: "dispatcher" });
         return this.wrapFieldDeclaration(
             `dispatcher.runSync(${this.getParameters().join(
                 ", "
-            )})${this.getResultAttributeGetter()}`
+            )})${this.getResultAttributeGetter()};`
         );
     }
 
