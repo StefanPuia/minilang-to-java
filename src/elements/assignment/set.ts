@@ -44,7 +44,10 @@ export class Set extends SetterElement {
     public getType() {
         return (
             this.attributes.type ??
-            this.converter.guessFieldType(this.attributes.field, this.attributes.value) ??
+            this.converter.guessFieldType(
+                this.attributes.field,
+                this.attributes.value
+            ) ??
             "Object"
         );
     }
@@ -61,6 +64,16 @@ export class Set extends SetterElement {
             this.getBaseType().type,
             this.attributes.value
         );
+
+        if (from) {
+            const { mapName } = ConvertUtils.mapMatch(from);
+            if (mapName) {
+                this.setVariableToContext({
+                    name: mapName,
+                    type: this.getBaseType().type,
+                });
+            }
+        }
 
         if (from && value) {
             return `${from} ? ${from} : ${value}`;
@@ -82,13 +95,7 @@ export class Set extends SetterElement {
                 return this.converter.parseValue(defaultVal);
             }
         }
-        return (
-            this.converter.parseValueOrInitialize(
-                this.attributes.type ??
-                    this.getVariableFromContext(this.attributes.field)?.type,
-                assigned
-            ) ?? this.converter.parseValue(assigned)
-        );
+        return assigned;
     }
 
     protected getUnsupportedAttributes() {

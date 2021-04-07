@@ -32,7 +32,9 @@ export class EntityOne extends EntityElement {
     }
 
     protected getWhereClause(): string[] {
-        return this.getFromFieldMap().map((line, index, array) => {
+        const fieldMap = this.getFromFieldMap();
+        if (!fieldMap) return [];
+        return fieldMap.map((line, index, array) => {
             if (index === 0) {
                 line = `.where(${line}`;
             }

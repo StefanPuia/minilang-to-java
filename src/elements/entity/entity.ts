@@ -13,17 +13,17 @@ export abstract class EntityElement extends SetterElement {
     }
 
     protected getFromFieldMap() {
-        this.converter.addImport("UtilMisc");
-        return [
-            `UtilMisc.toMap(`,
-            ...this.parseChildren()
-                .filter((el) => el instanceof FieldMap)
-                .map((el) => (el as FieldMap).convertOnlyValues())
-                .join(",\n")
-                .split("\n")
-                .map(this.prependIndentationMapper),
-            `)`,
-        ];
+        const conditions = this.parseChildren()
+            .filter((el) => el instanceof FieldMap)
+            .map((el) => (el as FieldMap).convertOnlyValues())
+            .join(",\n")
+            .split("\n")
+            .map(this.prependIndentationMapper);
+        if (conditions.length) {
+            this.converter.addImport("UtilMisc");
+            return [`UtilMisc.toMap(`, ...conditions, `)`];
+        }
+        return [];
     }
 }
 

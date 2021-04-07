@@ -44,7 +44,11 @@ export default class ConvertUtils {
     public static importMap: Record<string, string> = {
         "com.stannah.base.utils.MiscUtils": "MiscUtils",
         "com.stannah.external.hr.EmployeeUtils": "EmployeeUtils",
+        "java.lang.Boolean": "Boolean",
         "java.lang.Long": "Long",
+        "java.lang.Object": "Object",
+        "java.lang.String": "String",
+        "java.math.BigDecimal": "BigDecimal",
         "java.sql.Date": "Date",
         "java.sql.Time": "Time",
         "java.sql.Timestamp": "Timestamp",

@@ -28,6 +28,10 @@ export class BaseVariableHandler {
         return [];
     }
 
+    protected getReturnMapSource(): string[] {
+        return [];
+    }
+
     public getDelegator(context: VariableContext): string[] {
         if (context["delegator"]?.count > 0) {
             return this.getDelegatorSource();
@@ -59,6 +63,13 @@ export class BaseVariableHandler {
     public getLocale(context: VariableContext): string[] {
         if (context["locale"]?.count > 0) {
             return this.getLocaleSource();
+        }
+        return [];
+    }
+
+    public getReturnMap(context: VariableContext): string[] {
+        if (context["_returnMap"]?.count > 0) {
+            return this.getReturnMapSource();
         }
         return [];
     }

@@ -62,6 +62,9 @@ export class SimpleMethod extends ElementTag {
         this.addVarToContext("parameters", "Map", false, ["String", "Object"]);
         this.addVarToContext("userLogin", "GenericValue");
         this.addVarToContext("locale", "Locale");
+        if (this.converter.getMethodMode() === MethodMode.SERVICE) {
+            this.addVarToContext("_returnMap", "Map");
+        }
     }
 
     private getVariables(): string[] {
@@ -81,6 +84,9 @@ export class SimpleMethod extends ElementTag {
             ...this.converter
                 .getContextVariableHandler()
                 .getLocale(this.getVariableContext()),
+            ...this.converter
+                .getContextVariableHandler()
+                .getReturnMap(this.getVariableContext()),
         ];
     }
 

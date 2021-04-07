@@ -14,6 +14,7 @@ export class ResultToResult extends ResultTo {
         return "Map";
     }
     public getField(): string | undefined {
+        this.setVariableToContext({name: this.converter.getReturnVariable()});
         return `${this.converter.getReturnVariable()}.${
             this.attributes["service-result-name"] ?? this.attributes["result-name"]
         }`;

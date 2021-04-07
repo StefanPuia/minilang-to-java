@@ -159,6 +159,9 @@ export class Converter {
                     return value;
                 }
                 break;
+            case "BigDecimal":
+                this.addImport("BigDecimal");
+                return `new BigDecimal(${value && this.parseValue(value) || value})`;
         }
         if (value) return this.parseValue(value);
     }

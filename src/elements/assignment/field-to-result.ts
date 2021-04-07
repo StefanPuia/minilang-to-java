@@ -11,6 +11,7 @@ export class FieldToResult extends SetterElement {
     }
 
     public getField(): string | undefined {
+        this.setVariableToContext({name: this.converter.getReturnVariable()});
         return `${this.converter.getReturnVariable()}.${
             this.attributes["result-name"] ?? this.attributes.field
         }`;

@@ -34,9 +34,10 @@ export abstract class SetterElement extends ElementTag {
             this.setVariableToContext({
                 name: field,
                 count: 1,
-                ...this.getBaseType()
+                ...this.getBaseType(),
             });
         }
+        this.converter.addImport(this.getBaseType()?.type);
         const declaration =
             this.declared || !this.getType() ? "" : `${this.getType()} `;
         return `${declaration}${assign}`;
