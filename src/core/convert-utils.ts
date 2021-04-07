@@ -50,15 +50,21 @@ export default class ConvertUtils {
         "java.time.LocalDate": "LocalDate",
         "java.time.LocalDateTime": "LocalDateTime",
         "java.time.LocalTime": "LocalTime",
+        "java.util.ArrayList": "ArrayList",
         "java.util.Date": "java.util.Date",
         "java.util.HashMap": "HashMap",
         "java.util.Map": "Map",
         "javax.servlet.http.HttpServletRequest": "HttpServletRequest",
         "javax.servlet.http.HttpServletResponse": "HttpServletResponse",
-        "org.ofbiz.base.entity.GenericValue": "GenericValue",
         "org.ofbiz.base.util.UtilDateTime": "UtilDateTime",
         "org.ofbiz.base.util.UtilMisc": "UtilMisc",
         "org.ofbiz.base.util.UtilValidate": "UtilValidate",
+        "org.ofbiz.entity.Delegator": "Delegator",
+        "org.ofbiz.entity.GenericValue": "GenericValue",
+        "org.ofbiz.entity.util.EntityQuery": "EntityQuery",
+        "org.ofbiz.service.DispatchContext": "DispatchContext",
+        "org.ofbiz.service.LocalDispatcher": "LocalDispatcher",
+        "org.ofbiz.service.ServiceUtil": "ServiceUtil",
     };
 
     public static qualify(unqualified: string) {
@@ -100,7 +106,7 @@ export default class ConvertUtils {
                 case "request":
                     return `request.setAttribute("${fieldName}", ${value})`;
                 default:
-                    return `${mapName}.set("${fieldName}", ${value})`;
+                    return `${mapName}.put("${fieldName}", ${value})`;
             }
         }
         return `${field} = ${value}`;
@@ -113,8 +119,9 @@ export default class ConvertUtils {
         return { mapName, fieldName };
     }
 
-    public static isPrimitive(value?: string) {
-        if (!value) return false;
+    public static isPrimitive(val?: string) {
+        if (!val) return false;
+        const value = ConvertUtils.stripQuotes(val);
         if (["true", "false"].includes(value)) {
             return true;
         }
@@ -122,5 +129,9 @@ export default class ConvertUtils {
             return true;
         }
         return false;
+    }
+
+    public static stripQuotes(value: string) {
+        return value.replace(/^"(.+)"$/, "$1");
     }
 }

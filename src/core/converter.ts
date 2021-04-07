@@ -107,7 +107,8 @@ export class Converter {
     }
 
     public parseValue(val: string) {
-        switch (val) {
+        const value = ConvertUtils.stripQuotes(val);
+        switch (value) {
             case "null":
                 return "null";
             case "NewList":
@@ -117,7 +118,7 @@ export class Converter {
                 this.addImport("HashMap");
                 return "new HashMap<>()";
             default:
-                return val ? `"${val}"` : "null";
+                return value ? `"${value}"` : "null";
         }
     }
 

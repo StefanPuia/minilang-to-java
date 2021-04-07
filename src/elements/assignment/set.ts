@@ -10,7 +10,9 @@ export class Set extends SetterElement {
     }
 
     public convert(): string[] {
-        return this.wrapIfConditions([...this.wrapConvert(this.getWrappedAssigned())]);
+        return this.wrapIfConditions([
+            ...this.wrapConvert(this.getWrappedAssigned()),
+        ]);
     }
 
     private getConditions() {
@@ -20,7 +22,8 @@ export class Set extends SetterElement {
         return [
             this.attributes["set-if-empty"] === "true" &&
                 `UtilValidate.isEmpty(${this.attributes.field})`,
-            this.attributes["set-if-null"] === "true" && `${this.attributes.field} == null`,
+            this.attributes["set-if-null"] === "true" &&
+                `${this.attributes.field} == null`,
         ]
             .filter(Boolean)
             .join(" || ");
@@ -29,7 +32,11 @@ export class Set extends SetterElement {
     private wrapIfConditions(nested: string[]) {
         const condition = this.getConditions();
         if (condition) {
-            return [`if (${condition}) {`, ...nested.map(this.prependIndentationMapper), `}`];
+            return [
+                `if (${condition}) {`,
+                ...nested.map(this.prependIndentationMapper),
+                `}`,
+            ];
         }
         return nested;
     }
@@ -62,10 +69,23 @@ export class Set extends SetterElement {
         const assigned = this.getAssigned();
 
         if (defaultVal) {
-            this.converter.addImport("UtilValidate");
-            return `UtilValidate.isNotEmpty(${assigned}) ? ${assigned} : ${defaultVal}`;
+            if (assigned) {
+                this.converter.addImport("UtilValidate");
+                return `UtilValidate.isNotEmpty(${assigned}) ? ${assigned} : ${this.converter.parseValue(
+                    defaultVal
+                )}`;
+            } else {
+                return this.converter.parseValue(defaultVal);
+            }
         }
-        return assigned;
+        return (
+            this.converter.parseValueOrInitialize(
+                this.attributes.type ??
+                    this.parent?.getVariableContext()?.[this.attributes.field]
+                        ?.type,
+                assigned
+            ) ?? this.converter.parseValue(assigned)
+        );
     }
 
     protected getUnsupportedAttributes() {

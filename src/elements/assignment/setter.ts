@@ -36,7 +36,8 @@ export abstract class SetterElement extends ElementTag {
      * appends the class if the variable has not already been defined
      */
     public wrapDeclaration(assign: string) {
-        const declaration = this.declared || !this.getType() ? "" : `${this.getType()} `;
+        const declaration =
+            this.declared || !this.getType() ? "" : `${this.getType()} `;
         return `${declaration}${assign}`;
     }
 
@@ -44,10 +45,14 @@ export abstract class SetterElement extends ElementTag {
      * returns declaration line for map with new instance of a hashmap or nothing if variable does not match a map
      */
     private getMapDeclaration() {
-        if (this.mapName && !this.declared && !["request"].includes(this.mapName)) {
+        if (
+            this.mapName &&
+            !this.declared &&
+            !["request"].includes(this.mapName)
+        ) {
             this.converter.addImport("Map");
             this.converter.addImport("HashMap");
-            return [`Map ${this.mapName} = new HashMap();`];
+            return [`Map<String, Object> ${this.mapName} = new HashMap<>();`];
         }
         return [];
     }
@@ -56,7 +61,7 @@ export abstract class SetterElement extends ElementTag {
      * creates a set statement (either with setter or assignment)
      * adds the class if not declared
      */
-    public wrapConvert(assign: string): string[] {
+    public wrapConvert(assign: string, semicolon: boolean = true): string[] {
         if (!this.getField()) {
             return [assign];
         }
@@ -68,17 +73,24 @@ export abstract class SetterElement extends ElementTag {
             `${
                 hasSetter
                     ? setter
-                    : this.wrapDeclaration(`${this.getField()}${assign ? ` = ${assign}` : ""}`)
-            };`,
+                    : this.wrapDeclaration(
+                          `${this.getField()}${assign ? ` = ${assign}` : ""}`
+                      )
+            }${semicolon ? ";" : ""}`,
         ];
     }
 
     public getBaseType(): { type: string; params: string[] } {
+        const field = this.getField();
+        const selfType =
+            (field && this.parent?.getVariableContext()?.[field]?.type) ||
+            this.getType();
         const { type, params } =
-            (this.getType() ?? "").match(/^(?<type>\w+)(?:\<(?<params>.+?)\>)?$/)?.groups ?? {};
+            (selfType ?? "").match(/^(?<type>\w+)(?:\<(?<params>.+?)\>)?$/)
+                ?.groups ?? {};
         return {
-            type: type ?? this.getType(),
-            params: params && params.replace(/\s/g, "").split(",") || [],
+            type: type ?? selfType,
+            params: (params && params.replace(/\s/g, "").split(",")) || [],
         };
     }
 

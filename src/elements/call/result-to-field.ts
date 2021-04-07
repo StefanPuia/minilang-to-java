@@ -5,8 +5,7 @@ export class ResultToField extends ResultTo {
     protected attributes = this.attributes as ResultToFieldAttributes;
 
     public getType(): string | undefined {
-        this.converter.addImport("Map");
-        return "Map";
+        return "Object";
     }
     public getField(): string | undefined {
         return this.attributes.field ?? this.getResultAttribute();
