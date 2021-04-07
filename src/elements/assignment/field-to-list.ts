@@ -21,7 +21,7 @@ export class FieldToList extends SetterElement {
         if (!this.declared) {
             this.converter.addImport("List");
             this.converter.addImport("ArrayList");
-            const variable = this.parent?.getVariableContext()?.[this.attributes.field];
+            const variable = this.getVariableFromContext(this.attributes.field);
             const paramType = variable?.type ? `<${variable?.type}>` : "";
             return [`List${paramType} ${this.getField()} = new ArrayList<>();`];
         }

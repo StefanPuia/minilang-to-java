@@ -8,7 +8,8 @@ export class IfCompare extends ConditionElement {
     public convert(): string[] {
         return [
             `if (${this.getComparison(
-                ConvertUtils.parseFieldGetter(this.attributes.field) ?? this.attributes.field,
+                ConvertUtils.parseFieldGetter(this.attributes.field) ??
+                    this.attributes.field,
                 this.attributes.operator,
                 this.converter.parseValueOrInitialize(
                     this.getFieldType(),
@@ -25,7 +26,7 @@ export class IfCompare extends ConditionElement {
     }
 
     protected getFieldType() {
-        const variable = this.parent?.getVariableContext()?.[this.attributes.field];
+        const variable = this.getVariableFromContext(this.attributes.field);
         return variable?.type ?? this.attributes.type;
     }
 }

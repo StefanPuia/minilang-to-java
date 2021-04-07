@@ -14,21 +14,14 @@ export abstract class SetterElement extends ElementTag {
         if (typeof field !== "undefined") {
             const { mapName } = ConvertUtils.mapMatch(field);
             this.mapName = mapName;
-            const context = parent?.getVariableContext();
-            this.declared = !!context?.[mapName ?? field];
-            if (context) {
-                if (!this.declared) {
-                    const { type, params } = this.getBaseType();
-                    context[mapName ?? field] = {
-                        name: mapName ?? field,
-                        count: 1,
-                        type,
-                        typeParams: params,
-                    };
-                } else if (context[mapName ?? field]) {
-                    context[mapName ?? field].count++;
-                }
-            }
+            this.declared = !!this.getVariableFromContext(mapName ?? field);
+            const { type, params } = this.getBaseType();
+            this.setVariableToContext({
+                name: mapName ?? field,
+                count: 1,
+                type,
+                typeParams: params,
+            });
         }
     }
 
@@ -83,7 +76,7 @@ export abstract class SetterElement extends ElementTag {
     public getBaseType(): { type: string; params: string[] } {
         const field = this.getField();
         const selfType =
-            (field && this.parent?.getVariableContext()?.[field]?.type) ||
+            (field && this.getVariableFromContext(field)?.type) ||
             this.getType();
         const { type, params } =
             (selfType ?? "").match(/^(?<type>\w+)(?:\<(?<params>.+?)\>)?$/)

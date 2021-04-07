@@ -118,7 +118,7 @@ export class Converter {
                 this.addImport("HashMap");
                 return "new HashMap<>()";
             default:
-                return value ? `"${value}"` : "null";
+                return value ? (value.indexOf('"') > -1 ? value : `"${value}"`) : "null";
         }
     }
 

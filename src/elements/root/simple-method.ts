@@ -42,11 +42,14 @@ export class SimpleMethod extends ElementTag {
     }
 
     private getVariables(): string[] {
-        this.addVarToContext("dispatcher", "LocalDispatcher");
-        this.addVarToContext("delegator", "Delegator");
-        this.addVarToContext("parameters", "Map", ["String", "Object"]);
+        const addDelegatorDispatcherToContext = () => {
+            this.addVarToContext("dispatcher", "LocalDispatcher");
+            this.addVarToContext("delegator", "Delegator");
+            this.addVarToContext("parameters", "Map", ["String", "Object"]);
+        };
         switch (this.converter.getMethodMode()) {
             case MethodMode.EVENT:
+                addDelegatorDispatcherToContext();
                 return [
                     `LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");`,
                     `Delegator delegator = (Delegator) request.getAttribute("delegator");`,
@@ -54,6 +57,7 @@ export class SimpleMethod extends ElementTag {
                 ];
 
             case MethodMode.SERVICE:
+                addDelegatorDispatcherToContext();
                 return [
                     `LocalDispatcher dispatcher = dctx.getDispatcher();`,
                     `Delegator delegator = dctx.getDelegator();`,

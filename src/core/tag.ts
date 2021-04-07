@@ -1,6 +1,12 @@
 import { Converter } from "./converter";
-import { ValidChildren, VariableContext, XMLSchemaAnyElement } from "../types";
+import {
+    ValidChildren,
+    VariableContext,
+    XMLSchemaAnyElement,
+    ContextVariable,
+} from "../types";
 import { ElementFactory } from "./element-factory";
+import { ContextUtils } from "./context-utils";
 
 export abstract class Tag {
     protected readonly converter: Converter;
@@ -13,7 +19,9 @@ export abstract class Tag {
         this.parent = parent;
         this.converter = converter;
 
-        this.prependIndentationMapper = this.prependIndentationMapper.bind(this);
+        this.prependIndentationMapper = this.prependIndentationMapper.bind(
+            this
+        );
     }
 
     public abstract convert(): string[];
@@ -24,14 +32,24 @@ export abstract class Tag {
         return this.parent?.getVariableContext();
     }
 
+    public getVariableFromContext(variable: string) {
+        return this.getVariableContext()?.[variable];
+    }
+
+    public setVariableToContext(variable: ContextVariable) {
+        ContextUtils.setVariableToContext(variable, this.getVariableContext());
+    }
+
     protected parseChildren(): Tag[] {
         let children: Tag[] = this.children ?? [];
         if (this.children === undefined) {
             children = this.children =
                 this.tag.type === "element"
                     ? this.tag.elements
-                        ?.map((self) => ElementFactory.parse(self, this.converter, this))
-                        .filter((tag) => tag !== null) ?? ([] as Tag[])
+                          ?.map((self) =>
+                              ElementFactory.parse(self, this.converter, this)
+                          )
+                          .filter((tag) => tag !== null) ?? ([] as Tag[])
                     : [];
             this.validateChildren();
         }
@@ -43,7 +61,8 @@ export abstract class Tag {
         const children = this.parseChildren()
             .filter((el) => !el.getTagName().startsWith("!"))
             .reduce((collector, element) => {
-                collector[element.getTagName()] = (collector[element.getTagName()] ?? 0) + 1;
+                collector[element.getTagName()] =
+                    (collector[element.getTagName()] ?? 0) + 1;
                 return collector;
             }, {} as Record<string, number>);
 
@@ -86,7 +105,11 @@ export abstract class Tag {
         }
     }
 
-    protected prependIndentationMapper(line: string, _index: number, _array: string[]) {
+    protected prependIndentationMapper(
+        line: string,
+        _index: number,
+        _array: string[]
+    ) {
         return `${this.converter.getIndentSpaces()}${line}`;
     }
 }

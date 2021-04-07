@@ -55,7 +55,7 @@ export class Root extends ElementTag {
                             type: "element",
                             name: "simple-method",
                             attributes: {
-                                name: "someMethodName",
+                                "method-name": "someMethodName",
                             },
                             elements: clazz.elements,
                         },

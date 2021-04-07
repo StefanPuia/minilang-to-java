@@ -32,14 +32,14 @@ export interface ValidChildren {
     [tag: string]: ValidChild;
 }
 
-type Variable = {
+export type ContextVariable = {
     name: string;
     count: number;
     type?: string;
     typeParams: string[]
 };
 export type VariableContext = {
-    [name: string]: Variable;
+    [name: string]: ContextVariable;
 };
 
 export type Operator =

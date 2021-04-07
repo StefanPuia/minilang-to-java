@@ -1,9 +1,27 @@
 import ConvertUtils from "../../core/convert-utils";
 import { ElementTag } from "../../core/element-tag";
-import { Operator } from "../../types";
+import { Operator, VariableContext, ContextVariable } from "../../types";
 import { Else } from "./else";
+import { ContextUtils } from "../../core/context-utils";
 
 export abstract class ConditionElement extends ElementTag {
+    private variableContext: VariableContext = {};
+
+    public getVariableContext() {
+        return {
+            ...this.parent?.getVariableContext(),
+            ...this.variableContext,
+        };
+    }
+
+    public getVariableFromContext(variable: string) {
+        return this.getVariableContext()?.[variable];
+    }
+
+    public setVariableToContext(variable: ContextVariable) {
+        ContextUtils.setVariableToContext(variable, this.variableContext);
+    }
+
     protected getElseBlock(): string[] {
         const elseElement = this.tag.elements?.find(
             (el) => el.type === "element" && el.name === "else"
@@ -30,19 +48,31 @@ export abstract class ConditionElement extends ElementTag {
             case "equals":
                 if (value === "true") return field;
                 if (value === "false") return `!${field}`;
-                return primitive ? `${field} == ${strippedVal}` : `${value}.equals(${field})`;
+                return primitive
+                    ? `${field} == ${strippedVal}`
+                    : `${value}.equals(${field})`;
             case "not-equals":
                 if (strippedVal === "true") return `!${field}`;
                 if (strippedVal === "false") return field;
-                return primitive ? `${field} != ${strippedVal}` : `!${value}.equals(${field})`;
+                return primitive
+                    ? `${field} != ${strippedVal}`
+                    : `!${value}.equals(${field})`;
             case "greater":
-                return primitive ? `${field} > ${strippedVal}` : `${value}.compareTo(${field}) > 0`;
+                return primitive
+                    ? `${field} > ${strippedVal}`
+                    : `${value}.compareTo(${field}) > 0`;
             case "greater-equals":
-                return primitive ? `${field} >= ${strippedVal}` : `${value}.compareTo(${field}) >= 0`;
+                return primitive
+                    ? `${field} >= ${strippedVal}`
+                    : `${value}.compareTo(${field}) >= 0`;
             case "less":
-                return primitive ? `${field} < ${strippedVal}` : `${value}.compareTo(${field}) < 0`;
+                return primitive
+                    ? `${field} < ${strippedVal}`
+                    : `${value}.compareTo(${field}) < 0`;
             case "less-equals":
-                return primitive ? `${field} <= ${strippedVal}` : `${value}.compareTo(${field}) <= 0`;
+                return primitive
+                    ? `${field} <= ${strippedVal}`
+                    : `${value}.compareTo(${field}) <= 0`;
         }
     }
 }

@@ -22,6 +22,7 @@ import { Comment } from "../elements/comment";
 import { IfCompare } from "../elements/conditional/if-compare";
 import { IfEmpty } from "../elements/conditional/if-empty";
 import { IfNotEmpty } from "../elements/conditional/if-not-empty";
+import { EntityAnd } from "../elements/entity/entity-and";
 import { EntityOne } from "../elements/entity/entity-one";
 import { FieldMap } from "../elements/entity/field-map";
 import { MakeValue } from "../elements/entity/make-value";
@@ -118,6 +119,8 @@ export class ElementFactory {
                 return new FieldMap(self, converter, parent);
             case "make-value":
                 return new MakeValue(self, converter, parent);
+            case "entity-and":
+                return new EntityAnd(self, converter, parent);
 
             //
             default:

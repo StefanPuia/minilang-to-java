@@ -5,7 +5,7 @@ export class FirstFromList extends SetterElement {
     protected attributes = this.attributes as FirstFromListAttributes;
 
     public getType(): string | undefined {
-        return this.parent?.getVariableContext()?.[this.attributes.list]?.typeParams[0] ?? "Object";
+        return this.getVariableFromContext(this.attributes.list)?.typeParams[0] ?? "Object";
     }
     public getField(): string | undefined {
         return this.attributes.entry;

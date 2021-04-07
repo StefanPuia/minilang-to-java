@@ -81,8 +81,7 @@ export class Set extends SetterElement {
         return (
             this.converter.parseValueOrInitialize(
                 this.attributes.type ??
-                    this.parent?.getVariableContext()?.[this.attributes.field]
-                        ?.type,
+                    this.getVariableFromContext(this.attributes.field)?.type,
                 assigned
             ) ?? this.converter.parseValue(assigned)
         );
