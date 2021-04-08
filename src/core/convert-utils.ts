@@ -63,6 +63,7 @@ export default class ConvertUtils {
         "java.util.Map": "Map",
         "javax.servlet.http.HttpServletRequest": "HttpServletRequest",
         "javax.servlet.http.HttpServletResponse": "HttpServletResponse",
+        "org.ofbiz.base.util.ScriptUtil": "ScriptUtil",
         "org.ofbiz.base.util.UtilDateTime": "UtilDateTime",
         "org.ofbiz.base.util.UtilMisc": "UtilMisc",
         "org.ofbiz.base.util.UtilValidate": "UtilValidate",
