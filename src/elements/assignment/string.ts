@@ -1,4 +1,4 @@
-import { ElementTag } from "../../core/element-tag";
+import { ElementTag } from "../element-tag";
 import { XMLSchemaElementAttributes } from "../../types";
 
 export class StringTag extends ElementTag {

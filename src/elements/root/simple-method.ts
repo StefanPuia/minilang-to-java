@@ -1,4 +1,4 @@
-import { ElementTag } from "../../core/element-tag";
+import { ElementTag } from "../element-tag";
 import { ContextVariable } from "../../types";
 import { ContextUtils } from "../../core/context-utils";
 import {
@@ -11,7 +11,6 @@ import {
 
 export class SimpleMethod extends ElementTag {
     protected attributes: SimpleMethodAttributes = this.attributes;
-    private variableContext: VariableContext = {};
     private exceptions: Set<string> = new Set();
 
     public getValidChildren(): ValidChildren {
@@ -68,25 +67,18 @@ export class SimpleMethod extends ElementTag {
     }
 
     private getVariables(): string[] {
+        const context = this.getVariableContext() as VariableContext;
         return [
+            ...this.converter.getContextVariableHandler().getDelegator(context),
             ...this.converter
                 .getContextVariableHandler()
-                .getDelegator(this.getVariableContext()),
+                .getDispatcher(context),
             ...this.converter
                 .getContextVariableHandler()
-                .getDispatcher(this.getVariableContext()),
-            ...this.converter
-                .getContextVariableHandler()
-                .getParameters(this.getVariableContext()),
-            ...this.converter
-                .getContextVariableHandler()
-                .getUserLogin(this.getVariableContext()),
-            ...this.converter
-                .getContextVariableHandler()
-                .getLocale(this.getVariableContext()),
-            ...this.converter
-                .getContextVariableHandler()
-                .getReturnMap(this.getVariableContext()),
+                .getParameters(context),
+            ...this.converter.getContextVariableHandler().getUserLogin(context),
+            ...this.converter.getContextVariableHandler().getLocale(context),
+            ...this.converter.getContextVariableHandler().getReturnMap(context),
         ];
     }
 
@@ -96,7 +88,9 @@ export class SimpleMethod extends ElementTag {
                 return [`return "success";`];
 
             case MethodMode.SERVICE:
-                if (this.variableContext["_returnMap"]?.count > 0) {
+                if (
+                    (this.getVariableFromContext("_returnMap")?.count ?? 0) > 0
+                ) {
                     return [`return _returnMap;`];
                 }
                 this.converter.addImport("ServiceUtil");
@@ -106,12 +100,8 @@ export class SimpleMethod extends ElementTag {
         return [];
     }
 
-    public getVariableContext() {
-        return this.variableContext;
-    }
-
-    public setVariableToContext(variable: ContextVariable) {
-        ContextUtils.setVariableToContext(variable, this.variableContext);
+    protected hasOwnContext() {
+        return true;
     }
 
     private addVarToContext(
@@ -123,12 +113,12 @@ export class SimpleMethod extends ElementTag {
         if (addImport) {
             this.converter.addImport(type);
         }
-        this.variableContext[name] = {
+        this.setVariableToContext({
             name,
             type,
             typeParams,
             count: 0,
-        };
+        });
     }
 
     protected addException(exceptionClass: string) {

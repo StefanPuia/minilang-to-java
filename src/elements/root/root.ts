@@ -1,15 +1,13 @@
-import { ElementTag } from "../../core/element-tag";
+import { ElementTag } from "../element-tag";
 import {
     VariableContext,
     XMLSchemaAnyElement,
     XMLSchemaElement,
 } from "../../types";
 import { Converter } from "../../core/converter";
-import { Tag } from "../../core/tag";
+import { Tag } from "../tag";
 
 export class Root extends ElementTag {
-    private variableContext: VariableContext = {};
-
     constructor(tag: XMLSchemaAnyElement, converter: Converter, parent?: Tag) {
         super(tag, converter, parent);
         this.wrapClass();
@@ -62,9 +60,5 @@ export class Root extends ElementTag {
                     ];
                 }
             });
-    }
-
-    public getVariableContext() {
-        return this.variableContext;
     }
 }

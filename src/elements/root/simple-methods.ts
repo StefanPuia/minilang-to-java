@@ -1,4 +1,4 @@
-import { ElementTag } from "../../core/element-tag";
+import { ElementTag } from "../element-tag";
 import { ValidChildren } from "../../types";
 
 export class SimpleMethods extends ElementTag {

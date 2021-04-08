@@ -5,11 +5,16 @@ export interface XMLSchema {
     elements: XMLSchemaAnyElement[];
 }
 
-export type XMLSchemaAnyElement = XMLSchemaElement | XMLSchemaCommentElement;
+export type XMLSchemaAnyElement = XMLSchemaElement | XMLSchemaCommentElement | XMLSchemaTextElement;
 
 export interface XMLSchemaCommentElement {
     type: "comment";
     comment: string;
+}
+
+export interface XMLSchemaTextElement {
+    type: "text";
+    text: string;
 }
 
 export interface XMLSchemaElement {

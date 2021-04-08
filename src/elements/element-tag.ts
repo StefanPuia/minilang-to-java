@@ -1,5 +1,5 @@
 import { XMLSchemaAnyElement, XMLSchemaElement, XMLSchemaElementAttributes } from "../types";
-import { Converter } from "./converter";
+import { Converter } from "../core/converter";
 import { Tag } from "./tag";
 
 export abstract class ElementTag extends Tag {

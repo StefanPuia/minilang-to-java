@@ -2,7 +2,7 @@ import { XMLSchemaAnyElement, XMLSchemaElementAttributes, StringBoolean } from '
 import { SetterElement } from "../assignment/setter";
 import { FieldMap } from "./field-map";
 import { Converter } from "../../core/converter";
-import { Tag } from "../../core/tag";
+import { Tag } from "../tag";
 
 export abstract class EntityElement extends SetterElement {
     protected attributes = this.attributes as EntityElementAttributes;

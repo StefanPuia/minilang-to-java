@@ -1,32 +1,11 @@
 import ConvertUtils from "../../core/convert-utils";
-import { ElementTag } from "../../core/element-tag";
-import { Operator, VariableContext, ContextVariable } from "../../types";
+import { ElementTag } from "../element-tag";
+import { Operator } from "../../types";
 import { Else } from "./else";
-import { ContextUtils } from "../../core/context-utils";
 
 export abstract class ConditionElement extends ElementTag {
-    private variableContext: VariableContext = {};
-
-    public getVariableContext() {
-        return {
-            ...this.parent?.getVariableContext(),
-            ...this.variableContext,
-        };
-    }
-
-    public getVariableFromContext(variable: string) {
-        return this.getVariableContext()?.[variable];
-    }
-
-    public setVariableToContext(variable: ContextVariable) {
-        if (this?.parent?.getVariableFromContext(variable.name)) {
-            ContextUtils.setVariableToContext(
-                variable,
-                this.parent?.getVariableContext()
-            );
-        } else {
-            ContextUtils.setVariableToContext(variable, this.variableContext);
-        }
+    protected hasOwnContext(): boolean {
+        return true;
     }
 
     protected getElseBlock(): string[] {

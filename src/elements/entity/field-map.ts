@@ -1,5 +1,5 @@
 import ConvertUtils from "../../core/convert-utils";
-import { ElementTag } from "../../core/element-tag";
+import { ElementTag } from "../element-tag";
 import { XMLSchemaElementAttributes } from "../../types";
 
 export class FieldMap extends ElementTag {

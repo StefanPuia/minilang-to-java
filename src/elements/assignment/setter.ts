@@ -1,7 +1,7 @@
 import ConvertUtils from "../../core/convert-utils";
 import { Converter } from "../../core/converter";
-import { ElementTag } from "../../core/element-tag";
-import { Tag } from "../../core/tag";
+import { ElementTag } from "../element-tag";
+import { Tag } from "../tag";
 import { XMLSchemaAnyElement, XMLSchemaElementAttributes } from "../../types";
 
 export abstract class SetterElement extends ElementTag {

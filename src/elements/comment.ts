@@ -1,4 +1,4 @@
-import { Tag } from "../core/tag";
+import { Tag } from "./tag";
 import { ValidChildren } from "../types";
 
 export class Comment extends Tag {
@@ -19,14 +19,14 @@ export class Comment extends Tag {
     }
 
     private singleLine(comment: string): string[] {
-        return [`// ${comment}`];
+        return [`// ${comment.trim()}`];
     }
 
     private multiLine(comment: string): string[] {
         return [
             `/**`,
             ...comment.split("\n").map((str) => {
-                return ` * ${str}`;
+                return ` * ${str.trim()}`;
             }),
             `*/`,
         ];

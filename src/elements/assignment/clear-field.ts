@@ -1,4 +1,4 @@
-import { ElementTag } from "../../core/element-tag";
+import { ElementTag } from "../element-tag";
 import { BaseSetterAttributes } from "./setter";
 
 export class ClearField extends ElementTag {

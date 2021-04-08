@@ -1,18 +1,14 @@
-import { Converter } from "./converter";
-import {
-    ValidChildren,
-    VariableContext,
-    XMLSchemaAnyElement,
-    ContextVariable,
-} from "../types";
-import { ElementFactory } from "./element-factory";
-import { ContextUtils } from "./context-utils";
+import { ValidChildren, VariableContext, XMLSchemaAnyElement } from "../types";
+import { ContextUtils } from "../core/context-utils";
+import { Converter } from "../core/converter";
+import { ElementFactory } from "../core/element-factory";
 
 export abstract class Tag {
     protected readonly converter: Converter;
     protected readonly tag: XMLSchemaAnyElement;
     protected readonly parent?: Tag;
     protected children?: Tag[] = undefined;
+    private variableContext: VariableContext = {};
 
     constructor(tag: XMLSchemaAnyElement, converter: Converter, parent?: Tag) {
         this.tag = tag;
@@ -28,8 +24,17 @@ export abstract class Tag {
     public abstract getValidChildren(): ValidChildren;
     public abstract getTagName(): string;
 
+    protected hasOwnContext(): boolean {
+        return false;
+    }
+
     public getVariableContext(): VariableContext | undefined {
-        return this.parent?.getVariableContext();
+        return this.hasOwnContext()
+            ? {
+                  ...this.parent?.getVariableContext(),
+                  ...this.variableContext,
+              }
+            : this.parent?.getVariableContext();
     }
 
     public getVariableFromContext(variable: string) {
@@ -42,11 +47,26 @@ export abstract class Tag {
         typeParams?: string[];
         count?: number;
     }) {
-        this.parent?.setVariableToContext({
+        const contextVariable = {
             typeParams: [],
             count: 1,
             ...variable,
-        });
+        };
+        if (this.hasOwnContext()) {
+            if (this?.parent?.getVariableFromContext(contextVariable.name)) {
+                ContextUtils.setVariableToContext(
+                    contextVariable,
+                    this.parent?.getVariableContext()
+                );
+            } else {
+                ContextUtils.setVariableToContext(
+                    contextVariable,
+                    this.variableContext
+                );
+            }
+        } else {
+            this.parent?.setVariableToContext(contextVariable);
+        }
     }
 
     protected parseChildren(): Tag[] {

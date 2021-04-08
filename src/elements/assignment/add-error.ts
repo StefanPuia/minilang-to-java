@@ -1,4 +1,4 @@
-import { ElementTag } from "../../core/element-tag";
+import { ElementTag } from "../element-tag";
 
 export class AddError extends ElementTag {
     public convert(): string[] {

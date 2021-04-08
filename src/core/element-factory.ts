@@ -32,14 +32,32 @@ import { SimpleMethod } from "../elements/root/simple-method";
 import { SimpleMethods } from "../elements/root/simple-methods";
 import { XMLSchema, XMLSchemaAnyElement } from "../types";
 import { Converter } from "./converter";
-import { Tag } from "./tag";
-import { UnparsedElement } from "./unparsed";
-import { PropertyToField } from '../elements/assignment/property-to-field';
+import { PropertyToField } from "../elements/assignment/property-to-field";
+import { ScriptTag, ScriptTextTag } from "../elements/call/script";
+import { Tag } from "../elements/tag";
+import { UnparsedElement } from "../elements/unparsed";
 
 export class ElementFactory {
-    public static parse(self: XMLSchemaAnyElement, converter: Converter, parent?: Tag): Tag {
+    public static parse(
+        self: XMLSchemaAnyElement,
+        converter: Converter,
+        parent?: Tag
+    ): Tag {
         if (self.type === "comment") {
             return new Comment(self, converter, parent);
+        }
+        if (self.type === "text") {
+            switch (parent?.getTagName()) {
+                case "script":
+                    return new ScriptTextTag(self, converter, parent);
+            }
+            return this.makeErrorComment(
+                `Error parsing text element contained in "${
+                    parent?.getTagName() ?? "unknown parent"
+                }"`,
+                converter,
+                parent
+            );
         }
 
         switch (self.name) {
@@ -114,6 +132,8 @@ export class ElementFactory {
                 return new ResultToSession(self, converter, parent);
             case "result-to-result":
                 return new ResultToResult(self, converter, parent);
+            case "script":
+                return new ScriptTag(self, converter, parent);
 
             // entity
             case "entity-one":
@@ -125,6 +145,10 @@ export class ElementFactory {
             case "entity-and":
                 return new EntityAnd(self, converter, parent);
 
+            // not used
+            case "check-errors":
+                return new UnparsedElement(self, converter, parent);
+
             //
             default:
                 return this.makeErrorComment(
@@ -135,7 +159,11 @@ export class ElementFactory {
         }
     }
 
-    private static makeErrorComment(message: string, converter: Converter, parent?: Tag): Comment {
+    private static makeErrorComment(
+        message: string,
+        converter: Converter,
+        parent?: Tag
+    ): Comment {
         return new Comment(
             {
                 type: "comment",
@@ -145,7 +173,7 @@ export class ElementFactory {
             parent
         );
     }
-    
+
     public static parseWithRoot(parsed: XMLSchema, converter: Converter) {
         return new Root(
             {
