@@ -114,6 +114,10 @@ export abstract class Tag {
         }
     }
 
+    public getParent(): Tag | undefined {
+        return this.parent;
+    }
+
     protected addException(exceptionClass: string) {
         this.parent?.addException(exceptionClass);
     }

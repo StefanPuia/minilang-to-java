@@ -96,10 +96,11 @@ export class SimpleMethod extends ElementTag {
                 return [`return "success";`];
 
             case MethodMode.SERVICE:
-                if (this.variableContext["_returnMap"]) {
+                if (this.variableContext["_returnMap"]?.count > 0) {
                     return [`return _returnMap;`];
                 }
-                return ["return null;"];
+                this.converter.addImport("ServiceUtil");
+                return ["return ServiceUtil.returnSuccess();"];
         }
 
         return [];

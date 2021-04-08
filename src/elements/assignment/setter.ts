@@ -15,12 +15,12 @@ export abstract class SetterElement extends ElementTag {
             const { mapName } = ConvertUtils.mapMatch(field);
             this.mapName = mapName;
             this.declared = !!this.getVariableFromContext(mapName ?? field);
-            const { type, typeParams: params } = this.getBaseType();
+            const { type, typeParams } = this.getBaseType();
+            this.converter.addImport(type);
             this.setVariableToContext({
                 name: mapName ?? field,
-                count: 1,
                 type,
-                typeParams: params,
+                typeParams,
             });
         }
     }
@@ -29,14 +29,6 @@ export abstract class SetterElement extends ElementTag {
      * appends the class if the variable has not already been defined
      */
     public wrapDeclaration(assign: string) {
-        const field = this.getField();
-        if (field && !this.mapName) {
-            this.setVariableToContext({
-                name: field,
-                count: 1,
-                ...this.getBaseType(),
-            });
-        }
         this.converter.addImport(this.getBaseType()?.type);
         const declaration =
             this.declared || !this.getType() ? "" : `${this.getType()} `;
@@ -52,12 +44,6 @@ export abstract class SetterElement extends ElementTag {
             !this.declared &&
             !["request"].includes(this.mapName)
         ) {
-            this.setVariableToContext({
-                name: this.mapName,
-                type: "Map",
-                count: 1,
-                typeParams: ["String, Object"],
-            });
             this.converter.addImport("Map");
             this.converter.addImport("HashMap");
             return [`Map<String, Object> ${this.mapName} = new HashMap<>();`];

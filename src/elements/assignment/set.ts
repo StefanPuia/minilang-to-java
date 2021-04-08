@@ -1,5 +1,4 @@
 import ConvertUtils from "../../core/convert-utils";
-import { Converter } from "../../core/converter";
 import { StringBoolean, XMLSchemaElementAttributes } from "../../types";
 import { SetterElement } from "./setter";
 
@@ -42,14 +41,25 @@ export class Set extends SetterElement {
     }
 
     public getType() {
-        return (
+        const selfType =
             this.attributes.type ??
             this.converter.guessFieldType(
                 this.attributes.field,
                 this.attributes.value
-            ) ??
-            "Object"
+            );
+        if (selfType) {
+            return selfType;
+        }
+        const from = ConvertUtils.parseFieldGetter(
+            this.attributes.from ?? this.attributes["from-field"]
         );
+        if (from) {
+            const { mapName } = ConvertUtils.mapMatch(from);
+            if (!mapName) {
+                return this.getVariableFromContext(from)?.type ?? "Object";
+            }
+        }
+        return "Object";
     }
 
     private getDefault() {
