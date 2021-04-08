@@ -9,6 +9,7 @@ import { ContextVariableFactory } from "../handlers/context/context-variable-fac
 export class Converter {
     private readonly source: string;
     private readonly methodMode: MethodMode;
+    private readonly packageName?: string;
     private tabSize: number = 4;
     private imports: Set<string> = new Set();
     private errors: Message[] = [];
@@ -16,15 +17,17 @@ export class Converter {
     private errorHandler: BaseErrorHandler | undefined;
     private contextVariableHandler: BaseVariableHandler | undefined;
 
-    private constructor(source: string, mode: MethodMode) {
+    private constructor(source: string, mode: MethodMode, packageName?: string) {
         this.source = source;
         this.methodMode = mode;
+        this.packageName = packageName;
     }
 
     private convert() {
         const parsed = ConvertUtils.parseXML(this.source);
         const converted = ElementFactory.parseWithRoot(parsed, this);
         return [
+            this.getPackageName(),
             this.getImports(),
             this.newLine(),
             ...converted,
@@ -59,8 +62,17 @@ export class Converter {
             .join("\n");
     }
 
-    public static convert(source: string, mode: MethodMode) {
-        return new Converter(source, mode).convert();
+    private getPackageName(): string[] {
+        if (this.packageName) {
+            return [
+                `package ${this.packageName};\n`,
+            ];
+        }
+        return [];
+    }
+
+    public static convert(source: string, mode: MethodMode, packageName?: string) {
+        return new Converter(source, mode, packageName).convert();
     }
 
     public getIndentSpaces() {
