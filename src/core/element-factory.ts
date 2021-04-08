@@ -34,6 +34,7 @@ import { XMLSchema, XMLSchemaAnyElement } from "../types";
 import { Converter } from "./converter";
 import { Tag } from "./tag";
 import { UnparsedElement } from "./unparsed";
+import { PropertyToField } from '../elements/assignment/property-to-field';
 
 export class ElementFactory {
     public static parse(self: XMLSchemaAnyElement, converter: Converter, parent?: Tag): Tag {
@@ -73,6 +74,8 @@ export class ElementFactory {
                 return new FieldToList(self, converter, parent);
             case "first-from-list":
                 return new FirstFromList(self, converter, parent);
+            case "property-to-field":
+                return new PropertyToField(self, converter, parent);
 
             // conditions
             case "if-empty":

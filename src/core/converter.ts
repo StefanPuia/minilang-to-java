@@ -3,7 +3,7 @@ import { ErrorHandlerFactory } from "../handlers/error/error-handler-factory";
 import { MethodMode } from "../types";
 import ConvertUtils from "./convert-utils";
 import { ElementFactory } from "./element-factory";
-import { BaseVariableHandler } from '../handlers/context/base-variables';
+import { BaseVariableHandler } from "../handlers/context/base-variables";
 import { ContextVariableFactory } from "../handlers/context/context-variable-factory";
 
 export class Converter {
@@ -17,7 +17,11 @@ export class Converter {
     private errorHandler: BaseErrorHandler | undefined;
     private contextVariableHandler: BaseVariableHandler | undefined;
 
-    private constructor(source: string, mode: MethodMode, packageName?: string) {
+    private constructor(
+        source: string,
+        mode: MethodMode,
+        packageName?: string
+    ) {
         this.source = source;
         this.methodMode = mode;
         this.packageName = packageName;
@@ -64,14 +68,16 @@ export class Converter {
 
     private getPackageName(): string[] {
         if (this.packageName) {
-            return [
-                `package ${this.packageName};\n`,
-            ];
+            return [`package ${this.packageName};\n`];
         }
         return [];
     }
 
-    public static convert(source: string, mode: MethodMode, packageName?: string) {
+    public static convert(
+        source: string,
+        mode: MethodMode,
+        packageName?: string
+    ) {
         return new Converter(source, mode, packageName).convert();
     }
 
@@ -94,7 +100,13 @@ export class Converter {
 
     public addImport(classPath?: string) {
         if (classPath) {
+            if (["int", "boolean"].includes(classPath)) {
+                return;
+            }
             const qualified = ConvertUtils.qualify(classPath) ?? classPath;
+            if (qualified.startsWith("java.lang.")) {
+                return;
+            }
             if (!this.imports.has(qualified)) {
                 if (qualified.indexOf(".") === -1) {
                     this.appendMessage(
@@ -116,7 +128,9 @@ export class Converter {
 
     public getContextVariableHandler() {
         if (!this.contextVariableHandler) {
-            this.contextVariableHandler = ContextVariableFactory.getHandler(this);
+            this.contextVariableHandler = ContextVariableFactory.getHandler(
+                this
+            );
         }
         return this.contextVariableHandler;
     }
@@ -173,7 +187,9 @@ export class Converter {
                 break;
             case "BigDecimal":
                 this.addImport("BigDecimal");
-                return `new BigDecimal(${value && this.parseValue(value) || value})`;
+                return `new BigDecimal(${
+                    (value && this.parseValue(value)) || value
+                })`;
         }
         if (value) return this.parseValue(value);
     }
@@ -182,12 +198,12 @@ export class Converter {
         const value = ConvertUtils.stripQuotes(val);
         if (field.startsWith("is") || field.startsWith("has")) {
             if (value) {
-                if (["true", "false"].includes(value)) {
-                    return "Boolean";
+                if (["true", "false"].includes(value) || value.includes("(")) {
+                    return "boolean";
                 }
                 return "String";
             }
-            return "Boolean";
+            return "boolean";
         }
     }
 }
