@@ -22,7 +22,10 @@ export class Set extends SetterElement {
             this.attributes["set-if-empty"] === "true" &&
                 `UtilValidate.isEmpty(${this.attributes.field})`,
             this.attributes["set-if-null"] === "true" &&
-                `${this.attributes.field} == null`,
+                `${
+                    ConvertUtils.parseFieldGetter(this.attributes.field) ??
+                    this.attributes.field
+                } == null`,
         ]
             .filter(Boolean)
             .join(" || ");

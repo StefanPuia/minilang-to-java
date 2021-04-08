@@ -21,6 +21,12 @@ export class ServiceVariableHandler extends BaseVariableHandler {
             `GenericValue userLogin = (GenericValue) context.get("userLogin");`,
         ];
     }
+    protected getLocaleSource(): string[] {
+        this.converter.addImport("Locale");
+        return [
+            `Locale locale = (Locale) context.get("locale");`,
+        ];
+    }
     protected getReturnMapSource(): string[] {
         this.converter.addImport("Map");
         this.converter.addImport("ServiceUtil");

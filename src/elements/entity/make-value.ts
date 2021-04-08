@@ -21,6 +21,6 @@ export class MakeValue extends EntityElement {
 }
 
 interface MakeValueAttributes extends EntityElementAttributes {
+    "value-field": string;
     map?: string;
-    "delegator-name"?: string;
 }

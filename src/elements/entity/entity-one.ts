@@ -23,39 +23,26 @@ export class EntityOne extends EntityElement {
     }
 
     private getChainLines() {
+        const whereClause = this.getWhereClause();
         return [
             `.from("${this.attributes["entity-name"]}")`,
-            ...this.getWhereClause(),
+            ...whereClause,
             ...this.getUseCache(),
-            `.queryOne();`,
+            `.query${whereClause.length ? "One" : "First"}();`,
         ];
     }
 
-    protected getWhereClause(): string[] {
-        const fieldMap = this.getFromFieldMap();
-        if (!fieldMap) return [];
-        return fieldMap.map((line, index, array) => {
-            if (index === 0) {
-                line = `.where(${line}`;
-            }
-            if (index === array.length - 1) {
-                line = `${line})`;
-            }
-            return line;
-        });
-    }
-
-    protected getUseCache() {
-        if (this.attributes["use-cache"] === "true") {
-            return [`    .cache(true)`];
-        }
-        return [];
+    protected getUnsupportedAttributes() {
+        return [
+            ...super.getUnsupportedAttributes(),
+            "auto-field-map",
+            "for-update",
+        ];
     }
 }
 
 interface EntityOneAttributes extends EntityElementAttributes {
-    "use-cache": string;
+    "value-field": string;
     "auto-field-map": StringBoolean;
-    "delegator-name": string;
     "for-update": StringBoolean;
 }

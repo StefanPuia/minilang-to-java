@@ -59,6 +59,7 @@ export default class ConvertUtils {
         "java.util.Date": "java.util.Date",
         "java.util.HashMap": "HashMap",
         "java.util.List": "List",
+        "java.util.Locale": "Locale",
         "java.util.Map": "Map",
         "javax.servlet.http.HttpServletRequest": "HttpServletRequest",
         "javax.servlet.http.HttpServletResponse": "HttpServletResponse",

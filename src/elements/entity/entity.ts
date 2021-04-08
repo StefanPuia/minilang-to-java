@@ -1,4 +1,4 @@
-import { XMLSchemaAnyElement, XMLSchemaElementAttributes } from "../../types";
+import { XMLSchemaAnyElement, XMLSchemaElementAttributes, StringBoolean } from '../../types';
 import { SetterElement } from "../assignment/setter";
 import { FieldMap } from "./field-map";
 import { Converter } from "../../core/converter";
@@ -15,19 +15,65 @@ export abstract class EntityElement extends SetterElement {
     protected getFromFieldMap() {
         const conditions = this.parseChildren()
             .filter((el) => el instanceof FieldMap)
-            .map((el) => (el as FieldMap).convertOnlyValues())
-            .join(",\n")
-            .split("\n")
-            .map(this.prependIndentationMapper);
+            .map((el) => (el as FieldMap).convertOnlyValues());
         if (conditions.length) {
             this.converter.addImport("UtilMisc");
-            return [`UtilMisc.toMap(`, ...conditions, `)`];
+            return [
+                `UtilMisc.toMap(`,
+                ...conditions
+                    .join(",\n")
+                    .split("\n")
+                    .map(this.prependIndentationMapper),
+                `)`,
+            ];
         }
         return [];
+    }
+
+    protected getUseCache() {
+        if (this.attributes["use-cache"] === "true") {
+            return [`    .cache(true)`];
+        }
+        return [];
+    }
+
+    protected getDistinct() {
+        if (this.attributes.distinct === "true") {
+            return [`    .distinct()`];
+        }
+        return [];
+    }
+
+    protected getFilterByDate() {
+        if (this.attributes["filter-by-date"] === "true") {
+            return [`    .filterByDate()`];
+        }
+        return [];
+    }
+
+    protected getWhereClause(): string[] {
+        const fieldMap = this.getFromFieldMap();
+        if (!fieldMap) return [];
+        return fieldMap.map((line, index, array) => {
+            if (index === 0) {
+                line = `.where(${line}`;
+            }
+            if (index === array.length - 1) {
+                line = `${line})`;
+            }
+            return line;
+        });
+    }
+
+    protected getUnsupportedAttributes() {
+        return ["delegator-name"];
     }
 }
 
 export interface EntityElementAttributes extends XMLSchemaElementAttributes {
     "entity-name": string;
-    "value-field": string;
+    "delegator-name": string;
+    "filter-by-date"?: StringBoolean;
+    distinct?: StringBoolean;
+    "use-cache": StringBoolean;
 }
