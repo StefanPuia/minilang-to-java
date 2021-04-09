@@ -32,8 +32,13 @@ export class BaseVariableHandler {
         return [];
     }
 
+    protected getDispatchContextSource(): string[] {
+        return [];
+    }
+
     public getDelegator(context: VariableContext): string[] {
         if (context["delegator"]?.count > 0) {
+            this.converter.addImport("Delegator");
             return this.getDelegatorSource();
         }
         return [];
@@ -41,6 +46,7 @@ export class BaseVariableHandler {
 
     public getDispatcher(context: VariableContext): string[] {
         if (context["dispatcher"]?.count > 0) {
+            this.converter.addImport("LocalDispatcher");
             return this.getDispatcherSource();
         }
         return [];
@@ -48,6 +54,7 @@ export class BaseVariableHandler {
 
     public getParameters(context: VariableContext): string[] {
         if (context["parameters"]?.count > 0) {
+            this.converter.addImport("Map");
             return this.getParametersSource();
         }
         return [];
@@ -55,6 +62,7 @@ export class BaseVariableHandler {
 
     public getUserLogin(context: VariableContext): string[] {
         if (context["userLogin"]?.count > 0) {
+            this.converter.addImport("GenericValue");
             return this.getUserLoginSource();
         }
         return [];
@@ -62,6 +70,7 @@ export class BaseVariableHandler {
 
     public getLocale(context: VariableContext): string[] {
         if (context["locale"]?.count > 0) {
+            this.converter.addImport("Locale");
             return this.getLocaleSource();
         }
         return [];
@@ -69,7 +78,16 @@ export class BaseVariableHandler {
 
     public getReturnMap(context: VariableContext): string[] {
         if (context["_returnMap"]?.count > 0) {
+            this.converter.addImport("Map");
             return this.getReturnMapSource();
+        }
+        return [];
+    }
+
+    public getDispatchContext(context: VariableContext): string[] {
+        if (context["dctx"]?.count > 0) {
+            this.converter.addImport("DispatchContext");
+            return this.getDispatchContextSource();
         }
         return [];
     }

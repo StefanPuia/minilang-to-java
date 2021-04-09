@@ -7,11 +7,22 @@ export class IfEmpty extends ConditionalElement {
 
     public convert(): string[] {
         this.converter.addImport("UtilValidate");
-        return [
-            `if (UtilValidate.isEmpty(${ConvertUtils.parseFieldGetter(this.attributes.field)})) {`,
-            ...this.convertChildren().map(this.prependIndentationMapper),
-            ...this.getElseBlock(),
-        ];
+
+        if (this.parseChildren().length) {
+            return [
+                `if (${this.convertCondition()}) {`,
+                ...this.convertChildren().map(this.prependIndentationMapper),
+                ...this.getElseBlock(),
+            ];
+        } else {
+            return [this.convertCondition()];
+        }
+    }
+
+    private convertCondition(): string {
+        return `${this.getNegated()}UtilValidate.isEmpty(${ConvertUtils.parseFieldGetter(
+            this.attributes.field
+        )})`;
     }
 }
 

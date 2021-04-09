@@ -24,12 +24,12 @@ export class IfCompare extends ConditionalElement {
         }
     }
 
-    private convertCondition() {
-        return this.getComparison(
+    protected convertCondition() {
+        return `${this.getNegated()}${this.getComparison(
             this.getField(),
             this.attributes.operator,
             this.getValue()
-        );
+        )}`;
     }
 
     protected getField() {

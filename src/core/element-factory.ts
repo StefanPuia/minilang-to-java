@@ -14,6 +14,7 @@ import { StringTag } from "../elements/assignment/string";
 import { CallClassMethod } from "../elements/call/call-class-method";
 import { CallService } from "../elements/call/call-service";
 import { CallServiceAsynch } from "../elements/call/call-service-asynch";
+import { CallSimpleMethod } from "../elements/call/call-simple-method";
 import { PropertyInfo } from "../elements/call/property-info";
 import { ResultToField } from "../elements/call/result-to-field";
 import { ResultToMap } from "../elements/call/result-to-map";
@@ -21,6 +22,7 @@ import { ResultToRequest } from "../elements/call/result-to-request";
 import { ResultToResult } from "../elements/call/result-to-result";
 import { ResultToSession } from "../elements/call/result-to-session";
 import { ScriptTag, ScriptTextTag } from "../elements/call/script";
+import { SetServiceFields } from "../elements/call/set-service-fields";
 import { Comment } from "../elements/comment";
 import { And } from "../elements/conditional/and";
 import { Condition } from "../elements/conditional/condition";
@@ -31,6 +33,9 @@ import { IfCompare } from "../elements/conditional/if-compare";
 import { IfCompareField } from "../elements/conditional/if-compare-field";
 import { IfEmpty } from "../elements/conditional/if-empty";
 import { IfNotEmpty } from "../elements/conditional/if-not-empty";
+import { IfValidateMethod } from "../elements/conditional/if-validate-method";
+import { Not } from "../elements/conditional/not";
+import { Or } from "../elements/conditional/or";
 import { ConditionExpr } from "../elements/entity/condition-expr";
 import { ConditionList } from "../elements/entity/condition-list";
 import { CreateValue } from "../elements/entity/create-value";
@@ -39,6 +44,7 @@ import { EntityCondition } from "../elements/entity/entity-condition";
 import { EntityOne } from "../elements/entity/entity-one";
 import { FieldMap } from "../elements/entity/field-map";
 import { MakeValue } from "../elements/entity/make-value";
+import { RemoveValue } from "../elements/entity/remove-value";
 import { StoreValue } from "../elements/entity/store-value";
 import { Iterate } from "../elements/loops/iterate";
 import { Root } from "../elements/root/root";
@@ -119,6 +125,8 @@ export class ElementFactory {
                 return new IfCompare(self, converter, parent);
             case "and":
                 return new And(self, converter, parent);
+            case "or":
+                return new Or(self, converter, parent);
             case "condition":
                 return new Condition(self, converter, parent);
             case "then":
@@ -129,6 +137,10 @@ export class ElementFactory {
                 return new ElseIf(self, converter, parent);
             case "if-compare-field":
                 return new IfCompareField(self, converter, parent);
+            case "not":
+                return new Not(self, converter, parent);
+            case "if-validate-method":
+                return new IfValidateMethod(self, converter, parent);
 
             // loops
             case "iterate":
@@ -161,6 +173,10 @@ export class ElementFactory {
                 return new ResultToResult(self, converter, parent);
             case "script":
                 return new ScriptTag(self, converter, parent);
+            case "set-service-fields":
+                return new SetServiceFields(self, converter, parent);
+            case "call-simple-method":
+                return new CallSimpleMethod(self, converter, parent);
 
             // entity
             case "entity-one":
@@ -181,6 +197,8 @@ export class ElementFactory {
                 return new CreateValue(self, converter, parent);
             case "store-value":
                 return new StoreValue(self, converter, parent);
+            case "remove-value":
+                return new RemoveValue(self, converter, parent);
 
             // not used
             case "check-errors":

@@ -61,6 +61,7 @@ export class SimpleMethod extends ElementTag {
         this.addVarToContext("parameters", "Map", false, ["String", "Object"]);
         this.addVarToContext("userLogin", "GenericValue");
         this.addVarToContext("locale", "Locale");
+        this.addVarToContext("dctx", "DispatchContext");
         if (this.converter.getMethodMode() === MethodMode.SERVICE) {
             this.addVarToContext("_returnMap", "Map");
         }
@@ -73,6 +74,9 @@ export class SimpleMethod extends ElementTag {
             ...this.converter
                 .getContextVariableHandler()
                 .getDispatcher(context),
+            ...this.converter
+                .getContextVariableHandler()
+                .getDispatchContext(context),
             ...this.converter
                 .getContextVariableHandler()
                 .getParameters(context),
