@@ -22,7 +22,7 @@ export class ResultToField extends ResultTo {
             `${
                 (this.fromField &&
                     ConvertUtils.parseFieldGetter(
-                        `${this.fromField}.${this.getField()}`
+                        `${this.fromField}.${this.getResultAttribute()}`
                     )) ||
                 "null"
             }`

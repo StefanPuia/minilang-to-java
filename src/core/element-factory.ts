@@ -10,6 +10,7 @@ import { NowDateToEnv } from "../elements/assignment/now-date-to-env";
 import { NowTimestamp } from "../elements/assignment/now-timestamp";
 import { PropertyToField } from "../elements/assignment/property-to-field";
 import { Set } from "../elements/assignment/set";
+import { SetCalendar } from "../elements/assignment/set-calendar";
 import { StringTag } from "../elements/assignment/string";
 import { CallClassMethod } from "../elements/call/call-class-method";
 import { CallService } from "../elements/call/call-service";
@@ -44,7 +45,9 @@ import { EntityCondition } from "../elements/entity/entity-condition";
 import { EntityOne } from "../elements/entity/entity-one";
 import { FieldMap } from "../elements/entity/field-map";
 import { MakeValue } from "../elements/entity/make-value";
+import { RemoveList } from "../elements/entity/remove-list";
 import { RemoveValue } from "../elements/entity/remove-value";
+import { SequencedId } from "../elements/entity/sequenced-id";
 import { StoreValue } from "../elements/entity/store-value";
 import { Iterate } from "../elements/loops/iterate";
 import { Root } from "../elements/root/root";
@@ -113,6 +116,8 @@ export class ElementFactory {
                 return new FirstFromList(self, converter, parent);
             case "property-to-field":
                 return new PropertyToField(self, converter, parent);
+            case "set-calendar":
+                return new SetCalendar(self, converter, parent);
 
             // conditions
             case "if-empty":
@@ -199,6 +204,10 @@ export class ElementFactory {
                 return new StoreValue(self, converter, parent);
             case "remove-value":
                 return new RemoveValue(self, converter, parent);
+            case "remove-list":
+                return new RemoveList(self, converter, parent);
+            case "sequenced-id":
+                return new SequencedId(self, converter, parent);
 
             // not used
             case "check-errors":
