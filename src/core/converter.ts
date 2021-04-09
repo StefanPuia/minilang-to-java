@@ -36,8 +36,8 @@ export class Converter {
             this.newLine(),
             ...converted,
             this.newLine(),
-            this.getErrors(),
-            this.getWarnings(),
+            ...this.getErrors(),
+            ...this.getWarnings(),
         ]
             .filter(Boolean)
             .join("\n");
@@ -48,15 +48,11 @@ export class Converter {
     }
 
     private getErrors() {
-        return this.errors
-            .map(({ content }) => `// FIXME: ERROR: ${content}`)
-            .join("\n");
+        return this.errors.map(({ content }) => `// FIXME: ERROR: ${content}`);
     }
 
     private getWarnings() {
-        return this.warnings
-            .map(({ content }) => `// WARNING: ${content}`)
-            .join("\n");
+        return this.warnings.map(({ content }) => `// WARNING: ${content}`);
     }
 
     private getImports() {

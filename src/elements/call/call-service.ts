@@ -1,4 +1,5 @@
 import { StringBoolean, XMLSchemaElementAttributes } from "../../types";
+import { Set } from "../assignment/set";
 import { CallerElement } from "./caller";
 import { PropertyInfo } from "./property-info";
 import { ResultTo } from "./result-to";
@@ -28,11 +29,14 @@ export class CallService extends CallerElement {
         // ];
         this.addException("GenericServiceException");
         this.setVariableToContext({ name: "dispatcher" });
-        return this.wrapFieldDeclaration(
-            `dispatcher.runSync(${this.getParameters().join(
-                ", "
-            )})${this.getResultAttributeGetter()};`
-        );
+        return [
+            ...this.addUserLoginToMap(),
+            ...this.wrapFieldDeclaration(
+                `dispatcher.runSync(${this.getParameters().join(
+                    ", "
+                )})${this.getResultAttributeGetter()};`
+            ),
+        ];
     }
 
     private getAppendMessage(type: AppendedMessageType) {
@@ -45,9 +49,9 @@ export class CallService extends CallerElement {
 
     private wrapFieldDeclaration(serviceCall: string): string[] {
         return (
-            (this.parseChildren().find((el) => el instanceof ResultTo) as ResultTo)?.wrapConvert(
-                serviceCall
-            ) ?? [serviceCall]
+            (this.parseChildren().find(
+                (el) => el instanceof ResultTo
+            ) as ResultTo)?.wrapConvert(serviceCall) ?? [serviceCall]
         );
     }
 
@@ -58,10 +62,33 @@ export class CallService extends CallerElement {
         return attribute ? `.get("${attribute}")` : "";
     }
 
-    private getParameters(): string[] {
-        return [`"${this.attributes["service-name"]}"`, this.attributes["in-map-name"]].filter(
-            Boolean
-        ) as string[];
+    protected getParameters(): string[] {
+        return [
+            `"${this.attributes["service-name"]}"`,
+            this.attributes["in-map-name"],
+        ].filter(Boolean) as string[];
+    }
+
+    protected addUserLoginToMap(): string[] {
+        if (
+            this.attributes["in-map-name"] &&
+            (this.attributes["include-user-login"] ?? "true") === "true"
+        ) {
+            this.setVariableToContext({ name: "userLogin" });
+            return new Set(
+                {
+                    type: "element",
+                    name: "set",
+                    attributes: {
+                        field: `${this.attributes["in-map-name"]}.userLogin`,
+                        "from-field": "userLogin",
+                    },
+                },
+                this.converter,
+                this.parent
+            ).convert();
+        }
+        return [];
     }
 
     protected getUnsupportedAttributes() {
@@ -85,13 +112,13 @@ type AppendedMessageType =
     | "message-suffix"
     | "default-message";
 
-export interface CallServiceAttributes extends XMLSchemaElementAttributes {
+interface CallServiceAttributes extends XMLSchemaElementAttributes {
     "service-name": string;
     "in-map-name"?: string;
-    "include-user-login": StringBoolean;
+    "include-user-login"?: StringBoolean;
     "break-on-error": StringBoolean;
     "error-code"?: string;
     "success-code"?: string;
-    "require-new-transaction": StringBoolean;
+    "require-new-transaction"?: StringBoolean;
     "transaction-timeout"?: string;
 }

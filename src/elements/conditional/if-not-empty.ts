@@ -1,8 +1,8 @@
 import ConvertUtils from "../../core/convert-utils";
 import { XMLSchemaElementAttributes } from "../../types";
-import { ConditionElement } from "./condition";
+import { ConditionalElement } from "./conditional";
 
-export class IfNotEmpty extends ConditionElement {
+export class IfNotEmpty extends ConditionalElement {
     protected attributes = this.attributes as IfNotEmptyAttributes;
 
     public convert(): string[] {

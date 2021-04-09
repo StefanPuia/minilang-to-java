@@ -8,34 +8,47 @@ import { FieldToResult } from "../elements/assignment/field-to-result";
 import { FirstFromList } from "../elements/assignment/first-from-list";
 import { NowDateToEnv } from "../elements/assignment/now-date-to-env";
 import { NowTimestamp } from "../elements/assignment/now-timestamp";
+import { PropertyToField } from "../elements/assignment/property-to-field";
 import { Set } from "../elements/assignment/set";
 import { StringTag } from "../elements/assignment/string";
 import { CallClassMethod } from "../elements/call/call-class-method";
 import { CallService } from "../elements/call/call-service";
+import { CallServiceAsynch } from "../elements/call/call-service-asynch";
 import { PropertyInfo } from "../elements/call/property-info";
 import { ResultToField } from "../elements/call/result-to-field";
 import { ResultToMap } from "../elements/call/result-to-map";
 import { ResultToRequest } from "../elements/call/result-to-request";
 import { ResultToResult } from "../elements/call/result-to-result";
 import { ResultToSession } from "../elements/call/result-to-session";
+import { ScriptTag, ScriptTextTag } from "../elements/call/script";
 import { Comment } from "../elements/comment";
+import { And } from "../elements/conditional/and";
+import { Condition } from "../elements/conditional/condition";
+import { Else } from "../elements/conditional/else";
+import { ElseIf } from "../elements/conditional/else-if";
+import { If } from "../elements/conditional/if";
 import { IfCompare } from "../elements/conditional/if-compare";
+import { IfCompareField } from "../elements/conditional/if-compare-field";
 import { IfEmpty } from "../elements/conditional/if-empty";
 import { IfNotEmpty } from "../elements/conditional/if-not-empty";
+import { ConditionExpr } from "../elements/entity/condition-expr";
+import { ConditionList } from "../elements/entity/condition-list";
+import { CreateValue } from "../elements/entity/create-value";
 import { EntityAnd } from "../elements/entity/entity-and";
+import { EntityCondition } from "../elements/entity/entity-condition";
 import { EntityOne } from "../elements/entity/entity-one";
 import { FieldMap } from "../elements/entity/field-map";
 import { MakeValue } from "../elements/entity/make-value";
+import { StoreValue } from "../elements/entity/store-value";
 import { Iterate } from "../elements/loops/iterate";
 import { Root } from "../elements/root/root";
 import { SimpleMethod } from "../elements/root/simple-method";
 import { SimpleMethods } from "../elements/root/simple-methods";
+import { Tag } from "../elements/tag";
+import { UndefinedElement } from "../elements/undefined";
+import { UnparsedElement } from "../elements/unparsed";
 import { XMLSchema, XMLSchemaAnyElement } from "../types";
 import { Converter } from "./converter";
-import { PropertyToField } from "../elements/assignment/property-to-field";
-import { ScriptTag, ScriptTextTag } from "../elements/call/script";
-import { Tag } from "../elements/tag";
-import { UnparsedElement } from "../elements/unparsed";
 
 export class ElementFactory {
     public static parse(
@@ -101,9 +114,21 @@ export class ElementFactory {
             case "if-not-empty":
                 return new IfNotEmpty(self, converter, parent);
             case "else":
-                return new UnparsedElement(self, converter, parent);
+                return new Else(self, converter, parent);
             case "if-compare":
                 return new IfCompare(self, converter, parent);
+            case "and":
+                return new And(self, converter, parent);
+            case "condition":
+                return new Condition(self, converter, parent);
+            case "then":
+                return new UnparsedElement(self, converter, parent);
+            case "if":
+                return new If(self, converter, parent);
+            case "else-if":
+                return new ElseIf(self, converter, parent);
+            case "if-compare-field":
+                return new IfCompareField(self, converter, parent);
 
             // loops
             case "iterate":
@@ -114,6 +139,8 @@ export class ElementFactory {
                 return new CallClassMethod(self, converter, parent);
             case "call-service":
                 return new CallService(self, converter, parent);
+            case "call-service-asynch":
+                return new CallServiceAsynch(self, converter, parent);
             case "error-prefix":
             case "error-suffix":
             case "success-prefix":
@@ -144,6 +171,16 @@ export class ElementFactory {
                 return new MakeValue(self, converter, parent);
             case "entity-and":
                 return new EntityAnd(self, converter, parent);
+            case "condition-list":
+                return new ConditionList(self, converter, parent);
+            case "entity-condition":
+                return new EntityCondition(self, converter, parent);
+            case "condition-expr":
+                return new ConditionExpr(self, converter, parent);
+            case "create-value":
+                return new CreateValue(self, converter, parent);
+            case "store-value":
+                return new StoreValue(self, converter, parent);
 
             // not used
             case "check-errors":
@@ -151,11 +188,7 @@ export class ElementFactory {
 
             //
             default:
-                return this.makeErrorComment(
-                    `Parser not defined for element "${self.name}"`,
-                    converter,
-                    parent
-                );
+                return new UndefinedElement(self, converter, parent);
         }
     }
 

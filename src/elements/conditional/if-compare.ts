@@ -1,24 +1,51 @@
 import ConvertUtils from "../../core/convert-utils";
 import { Operator, XMLSchemaElementAttributes } from "../../types";
-import { ConditionElement } from "./condition";
+import { ConditionalElement } from "./conditional";
 
-export class IfCompare extends ConditionElement {
+export class IfCompare extends ConditionalElement {
     protected attributes = this.attributes as IfCompareAttributes;
 
     public convert(): string[] {
-        return [
-            `if (${this.getComparison(
-                ConvertUtils.parseFieldGetter(this.attributes.field) ??
-                    this.attributes.field,
-                this.attributes.operator,
-                this.converter.parseValueOrInitialize(
-                    this.getFieldType(),
-                    this.attributes.value
-                ) ?? this.converter.parseValue(this.attributes.value)
-            )}) {`,
-            ...this.convertChildren().map(this.prependIndentationMapper),
-            ...this.getElseBlock(),
-        ];
+        if (this.parseChildren().length) {
+            return [
+                `if (${this.convertCondition()}) {`,
+                ...this.parseChildren()
+                    .filter(
+                        (tag) => !["else", "else-if"].includes(tag.getTagName())
+                    )
+                    .map((tag) => tag.convert())
+                    .flat()
+                    .map(this.prependIndentationMapper),
+                ...this.getElseIfBlocks(),
+                ...this.getElseBlock(),
+            ];
+        } else {
+            return [this.convertCondition()];
+        }
+    }
+
+    private convertCondition() {
+        return this.getComparison(
+            this.getField(),
+            this.attributes.operator,
+            this.getValue()
+        );
+    }
+
+    protected getField() {
+        return (
+            ConvertUtils.parseFieldGetter(this.attributes.field) ??
+            this.attributes.field
+        );
+    }
+
+    protected getValue() {
+        return (
+            this.converter.parseValueOrInitialize(
+                this.getFieldType(),
+                this.attributes.value
+            ) ?? this.converter.parseValue(this.attributes.value)
+        );
     }
 
     protected getUnsupportedAttributes() {

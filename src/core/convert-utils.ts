@@ -42,6 +42,7 @@ export default class ConvertUtils {
     }
 
     public static importMap: Record<string, string> = {
+        "com.stannah.base.entity.condition.EntityConditionBuilder": "EntityConditionBuilder",
         "com.stannah.base.utils.MiscUtils": "MiscUtils",
         "com.stannah.external.hr.EmployeeUtils": "EmployeeUtils",
         "java.lang.Boolean": "Boolean",
