@@ -17,8 +17,10 @@ export class EntityAnd extends EntityElement {
     private getChainLines() {
         const whereClause = this.getWhereClause();
         return [
+            ...this.getSelectClause(),
             `.from("${this.attributes["entity-name"]}")`,
             ...whereClause,
+            ...this.getOrderByClause(),
             ...this.getUseCache(),
             ...this.getFilterByDate(),
             ...this.getDistinct(),

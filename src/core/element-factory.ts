@@ -45,8 +45,10 @@ import { EntityCondition } from "../elements/entity/entity-condition";
 import { EntityOne } from "../elements/entity/entity-one";
 import { FieldMap } from "../elements/entity/field-map";
 import { MakeValue } from "../elements/entity/make-value";
+import { OrderBy } from "../elements/entity/order-by";
 import { RemoveList } from "../elements/entity/remove-list";
 import { RemoveValue } from "../elements/entity/remove-value";
+import { SelectField } from "../elements/entity/select-field";
 import { SequencedId } from "../elements/entity/sequenced-id";
 import { StoreValue } from "../elements/entity/store-value";
 import { Iterate } from "../elements/loops/iterate";
@@ -208,6 +210,10 @@ export class ElementFactory {
                 return new RemoveList(self, converter, parent);
             case "sequenced-id":
                 return new SequencedId(self, converter, parent);
+            case "select-field":
+                return new SelectField(self, converter, parent);
+            case "order-by":
+                return new OrderBy(self, converter, parent);
 
             // not used
             case "check-errors":

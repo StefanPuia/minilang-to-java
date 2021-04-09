@@ -16,8 +16,10 @@ export class EntityCondition extends EntityElement {
             ...this.getConditionBuilder(),
             ...this.wrapConvert(`EntityQuery.use(delegator)`),
             ...[
+                ...this.getSelectClause(),
                 `.from(${this.attributes["entity-name"]})`,
                 `.where(${this.getEcbName()}.build())`,
+                ...this.getOrderByClause(),
                 ".queryList();",
             ].map(this.prependIndentationMapper),
         ];
@@ -55,3 +57,10 @@ export class EntityCondition extends EntityElement {
 interface EntityConditionAttributes extends EntityElementAttributes {
     list: string;
 }
+
+// TODO:
+// <xs:choice minOccurs="0">
+//     <xs:element ref="limit-range"/>
+//     <xs:element ref="limit-view"/>
+//     <xs:element ref="use-iterator"/>
+// </xs:choice>

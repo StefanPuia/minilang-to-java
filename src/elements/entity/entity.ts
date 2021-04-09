@@ -1,8 +1,14 @@
-import { XMLSchemaAnyElement, XMLSchemaElementAttributes, StringBoolean } from '../../types';
+import {
+    XMLSchemaAnyElement,
+    XMLSchemaElementAttributes,
+    StringBoolean,
+} from "../../types";
 import { SetterElement } from "../assignment/setter";
 import { FieldMap } from "./field-map";
 import { Converter } from "../../core/converter";
 import { Tag } from "../tag";
+import { SelectField } from "./select-field";
+import { OrderBy } from "./order-by";
 
 export abstract class EntityElement extends SetterElement {
     protected attributes = this.attributes as EntityElementAttributes;
@@ -25,6 +31,30 @@ export abstract class EntityElement extends SetterElement {
                     .split("\n")
                     .map(this.prependIndentationMapper),
                 `)`,
+            ];
+        }
+        return [];
+    }
+
+    protected getSelectClause(): string[] {
+        const fields = this.parseChildren()
+            .filter((el) => el.getTagName() === "select-field")
+            .map((el) => (el as SelectField).getFieldName());
+        if (fields.length) {
+            return [
+                `.select(${fields.map((field) => `"${field}"`).join(", ")})`,
+            ];
+        }
+        return [];
+    }
+
+    protected getOrderByClause(): string[] {
+        const fields = this.parseChildren()
+            .filter((el) => el.getTagName() === "order-by")
+            .map((el) => (el as OrderBy).getFieldName());
+        if (fields.length) {
+            return [
+                `.orderBy(${fields.map((field) => `"${field}"`).join(", ")})`,
             ];
         }
         return [];
@@ -74,6 +104,6 @@ export interface EntityElementAttributes extends XMLSchemaElementAttributes {
     "entity-name": string;
     "delegator-name": string;
     "filter-by-date"?: StringBoolean;
-    distinct?: StringBoolean;
+    "distinct"?: StringBoolean;
     "use-cache": StringBoolean;
 }
