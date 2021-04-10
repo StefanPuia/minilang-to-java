@@ -5,7 +5,11 @@ export interface XMLSchema {
     elements: XMLSchemaAnyElement[];
 }
 
-export type XMLSchemaAnyElement = XMLSchemaElement | XMLSchemaCommentElement | XMLSchemaTextElement;
+export type XMLSchemaAnyElement =
+    | XMLSchemaElement
+    | XMLSchemaCommentElement
+    | XMLSchemaTextElement
+    | XMLSchemaCdataElement;
 
 export interface XMLSchemaCommentElement {
     type: "comment";
@@ -15,6 +19,11 @@ export interface XMLSchemaCommentElement {
 export interface XMLSchemaTextElement {
     type: "text";
     text: string;
+}
+
+export interface XMLSchemaCdataElement {
+    type: "cdata";
+    cdata: string;
 }
 
 export interface XMLSchemaElement {
@@ -41,7 +50,7 @@ export type ContextVariable = {
     name: string;
     count: number;
     type?: string;
-    typeParams: string[]
+    typeParams: string[];
 };
 export type VariableContext = {
     [name: string]: ContextVariable;

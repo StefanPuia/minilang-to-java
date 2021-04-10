@@ -158,11 +158,16 @@ export class Converter {
                 this.addImport("HashMap");
                 return "new HashMap<>()";
         }
-        const scriptMatch = value.match(/^\$\{\s*(?:groovy:)?\s*(?<script>.+)\}$/);
+        const scriptMatch = value.match(
+            /^\$\{\s*(?:groovy:)?\s*(?<script>.+)\}$/
+        );
         if (scriptMatch) {
             return scriptMatch?.groups?.script as string;
         }
         if (value.includes('"') || value.includes("(")) {
+            return value;
+        }
+        if (!isNaN(parseFloat(value))) {
             return value;
         }
         return `"${value}"`;

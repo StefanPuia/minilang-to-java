@@ -12,6 +12,10 @@ import { PropertyToField } from "../elements/assignment/property-to-field";
 import { Set } from "../elements/assignment/set";
 import { SetCalendar } from "../elements/assignment/set-calendar";
 import { StringTag } from "../elements/assignment/string";
+import { Calcop } from "../elements/calculate/calcop";
+import { Calculate } from "../elements/calculate/calculate";
+import { NumberElement } from "../elements/calculate/number";
+import { CallBsh } from "../elements/call/call-bsh";
 import { CallClassMethod } from "../elements/call/call-class-method";
 import { CallObjectMethod } from "../elements/call/call-object-method";
 import { CallService } from "../elements/call/call-service";
@@ -23,7 +27,7 @@ import { ResultToMap } from "../elements/call/result-to-map";
 import { ResultToRequest } from "../elements/call/result-to-request";
 import { ResultToResult } from "../elements/call/result-to-result";
 import { ResultToSession } from "../elements/call/result-to-session";
-import { ScriptTag, ScriptTextTag } from "../elements/call/script";
+import { ScriptCdataTag, ScriptTag, ScriptTextTag } from "../elements/call/script";
 import { SetServiceFields } from "../elements/call/set-service-fields";
 import { Comment } from "../elements/comment";
 import { And } from "../elements/conditional/and";
@@ -79,6 +83,19 @@ export class ElementFactory {
             switch (parent?.getTagName()) {
                 case "script":
                     return new ScriptTextTag(self, converter, parent);
+            }
+            return this.makeErrorComment(
+                `Error parsing text element contained in "${
+                    parent?.getTagName() ?? "unknown parent"
+                }"`,
+                converter,
+                parent
+            );
+        }
+        if (self.type === "cdata") {
+            switch (parent?.getTagName()) {
+                case "call-bsh":
+                    return new ScriptCdataTag(self, converter, parent);
             }
             return this.makeErrorComment(
                 `Error parsing text element contained in "${
@@ -195,6 +212,8 @@ export class ElementFactory {
                 return new CallSimpleMethod(self, converter, parent);
             case "call-object-method":
                 return new CallObjectMethod(self, converter, parent);
+            case "call-bsh":
+                return new CallBsh(self, converter, parent);
 
             // entity
             case "entity-one":
@@ -231,6 +250,14 @@ export class ElementFactory {
                 return new Log(self, converter, parent);
             case "trace":
                 return new Trace(self, converter, parent);
+
+            // calculate
+            case "calcop":
+                return new Calcop(self, converter, parent);
+            case "calculate":
+                return new Calculate(self, converter, parent);
+            case "number":
+                return new NumberElement(self, converter, parent);
 
             // not used
             case "check-errors":

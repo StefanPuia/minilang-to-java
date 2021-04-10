@@ -1,4 +1,5 @@
 import { XMLSchemaElementAttributes } from "../../types";
+import { CdataTag } from "../cdata-tag";
 import { TextTag } from "../text-tag";
 import { CallerElement } from "./caller";
 export class ScriptTag extends CallerElement {
@@ -37,13 +38,11 @@ export class ScriptTag extends CallerElement {
     }
 }
 
-interface ScriptTagAttributes extends XMLSchemaElementAttributes {
+export interface ScriptTagAttributes extends XMLSchemaElementAttributes {
     location?: string;
     script?: string;
 }
 
-export class ScriptTextTag extends TextTag {
-    public convert(): string[] {
-        return super.convert();
-    }
-}
+export class ScriptTextTag extends TextTag {}
+
+export class ScriptCdataTag extends CdataTag {}

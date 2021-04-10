@@ -10,7 +10,7 @@ export class UndefinedElement extends ElementTag {
     }
 
     private getMessage() {
-        return `Parser not defined for ${this.getType()} ${this.getTag()}`;
+        return `Parser not defined for ${this.getType()} ${this.getTag()}`.trim();
     }
 
     private getType() {
