@@ -13,6 +13,7 @@ import { Set } from "../elements/assignment/set";
 import { SetCalendar } from "../elements/assignment/set-calendar";
 import { StringTag } from "../elements/assignment/string";
 import { CallClassMethod } from "../elements/call/call-class-method";
+import { CallObjectMethod } from "../elements/call/call-object-method";
 import { CallService } from "../elements/call/call-service";
 import { CallServiceAsynch } from "../elements/call/call-service-asynch";
 import { CallSimpleMethod } from "../elements/call/call-simple-method";
@@ -186,6 +187,8 @@ export class ElementFactory {
                 return new SetServiceFields(self, converter, parent);
             case "call-simple-method":
                 return new CallSimpleMethod(self, converter, parent);
+            case "call-object-method":
+                return new CallObjectMethod(self, converter, parent);
 
             // entity
             case "entity-one":

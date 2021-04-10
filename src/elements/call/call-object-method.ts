@@ -1,34 +1,31 @@
 import ConvertUtils from "../../core/convert-utils";
 import { XMLSchemaElementAttributes } from "../../types";
-import { Field } from "../assignment/field";
-import { StringTag } from "../assignment/string";
 import { CallerElement } from "./caller";
 
-export class CallClassMethod extends CallerElement {
-    public getType() {
+export class CallObjectMethod extends CallerElement {
+    protected attributes = this.attributes as CallObjectMethodAttributes;
+
+    public getType(): string | undefined {
         return (
             (this.attributes["ret-field"] &&
                 this.converter.guessFieldType(this.attributes["ret-field"])) ||
             "Object"
         );
     }
-    public getField() {
+    public getField(): string | undefined {
         return this.attributes["ret-field"];
     }
-    protected attributes = this.attributes as CallClassMethodAttributes;
-
     public convert(): string[] {
-        this.converter.addImport(this.attributes["class-name"]);
         return this.wrapConvert(
-            `${ConvertUtils.unqualify(this.attributes["class-name"])}.${
+            `${ConvertUtils.parseFieldGetter(this.attributes["obj-field"])}.${
                 this.attributes["method-name"]
             }(${this.getFields()})`
         );
     }
 }
 
-interface CallClassMethodAttributes extends XMLSchemaElementAttributes {
-    "class-name": string;
+interface CallObjectMethodAttributes extends XMLSchemaElementAttributes {
     "method-name": string;
+    "obj-field": string;
     "ret-field"?: string;
 }
