@@ -88,7 +88,7 @@ export abstract class Tag {
     private validateChildren() {
         const validChildren = this.getValidChildren();
         const children = this.parseChildren()
-            .filter((el) => !el.getTagName().startsWith("!"))
+            .filter((el) => !el.getTagName()?.startsWith("!"))
             .reduce((collector, element) => {
                 collector[element.getTagName()] =
                     (collector[element.getTagName()] ?? 0) + 1;

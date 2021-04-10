@@ -51,6 +51,8 @@ import { RemoveValue } from "../elements/entity/remove-value";
 import { SelectField } from "../elements/entity/select-field";
 import { SequencedId } from "../elements/entity/sequenced-id";
 import { StoreValue } from "../elements/entity/store-value";
+import { Log } from "../elements/logging/log";
+import { Trace } from "../elements/logging/trace";
 import { Iterate } from "../elements/loops/iterate";
 import { Root } from "../elements/root/root";
 import { SimpleMethod } from "../elements/root/simple-method";
@@ -214,6 +216,12 @@ export class ElementFactory {
                 return new SelectField(self, converter, parent);
             case "order-by":
                 return new OrderBy(self, converter, parent);
+
+            // logging
+            case "log":
+                return new Log(self, converter, parent);
+            case "trace":
+                return new Trace(self, converter, parent);
 
             // not used
             case "check-errors":
