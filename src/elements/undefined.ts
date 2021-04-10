@@ -14,7 +14,10 @@ export class UndefinedElement extends ElementTag {
     }
 
     private getType() {
-        return (this.tag.type !== "element" && this.tag.type) || "element";
+        return (
+            (this.tag.type !== "element" && `${this.tag.type} element`) ||
+            "element"
+        );
     }
 
     private getTag() {

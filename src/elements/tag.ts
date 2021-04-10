@@ -146,6 +146,13 @@ export abstract class Tag {
         this.parent?.addException(exceptionClass);
     }
 
+    protected getParents(): Tag[] {
+        if (this.parent) {
+            return [this.parent, ...this.parent.getParents()];
+        }
+        return [];
+    }
+
     protected prependIndentationMapper(
         line: string,
         _index: number,

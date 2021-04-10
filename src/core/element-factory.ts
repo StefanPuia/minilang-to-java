@@ -56,6 +56,7 @@ import { StoreValue } from "../elements/entity/store-value";
 import { Log } from "../elements/logging/log";
 import { Trace } from "../elements/logging/trace";
 import { Iterate } from "../elements/loops/iterate";
+import { Loop } from "../elements/loops/loop";
 import { Root } from "../elements/root/root";
 import { SimpleMethod } from "../elements/root/simple-method";
 import { SimpleMethods } from "../elements/root/simple-methods";
@@ -158,6 +159,8 @@ export class ElementFactory {
             // loops
             case "iterate":
                 return new Iterate(self, converter, parent);
+            case "loop":
+                return new Loop(self, converter, parent);
 
             // caller
             case "call-class-method":

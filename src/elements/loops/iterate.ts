@@ -1,7 +1,7 @@
 import { XMLSchemaElementAttributes } from "../../types";
-import { Loop } from "./loop";
+import { LoopingElement } from "./looping";
 
-export class Iterate extends Loop {
+export class Iterate extends LoopingElement {
     protected attributes = this.attributes as IterateAttributes;
 
     public convert(): string[] {
