@@ -87,6 +87,9 @@ export class SimpleMethod extends ElementTag {
     }
 
     private getReturn(): string[] {
+        if (this.parseChildren().find((el) => el.getTagName() === "return")) {
+            return [];
+        }
         switch (this.converter.getMethodMode()) {
             case MethodMode.EVENT:
                 return [`return "success";`];
@@ -128,6 +131,10 @@ export class SimpleMethod extends ElementTag {
     protected addException(exceptionClass: string) {
         this.converter.addImport(exceptionClass);
         this.exceptions.add(exceptionClass);
+    }
+
+    public getDefaultSuccessCode() {
+        return this.attributes["default-success-code"] ?? "success";
     }
 }
 

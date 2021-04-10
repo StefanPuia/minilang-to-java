@@ -9,6 +9,7 @@ import { FirstFromList } from "../elements/assignment/first-from-list";
 import { NowDateToEnv } from "../elements/assignment/now-date-to-env";
 import { NowTimestamp } from "../elements/assignment/now-timestamp";
 import { PropertyToField } from "../elements/assignment/property-to-field";
+import { SessionToField } from "../elements/assignment/session-to-field";
 import { Set } from "../elements/assignment/set";
 import { SetCalendar } from "../elements/assignment/set-calendar";
 import { StringTag } from "../elements/assignment/string";
@@ -43,6 +44,7 @@ import { IfNotEmpty } from "../elements/conditional/if-not-empty";
 import { IfValidateMethod } from "../elements/conditional/if-validate-method";
 import { Not } from "../elements/conditional/not";
 import { Or } from "../elements/conditional/or";
+import { Return } from "../elements/conditional/return";
 import { ConditionExpr } from "../elements/entity/condition-expr";
 import { ConditionList } from "../elements/entity/condition-list";
 import { CreateValue } from "../elements/entity/create-value";
@@ -57,8 +59,12 @@ import { RemoveValue } from "../elements/entity/remove-value";
 import { SelectField } from "../elements/entity/select-field";
 import { SequencedId } from "../elements/entity/sequenced-id";
 import { StoreValue } from "../elements/entity/store-value";
+import { TransactionBegin } from "../elements/entity/transaction-begin";
+import { TransactionCommit } from "../elements/entity/transasction-commit";
+import { TransactionRollback } from "../elements/entity/transasction-rollback";
 import { Log } from "../elements/logging/log";
 import { Trace } from "../elements/logging/trace";
+import { Break } from "../elements/loops/break";
 import { Iterate } from "../elements/loops/iterate";
 import { Loop } from "../elements/loops/loop";
 import { Root } from "../elements/root/root";
@@ -142,6 +148,8 @@ export class ElementFactory {
                 return new PropertyToField(self, converter, parent);
             case "set-calendar":
                 return new SetCalendar(self, converter, parent);
+            case "session-to-field":
+                return new SessionToField(self, converter, parent);
 
             // conditions
             case "if-empty":
@@ -172,12 +180,16 @@ export class ElementFactory {
                 return new IfValidateMethod(self, converter, parent);
             case "if-instance-of":
                 return new IfInstanceOf(self, converter, parent);
+            case "return":
+                return new Return(self, converter, parent);
 
             // loops
             case "iterate":
                 return new Iterate(self, converter, parent);
             case "loop":
                 return new Loop(self, converter, parent);
+            case "break":
+                return new Break(self, converter, parent);
 
             // caller
             case "call-class-method":
@@ -244,6 +256,12 @@ export class ElementFactory {
                 return new SelectField(self, converter, parent);
             case "order-by":
                 return new OrderBy(self, converter, parent);
+            case "transaction-begin":
+                return new TransactionBegin(self, converter, parent);
+            case "transaction-commit":
+                return new TransactionCommit(self, converter, parent);
+            case "transaction-rollback":
+                return new TransactionRollback(self, converter, parent);
 
             // logging
             case "log":

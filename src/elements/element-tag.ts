@@ -30,7 +30,6 @@ export abstract class ElementTag extends Tag {
     }
 
     public convertChildren(): string[] {
-        this.parseChildren();
         return this.parseChildren().map((tag) => tag.convert()).flat();
     }
 

@@ -76,6 +76,8 @@ export default class ConvertUtils {
         "org.ofbiz.entity.Delegator": "Delegator",
         "org.ofbiz.entity.GenericEntityException": "GenericEntityException",
         "org.ofbiz.entity.GenericValue": "GenericValue",
+        "org.ofbiz.entity.transaction.GenericTransactionException": "GenericTransactionException",
+        "org.ofbiz.entity.transaction.TransactionUtil": "TransactionUtil",
         "org.ofbiz.entity.util.EntityQuery": "EntityQuery",
         "org.ofbiz.entity.util.EntityUtilProperties": "EntityUtilProperties",
         "org.ofbiz.service.DispatchContext": "DispatchContext",

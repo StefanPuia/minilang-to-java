@@ -134,7 +134,10 @@ export abstract class Tag {
         }
     }
 
-    public getParent(): Tag | undefined {
+    public getParent(tagName?: string): Tag | undefined {
+        if (typeof tagName !== "undefined") {
+            return this.getParents().find(el => el.getTagName() === tagName);
+        }
         return this.parent;
     }
 
