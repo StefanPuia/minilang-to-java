@@ -34,6 +34,7 @@ import { If } from "../elements/conditional/if";
 import { IfCompare } from "../elements/conditional/if-compare";
 import { IfCompareField } from "../elements/conditional/if-compare-field";
 import { IfEmpty } from "../elements/conditional/if-empty";
+import { IfInstanceOf } from "../elements/conditional/if-instance-of";
 import { IfNotEmpty } from "../elements/conditional/if-not-empty";
 import { IfValidateMethod } from "../elements/conditional/if-validate-method";
 import { Not } from "../elements/conditional/not";
@@ -151,6 +152,8 @@ export class ElementFactory {
                 return new Not(self, converter, parent);
             case "if-validate-method":
                 return new IfValidateMethod(self, converter, parent);
+            case "if-instance-of":
+                return new IfInstanceOf(self, converter, parent);
 
             // loops
             case "iterate":

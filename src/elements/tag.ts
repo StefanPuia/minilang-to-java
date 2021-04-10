@@ -8,7 +8,7 @@ export abstract class Tag {
     protected readonly tag: XMLSchemaAnyElement;
     protected readonly parent?: Tag;
     protected children?: Tag[] = undefined;
-    private variableContext: VariableContext = {};
+    protected variableContext: VariableContext = {};
 
     constructor(tag: XMLSchemaAnyElement, converter: Converter, parent?: Tag) {
         this.tag = tag;
@@ -31,10 +31,10 @@ export abstract class Tag {
     public getVariableContext(): VariableContext | undefined {
         return this.hasOwnContext()
             ? {
-                  ...this.parent?.getVariableContext(),
+                  ...this.getParentVariableContext(),
                   ...this.variableContext,
               }
-            : this.parent?.getVariableContext();
+            : this.getParentVariableContext();
     }
 
     public getVariableFromContext(variable: string) {
@@ -56,7 +56,7 @@ export abstract class Tag {
             if (this?.parent?.getVariableFromContext(contextVariable.name)) {
                 ContextUtils.setVariableToContext(
                     contextVariable,
-                    this.parent?.getVariableContext()
+                    this.getParentVariableContext()
                 );
             } else {
                 ContextUtils.setVariableToContext(
@@ -136,6 +136,10 @@ export abstract class Tag {
 
     public getParent(): Tag | undefined {
         return this.parent;
+    }
+
+    protected getParentVariableContext() {
+        return this.parent?.getVariableContext();
     }
 
     protected addException(exceptionClass: string) {

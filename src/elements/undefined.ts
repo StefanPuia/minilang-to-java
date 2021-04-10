@@ -10,10 +10,21 @@ export class UndefinedElement extends ElementTag {
     }
 
     private getMessage() {
-        return `Parser not defined for element "${this.tag.name}"`;
+        return `Parser not defined for ${this.getType()} ${this.getTag()}`;
+    }
+
+    private getType() {
+        return (this.tag.type !== "element" && this.tag.type) || "element";
+    }
+
+    private getTag() {
+        return this.tag.name || "";
     }
 
     public convert(): string[] {
-        return [`// ${this.getMessage()}`, ...this.convertChildren()];
+        return [
+            `// ${this.getMessage()}`,
+            ...this.convertChildren().map(this.prependIndentationMapper),
+        ];
     }
 }

@@ -3,6 +3,29 @@ import { Operator } from "../../types";
 import { ElementTag } from "../element-tag";
 
 export abstract class ConditionalElement extends ElementTag {
+    public convert(): string[] {
+        if (this.parseChildren().length) {
+            return [
+                `if (${this.convertCondition()}) {`,
+                ...this.parseChildren()
+                    .filter(
+                        (tag) => !["else", "else-if"].includes(tag.getTagName())
+                    )
+                    .map((tag) => tag.convert())
+                    .flat()
+                    .map(this.prependIndentationMapper),
+                ...this.getElseIfBlocks(),
+                ...this.getElseBlock(),
+            ];
+        } else {
+            return [this.convertCondition()];
+        }
+    }
+
+    protected convertCondition(): string {
+        return "true";
+    }
+
     protected hasOwnContext(): boolean {
         return true;
     }
