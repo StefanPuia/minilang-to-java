@@ -57,7 +57,7 @@ export abstract class SetterElement extends ElementTag {
      */
     public wrapConvert(assign: string, semicolon: boolean = true): string[] {
         if (!this.getField()) {
-            return [assign];
+            return [`${assign}${semicolon ? ";" : ""}`];
         }
         const hasSetter = ConvertUtils.hasSetter(this.getField());
         const setter = ConvertUtils.parseFieldSetter(this.getField(), assign);

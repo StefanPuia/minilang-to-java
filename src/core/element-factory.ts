@@ -5,6 +5,7 @@ import { FailProperty } from "../elements/assignment/fail-property";
 import { Field } from "../elements/assignment/field";
 import { FieldToList } from "../elements/assignment/field-to-list";
 import { FieldToResult } from "../elements/assignment/field-to-result";
+import { FilterListByDate } from "../elements/assignment/filter-list-by-date";
 import { FirstFromList } from "../elements/assignment/first-from-list";
 import { NowDateToEnv } from "../elements/assignment/now-date-to-env";
 import { NowTimestamp } from "../elements/assignment/now-timestamp";
@@ -58,6 +59,8 @@ import { RemoveList } from "../elements/entity/remove-list";
 import { RemoveValue } from "../elements/entity/remove-value";
 import { SelectField } from "../elements/entity/select-field";
 import { SequencedId } from "../elements/entity/sequenced-id";
+import { SetNonPKFields } from "../elements/entity/set-nonpk-fields";
+import { SetPKFields } from "../elements/entity/set-pk-fields";
 import { StoreValue } from "../elements/entity/store-value";
 import { TransactionBegin } from "../elements/entity/transaction-begin";
 import { TransactionCommit } from "../elements/entity/transasction-commit";
@@ -150,6 +153,8 @@ export class ElementFactory {
                 return new SetCalendar(self, converter, parent);
             case "session-to-field":
                 return new SessionToField(self, converter, parent);
+            case "filter-list-by-date":
+                return new FilterListByDate(self, converter, parent);
 
             // conditions
             case "if-empty":
@@ -262,6 +267,10 @@ export class ElementFactory {
                 return new TransactionCommit(self, converter, parent);
             case "transaction-rollback":
                 return new TransactionRollback(self, converter, parent);
+            case "set-pk-fields":
+                return new SetPKFields(self, converter, parent);
+            case "set-nonpk-fields":
+                return new SetNonPKFields(self, converter, parent);
 
             // logging
             case "log":

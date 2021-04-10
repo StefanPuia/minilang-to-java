@@ -19,7 +19,7 @@ export class CallObjectMethod extends CallerElement {
         return this.wrapConvert(
             `${ConvertUtils.parseFieldGetter(this.attributes["obj-field"])}.${
                 this.attributes["method-name"]
-            }(${this.getFields()})`
+            }(${this.getFields()})`,
         );
     }
 }
