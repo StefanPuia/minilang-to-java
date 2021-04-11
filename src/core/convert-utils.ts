@@ -42,10 +42,12 @@ export default class ConvertUtils {
     }
 
     public static importMap: Record<string, string> = {
-        "com.stannah.base.entity.condition.EntityConditionBuilder": "EntityConditionBuilder",
+        "com.stannah.base.entity.condition.EntityConditionBuilder":
+            "EntityConditionBuilder",
         "com.stannah.base.utils.MiscUtils": "MiscUtils",
         "com.stannah.external.hr.EmployeeUtils": "EmployeeUtils",
         "java.lang.Boolean": "Boolean",
+        "java.lang.Double": "Double",
         "java.lang.Integer": "Integer",
         "java.lang.Long": "Long",
         "java.lang.Math": "Math",
@@ -76,7 +78,8 @@ export default class ConvertUtils {
         "org.ofbiz.entity.Delegator": "Delegator",
         "org.ofbiz.entity.GenericEntityException": "GenericEntityException",
         "org.ofbiz.entity.GenericValue": "GenericValue",
-        "org.ofbiz.entity.transaction.GenericTransactionException": "GenericTransactionException",
+        "org.ofbiz.entity.transaction.GenericTransactionException":
+            "GenericTransactionException",
         "org.ofbiz.entity.transaction.TransactionUtil": "TransactionUtil",
         "org.ofbiz.entity.util.EntityQuery": "EntityQuery",
         "org.ofbiz.entity.util.EntityUtil": "EntityUtil",

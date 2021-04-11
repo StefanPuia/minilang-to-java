@@ -5,7 +5,10 @@ export abstract class PropertyInfo extends ElementTag {
     protected attributes = this.attributes as PropertyInfoAttributes;
 
     public convert(): string[] {
-        throw new Error("Method not implemented.");
+        return [
+            `// Parser not defined for element "${this.getTagName()}"`,
+            ...this.convertChildren(),
+        ];
     }
 }
 

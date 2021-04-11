@@ -11,8 +11,6 @@ import { SelectField } from "./select-field";
 import { OrderBy } from "./order-by";
 
 export abstract class EntityElement extends SetterElement {
-    protected attributes = this.attributes as EntityElementAttributes;
-
     constructor(self: XMLSchemaAnyElement, converter: Converter, parent?: Tag) {
         super(self, converter, parent);
         this.addException("GenericEntityException");
@@ -62,21 +60,28 @@ export abstract class EntityElement extends SetterElement {
 
     protected getUseCache() {
         if (this.attributes["use-cache"] === "true") {
-            return [`    .cache(true)`];
+            return [`.cache(true)`];
         }
         return [];
     }
 
     protected getDistinct() {
         if (this.attributes.distinct === "true") {
-            return [`    .distinct()`];
+            return [`.distinct()`];
         }
         return [];
     }
 
     protected getFilterByDate() {
         if (this.attributes["filter-by-date"] === "true") {
-            return [`    .filterByDate()`];
+            return [`.filterByDate()`];
+        }
+        return [];
+    }
+
+    protected getFrom() {
+        if (this.attributes["entity-name"]) {
+            return [`.from("${this.attributes["entity-name"]}")`];
         }
         return [];
     }
