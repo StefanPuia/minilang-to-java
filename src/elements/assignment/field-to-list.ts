@@ -1,7 +1,7 @@
-import { XMLSchemaElementAttributes } from "../../types";
 import { BaseSetterAttributes, SetterElement } from "./setter";
 
 export class FieldToList extends SetterElement {
+    public static readonly TAG = "field-to-list";
     protected attributes = this.attributes as FieldToListAttributes;
 
     public getType(): string | undefined {

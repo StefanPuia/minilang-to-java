@@ -1,10 +1,10 @@
-import { StringBoolean, XMLSchemaElementAttributes } from "../../types";
-import { Set } from "../assignment/set";
-import { CallerElement } from "./caller";
-import { PropertyInfo } from "./property-info";
-import { ResultTo } from "./result-to";
+import { StringBoolean, XMLSchemaElementAttributes } from "../../../types";
+import { PropertyInfo } from "../property-info/property-info";
+import { ResultTo } from "../result-to";
+import { AbstractCallService } from "./abstract-call-service";
 
-export class CallService extends CallerElement {
+export class CallService extends AbstractCallService {
+    public static readonly TAG = "call-service";
     public getType(): string | undefined {
         this.converter.addImport("Map");
         return "Map";
@@ -60,35 +60,6 @@ export class CallService extends CallerElement {
             (el) => el instanceof ResultTo
         ) as ResultTo)?.getResultAttribute();
         return attribute ? `.get("${attribute}")` : "";
-    }
-
-    protected getParameters(): string[] {
-        return [
-            `"${this.attributes["service-name"]}"`,
-            this.attributes["in-map-name"],
-        ].filter(Boolean) as string[];
-    }
-
-    protected addUserLoginToMap(): string[] {
-        if (
-            this.attributes["in-map-name"] &&
-            (this.attributes["include-user-login"] ?? "true") === "true"
-        ) {
-            this.setVariableToContext({ name: "userLogin" });
-            return new Set(
-                {
-                    type: "element",
-                    name: "set",
-                    attributes: {
-                        field: `${this.attributes["in-map-name"]}.userLogin`,
-                        "from-field": "userLogin",
-                    },
-                },
-                this.converter,
-                this.parent
-            ).convert();
-        }
-        return [];
     }
 
     protected getUnsupportedAttributes() {

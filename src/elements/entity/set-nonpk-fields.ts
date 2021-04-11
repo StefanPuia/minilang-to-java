@@ -4,6 +4,7 @@ import { ElementTag } from "../element-tag";
 import { SetPKFieldsAttributes } from "./set-pk-fields";
 
 export class SetNonPKFields extends ElementTag {
+    public static readonly TAG = "set-nonpk-fields";
     protected attributes = this.attributes as SetPKFieldsAttributes;
 
     public convert(): string[] {

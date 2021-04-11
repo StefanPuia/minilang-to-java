@@ -2,6 +2,7 @@ import { MethodMode, XMLSchemaElementAttributes } from "../../types";
 import { ResultTo } from "./result-to";
 
 export class ResultToRequest extends ResultTo {
+    public static readonly TAG = "result-to-request";
     protected attributes = this.attributes as ResultToRequestAttributes;
 
     public getResultAttribute(): string | undefined {
@@ -20,7 +21,10 @@ export class ResultToRequest extends ResultTo {
 
     public wrapConvert(assign: string): string[] {
         if (this.converter.getMethodMode() !== MethodMode.EVENT) {
-            this.converter.appendMessage("ERROR", `"${this.getTagName()}" used in a non-event environment`);
+            this.converter.appendMessage(
+                "ERROR",
+                `"${this.getTagName()}" used in a non-event environment`
+            );
         }
         return [
             `request.setAttribute("${

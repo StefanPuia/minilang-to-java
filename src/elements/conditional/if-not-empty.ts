@@ -3,6 +3,7 @@ import { XMLSchemaElementAttributes } from "../../types";
 import { ConditionalElement } from "./conditional";
 
 export class IfNotEmpty extends ConditionalElement {
+    public static readonly TAG = "if-not-empty";
     protected attributes = this.attributes as IfNotEmptyAttributes;
 
     public convert(): string[] {

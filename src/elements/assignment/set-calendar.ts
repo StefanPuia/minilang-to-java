@@ -1,7 +1,8 @@
-import { StringBoolean, XMLSchemaElementAttributes } from "../../types";
+import { StringBoolean } from "../../types";
 import { BaseSetterAttributes, SetterElement } from "./setter";
 
 export class SetCalendar extends SetterElement {
+    public static readonly TAG = "set-calendar";
     protected attributes = this.attributes as SetCalendarAttributes;
 
     public getType(): string {

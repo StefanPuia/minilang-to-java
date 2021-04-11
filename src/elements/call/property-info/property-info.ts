@@ -1,7 +1,7 @@
-import { ElementTag } from "../element-tag";
-import { XMLSchemaElementAttributes } from "../../types";
+import { ElementTag } from "../../element-tag";
+import { XMLSchemaElementAttributes } from "../../../types";
 
-export class PropertyInfo extends ElementTag {
+export abstract class PropertyInfo extends ElementTag {
     protected attributes = this.attributes as PropertyInfoAttributes;
 
     public convert(): string[] {

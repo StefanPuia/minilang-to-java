@@ -3,6 +3,7 @@ import { XMLSchemaElementAttributes } from "../../types";
 import { CallerElement } from "./caller";
 
 export class CallObjectMethod extends CallerElement {
+    public static readonly TAG = "call-object-method";
     protected attributes = this.attributes as CallObjectMethodAttributes;
 
     public getType(): string | undefined {

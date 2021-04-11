@@ -1,6 +1,8 @@
 import { ElementTag } from "../element-tag";
 import { XMLSchemaElementAttributes, StringBoolean } from "../../types";
+
 export class StoreValue extends ElementTag {
+    public static readonly TAG = "store-value";
     protected attributes = this.attributes as StoreValueAttributes;
 
     public convert() {

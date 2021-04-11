@@ -3,6 +3,7 @@ import { XMLSchemaElementAttributes } from "../../types";
 import { SetterElement } from "../assignment/setter";
 
 export class SetServiceFields extends SetterElement {
+    public static readonly TAG = "set-service-fields";
     protected attributes = this.attributes as SetServiceFieldsAttributes;
 
     public getType(): string | undefined {

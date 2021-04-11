@@ -3,6 +3,7 @@ import { ElementTag } from "../element-tag";
 import { SimpleMethod } from "../root/simple-method";
 
 export class Return extends ElementTag {
+    public static readonly TAG = "return";
     protected attributes = this.attributes as ReturnAttributes;
 
     public convert() {
@@ -11,7 +12,7 @@ export class Return extends ElementTag {
 
     private getCode() {
         return this.converter.parseValue(
-            this.attributes["response-code"] ??
+            this.attributes?.["response-code"] ??
                 (this.getParent(
                     "simple-method"
                 ) as SimpleMethod).getDefaultSuccessCode()

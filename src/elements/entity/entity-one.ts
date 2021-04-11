@@ -2,6 +2,7 @@ import { StringBoolean } from "../../types";
 import { EntityElement, EntityElementAttributes } from "./entity";
 
 export class EntityOne extends EntityElement {
+    public static readonly TAG = "entity-one";
     protected attributes = this.attributes as EntityOneAttributes;
 
     public getType(): string {
@@ -15,6 +16,7 @@ export class EntityOne extends EntityElement {
     public convert(): string[] {
         this.converter.addImport("GenericValue");
         this.converter.addImport("EntityQuery");
+        this.addException("GenericEntityException");
         this.setVariableToContext({ name: "delegator" });
         return [
             ...this.wrapConvert("EntityQuery.use(delegator)", false),

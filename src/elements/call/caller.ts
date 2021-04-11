@@ -1,6 +1,5 @@
-import { ElementTag } from "../element-tag";
-import { SetterElement } from "../assignment/setter";
 import { Field } from "../assignment/field";
+import { SetterElement } from "../assignment/setter";
 import { StringTag } from "../assignment/string";
 
 export abstract class CallerElement extends SetterElement {

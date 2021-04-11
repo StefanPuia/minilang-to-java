@@ -1,6 +1,7 @@
 import { EntityElement, EntityElementAttributes } from "./entity";
 
 export class EntityCondition extends EntityElement {
+    public static readonly TAG = "entity-condition";
     protected attributes = this.attributes as EntityConditionAttributes;
 
     public getType(): string | undefined {
@@ -22,34 +23,6 @@ export class EntityCondition extends EntityElement {
                 ...this.getOrderByClause(),
                 ".queryList();",
             ].map(this.prependIndentationMapper),
-        ];
-    }
-
-    private getEcbName() {
-        return `${this.attributes.list}Condition`;
-    }
-
-    private getConditionBuilder(): string[] {
-        const ecbDeclared = this.getVariableFromContext(this.getEcbName());
-        this.converter.addImport("EntityConditionBuilder");
-        this.setVariableToContext({
-            name: this.getEcbName(),
-            type: "EntityConditionBuilder",
-        });
-        const declaration = ecbDeclared ? "" : "EntityConditionBuilder ";
-        return [
-            `${declaration}${this.getEcbName()} = EntityConditionBuilder.create()`,
-            ...this.parseChildren()
-                .filter((tag) =>
-                    [
-                        "condition-expr",
-                        "condition-list",
-                        "condition-object",
-                    ].includes(tag.getTagName())
-                )
-                .map((tag) => tag.convert())
-                .flat()
-                .map(this.prependIndentationMapper),
         ];
     }
 }

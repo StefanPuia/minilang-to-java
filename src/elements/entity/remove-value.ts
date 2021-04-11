@@ -3,6 +3,7 @@ import { StringBoolean, XMLSchemaElementAttributes } from "../../types";
 import { ElementTag } from "../element-tag";
 
 export class RemoveValue extends ElementTag {
+    public static readonly TAG = "remove-value";
     protected attributes = this.attributes as RemoveValueAttributes;
 
     public convert(): string[] {

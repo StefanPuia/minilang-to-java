@@ -1,6 +1,7 @@
 import { BaseSetterAttributes, SetterElement } from "./setter";
 
 export class NowTimestamp extends SetterElement {
+    public static readonly TAG = "now-timestamp";
     protected attributes = this.attributes as BaseSetterAttributes;
 
     public getField(): string {

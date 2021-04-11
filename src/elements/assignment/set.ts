@@ -3,6 +3,7 @@ import { StringBoolean, XMLSchemaElementAttributes } from "../../types";
 import { SetterElement } from "./setter";
 
 export class Set extends SetterElement {
+    public static readonly TAG = "set";
     protected attributes = this.attributes as SetAttributes;
     public getField(): string {
         return this.attributes.field;

@@ -69,11 +69,12 @@ export class Converter {
         return [];
     }
 
-    public static convert(
+    public static async convert(
         source: string,
         mode: MethodMode,
         packageName?: string
     ) {
+        await ElementFactory.loadClasses();
         return new Converter(source, mode, packageName).convert();
     }
 
@@ -96,7 +97,9 @@ export class Converter {
 
     public addImport(classPath?: string) {
         if (classPath) {
-            if (["int", "boolean"].includes(classPath)) {
+            if (
+                ["int", "boolean", "long", "double", "char"].includes(classPath)
+            ) {
                 return;
             }
             const qualified = ConvertUtils.qualify(classPath) ?? classPath;

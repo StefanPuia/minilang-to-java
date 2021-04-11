@@ -1,6 +1,7 @@
 import { EntityElement, EntityElementAttributes } from "./entity";
 
 export class EntityAnd extends EntityElement {
+    public static readonly TAG = "entity-and";
     protected attributes = this.attributes as EntityAndAttributes;
 
     public convert(): string[] {

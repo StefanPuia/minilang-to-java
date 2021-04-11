@@ -1,8 +1,9 @@
-import ConvertUtils from "../../core/convert-utils";
-import { XMLSchemaElementAttributes } from "../../types";
-import { IfCompare } from "./if-compare";
+import ConvertUtils from "../../../core/convert-utils";
+import { IfComparing, IfComparingAttributes } from "./if-comparing";
 
-export class IfValidateMethod extends IfCompare {
+export class IfValidateMethod extends IfComparing {
+    public static readonly TAG = "if-validate-method";
+    protected attributes = this.attributes as IfValidateMethodAttributes;
     protected convertCondition() {
         return `${this.getNegated()}${this.getValidator()}`;
     }
@@ -20,7 +21,7 @@ export class IfValidateMethod extends IfCompare {
     }
 }
 
-interface IfValidateMethodAttributes extends XMLSchemaElementAttributes {
+interface IfValidateMethodAttributes extends IfComparingAttributes {
     field: string;
     method: string;
     class?: string;

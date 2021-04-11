@@ -3,6 +3,7 @@ import { MethodMode } from "../../types";
 import { BaseSetterAttributes, SetterElement } from "./setter";
 
 export class FieldToResult extends SetterElement {
+    public static readonly TAG = "field-to-result";
     protected attributes = this.attributes as FieldToResultAttribute;
 
     public getType(): string | undefined {

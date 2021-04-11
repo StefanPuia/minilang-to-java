@@ -4,6 +4,7 @@ import { XMLSchemaElementAttributes } from "../../types";
 import { SetterElement } from "./setter";
 
 export class FilterListByDate extends SetterElement {
+    public static readonly TAG = "filter-list-by-date";
     protected attributes = this.attributes as FilterListByDateAttributes;
 
     public getType(): string | undefined {

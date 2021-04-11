@@ -1,28 +1,10 @@
-import ConvertUtils from "../../core/convert-utils";
-import { Operator, XMLSchemaElementAttributes } from "../../types";
-import { ConditionalElement } from "./conditional";
+import ConvertUtils from "../../../core/convert-utils";
+import { Operator } from "../../../types";
+import { IfComparing, IfComparingAttributes } from "./if-comparing";
 
-export class IfCompare extends ConditionalElement {
+export class IfCompare extends IfComparing {
+    public static readonly TAG = "if-compare";
     protected attributes = this.attributes as IfCompareAttributes;
-
-    public convert(): string[] {
-        if (this.parseChildren().length) {
-            return [
-                `if (${this.convertCondition()}) {`,
-                ...this.parseChildren()
-                    .filter(
-                        (tag) => !["else", "else-if"].includes(tag.getTagName())
-                    )
-                    .map((tag) => tag.convert())
-                    .flat()
-                    .map(this.prependIndentationMapper),
-                ...this.getElseIfBlocks(),
-                ...this.getElseBlock(),
-            ];
-        } else {
-            return [this.convertCondition()];
-        }
-    }
 
     protected convertCondition() {
         return `${this.getNegated()}${this.getComparison(
@@ -58,10 +40,8 @@ export class IfCompare extends ConditionalElement {
     }
 }
 
-interface IfCompareAttributes extends XMLSchemaElementAttributes {
-    field: string;
+interface IfCompareAttributes extends IfComparingAttributes {
     operator: Operator;
     value: string;
-    type?: string;
     format?: string;
 }

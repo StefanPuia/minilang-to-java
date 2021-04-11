@@ -2,6 +2,7 @@ import { ElementTag } from "../element-tag";
 import { LoopingElement } from "./looping";
 
 export class Break extends ElementTag {
+    public static readonly TAG = "break";
     public convert() {
         const loopParent = this.getParents().find(
             (el) => el instanceof LoopingElement

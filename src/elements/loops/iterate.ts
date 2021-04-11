@@ -2,6 +2,7 @@ import { XMLSchemaElementAttributes } from "../../types";
 import { LoopingElement } from "./looping";
 
 export class Iterate extends LoopingElement {
+    public static readonly TAG = "iterate";
     protected attributes = this.attributes as IterateAttributes;
 
     public convert(): string[] {

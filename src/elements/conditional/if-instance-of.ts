@@ -3,6 +3,7 @@ import { XMLSchemaElementAttributes } from "../../types";
 import { ConditionalElement } from "./conditional";
 
 export class IfInstanceOf extends ConditionalElement {
+    public static readonly TAG = "if-instance-of";
     protected attributes = this.attributes as IfInstanceOfAttributes;
 
     protected convertCondition(): string {

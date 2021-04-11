@@ -1,6 +1,7 @@
-import { If } from "./if";
+import { ConditionalElement } from "./conditional";
 
-export class ElseIf extends If {
+export class ElseIf extends ConditionalElement {
+    public static readonly TAG = "else-if";
     public convert(): string[] {
         return [
             `} else if (${this.getCondition()}) {`,

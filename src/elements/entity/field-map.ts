@@ -3,6 +3,7 @@ import { ElementTag } from "../element-tag";
 import { XMLSchemaElementAttributes } from "../../types";
 
 export class FieldMap extends ElementTag {
+    public static readonly TAG = "field-map";
     protected attributes = this.attributes as FieldMapAttributes;
 
     public convert(): string[] {
@@ -30,5 +31,5 @@ export class FieldMap extends ElementTag {
 interface FieldMapAttributes extends XMLSchemaElementAttributes {
     "field-name": string;
     "from-field"?: string;
-    value?: string;
+    "value"?: string;
 }

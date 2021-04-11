@@ -3,6 +3,7 @@ import { XMLSchemaElementAttributes } from "../../types";
 import { ElementTag } from "../element-tag";
 
 export class RemoveList extends ElementTag {
+    public static readonly TAG = "remove-list";
     protected attributes = this.attributes as RemoveListAttributes;
 
     public convert(): string[] {

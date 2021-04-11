@@ -2,6 +2,7 @@ import { ElementTag } from "../element-tag";
 import { XMLSchemaElementAttributes } from "../../types";
 
 export class StringTag extends ElementTag {
+    public static readonly TAG = "string";
     protected attributes = this.attributes as FieldAttributes;
 
     public convert(): string[] {

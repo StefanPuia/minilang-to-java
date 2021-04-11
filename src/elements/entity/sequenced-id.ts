@@ -2,6 +2,7 @@ import { StringBoolean } from "../../types";
 import { BaseSetterAttributes, SetterElement } from "../assignment/setter";
 
 export class SequencedId extends SetterElement {
+    public static readonly TAG = "sequenced-id";
     protected attributes = this.attributes as SequenceIdAttributes;
 
     public getType(): string {

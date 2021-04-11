@@ -2,6 +2,7 @@ import { XMLSchemaElementAttributes } from "../../types";
 import { ElementTag } from "../element-tag";
 
 export class SelectField extends ElementTag {
+    public static readonly TAG = "select-field";
     protected attributes = this.attributes as SelectFieldAttributes;
 
     public convert(): string[] {

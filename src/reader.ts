@@ -4,14 +4,14 @@ import { join } from "path";
 import { MethodMode } from "./types";
 
 const start = new Date().getTime();
-readFile(join(__dirname, "../read.xml"), "utf-8", (err, data) => {
+readFile(join(__dirname, "../read.xml"), "utf-8", async (err, data) => {
     if (err) {
         console.error(err);
     } else {
         console.clear();
         writeFileSync(
             join(__dirname, "../out.java"),
-            Converter.convert(data, MethodMode.SERVICE)
+            await Converter.convert(data, MethodMode.SERVICE)
         );
         const end = new Date().getTime();
         console.log(

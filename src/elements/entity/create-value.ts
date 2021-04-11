@@ -1,6 +1,8 @@
 import { ElementTag } from "../element-tag";
 import { XMLSchemaElementAttributes, StringBoolean } from "../../types";
+
 export class CreateValue extends ElementTag {
+    public static readonly TAG = "create-value";
     protected attributes = this.attributes as CreateValueAttributes;
 
     public convert() {

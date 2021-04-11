@@ -2,6 +2,7 @@ import { ElementTag } from "../element-tag";
 import { BaseSetterAttributes } from "./setter";
 
 export class ClearField extends ElementTag {
+    public static readonly TAG = "clear-field";
     protected attributes = this.attributes as BaseSetterAttributes;
 
     public getType() {

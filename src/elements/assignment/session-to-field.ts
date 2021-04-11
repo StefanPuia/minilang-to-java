@@ -1,9 +1,10 @@
 import { MethodMode } from "../../types";
 import { ElementTag } from "../element-tag";
 import { Set } from "./set";
-import { BaseSetterAttributes, SetterElement } from "./setter";
+import { BaseSetterAttributes } from "./setter";
 
 export class SessionToField extends ElementTag {
+    public static readonly TAG = "session-to-field";
     protected attributes = this.attributes as SessionToFieldAttributes;
 
     private getAttrName() {

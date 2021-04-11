@@ -1,6 +1,7 @@
 import { BaseSetterAttributes, SetterElement } from "./setter";
 import { StringBoolean } from "../../types";
 export class PropertyToField extends SetterElement {
+    public static readonly TAG = "property-to-field";
     protected attributes = this.attributes as PropertyToFieldAttributes;
 
     public getType(): string | undefined {

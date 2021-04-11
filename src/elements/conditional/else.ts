@@ -1,6 +1,7 @@
 import { ElementTag } from "../element-tag";
 
 export class Else extends ElementTag {
+    public static readonly TAG = "else";
     protected hasOwnContext(): boolean {
         return true;
     }

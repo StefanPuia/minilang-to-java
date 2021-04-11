@@ -3,6 +3,7 @@ import { CallObjectMethod } from "../call/call-object-method";
 import { ElementTag } from "../element-tag";
 
 export class SetPKFields extends ElementTag {
+    public static readonly TAG = "set-pk-fields";
     protected attributes = this.attributes as SetPKFieldsAttributes;
 
     public convert(): string[] {

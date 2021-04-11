@@ -1,7 +1,11 @@
-import { IfCompare } from "./if-compare";
-import { XMLSchemaElementAttributes, Operator } from "../../types";
-import ConvertUtils from "../../core/convert-utils";
-export class IfCompareField extends IfCompare {
+import ConvertUtils from "../../../core/convert-utils";
+import { Operator } from "../../../types";
+import { IfComparing, IfComparingAttributes } from "./if-comparing";
+
+export class IfCompareField extends IfComparing {
+    public static readonly TAG = "if-compare-field";
+    protected attributes = this.attributes as IfCompareFieldAttributes;
+
     protected getValue() {
         const attributes = (this
             .attributes as unknown) as IfCompareFieldAttributes;
@@ -16,10 +20,8 @@ export class IfCompareField extends IfCompare {
     }
 }
 
-interface IfCompareFieldAttributes extends XMLSchemaElementAttributes {
-    field: string;
-    operator: Operator;
+interface IfCompareFieldAttributes extends IfComparingAttributes {
+    "operator": Operator;
     "to-field": string;
-    type?: string;
-    format?: string;
+    "format"?: string;
 }

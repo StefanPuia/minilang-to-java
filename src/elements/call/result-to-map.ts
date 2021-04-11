@@ -2,6 +2,7 @@ import { XMLSchemaElementAttributes } from "../../types";
 import { ResultTo } from "./result-to";
 
 export class ResultToMap extends ResultTo {
+    public static readonly TAG = "result-to-map";
     protected attributes = this.attributes as ResultToMapAttributes;
 
     public getResultAttribute(): string | undefined {

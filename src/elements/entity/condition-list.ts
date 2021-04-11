@@ -1,6 +1,8 @@
 import { ElementTag } from "../element-tag";
 import { XMLSchemaElementAttributes } from "../../types";
+
 export class ConditionList extends ElementTag {
+    public static readonly TAG = "condition-list";
     protected attributes = this.attributes as ConditionListAttributes;
 
     public convert(): string[] {

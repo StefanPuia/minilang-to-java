@@ -1,7 +1,9 @@
 import { ElementTag } from "../element-tag";
 import { XMLSchemaElementAttributes, StringBoolean } from "../../types";
 import ConvertUtils from "../../core/convert-utils";
+
 export class ConditionExpr extends ElementTag {
+    public static readonly TAG = "condition-expr";
     protected attributes = this.attributes as ConditionExprAttributes;
 
     public convert(): string[] {
@@ -76,7 +78,7 @@ type MethodReturn = [method: string, ...args: string[]];
 
 interface ConditionExprAttributes extends XMLSchemaElementAttributes {
     "field-name": string;
-    operator:
+    "operator":
         | "less"
         | "greater"
         | "less-equals"
@@ -89,9 +91,9 @@ interface ConditionExprAttributes extends XMLSchemaElementAttributes {
         | "like"
         | "not-like";
     "from-field"?: string;
-    value?: string;
+    "value"?: string;
     "ignore-if-null": StringBoolean;
     "ignore-if-empty": StringBoolean;
     "ignore-case": StringBoolean;
-    ignore: StringBoolean;
+    "ignore": StringBoolean;
 }

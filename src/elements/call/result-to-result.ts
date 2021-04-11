@@ -1,8 +1,8 @@
 import { MethodMode, XMLSchemaElementAttributes } from "../../types";
-import { Set } from "../assignment/set";
 import { ResultTo } from "./result-to";
 
 export class ResultToResult extends ResultTo {
+    public static readonly TAG = "result-to-result";
     protected attributes = this.attributes as ResultToResultAttributes;
 
     public getResultAttribute(): string | undefined {
@@ -14,9 +14,10 @@ export class ResultToResult extends ResultTo {
         return "Map";
     }
     public getField(): string | undefined {
-        this.setVariableToContext({name: this.converter.getReturnVariable()});
+        this.setVariableToContext({ name: this.converter.getReturnVariable() });
         return `${this.converter.getReturnVariable()}.${
-            this.attributes["service-result-name"] ?? this.attributes["result-name"]
+            this.attributes["service-result-name"] ??
+            this.attributes["result-name"]
         }`;
     }
     public convert(): string[] {
@@ -24,7 +25,11 @@ export class ResultToResult extends ResultTo {
     }
 
     public wrapConvert(assign: string): string[] {
-        if (![MethodMode.SERVICE, MethodMode.EVENT].includes(this.converter.getMethodMode())) {
+        if (
+            ![MethodMode.SERVICE, MethodMode.EVENT].includes(
+                this.converter.getMethodMode()
+            )
+        ) {
             this.converter.appendMessage(
                 "ERROR",
                 `"${this.getTagName()}" used in a non-service or non-event environment`

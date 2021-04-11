@@ -1,10 +1,9 @@
 import ConvertUtils from "../../core/convert-utils";
 import { XMLSchemaElementAttributes } from "../../types";
-import { Field } from "../assignment/field";
-import { StringTag } from "../assignment/string";
 import { CallerElement } from "./caller";
 
 export class CallClassMethod extends CallerElement {
+    public static readonly TAG = "call-class-method";
     public getType() {
         return (
             (this.attributes["ret-field"] &&

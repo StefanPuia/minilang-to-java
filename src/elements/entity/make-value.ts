@@ -1,6 +1,7 @@
 import { EntityElement, EntityElementAttributes } from "./entity";
 
 export class MakeValue extends EntityElement {
+    public static readonly TAG = "make-value";
     protected attributes = this.attributes as MakeValueAttributes;
 
     public getType(): string | undefined {

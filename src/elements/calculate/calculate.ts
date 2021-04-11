@@ -1,6 +1,7 @@
 import { BaseSetterAttributes, SetterElement } from "../assignment/setter";
 
 export class Calculate extends SetterElement {
+    public static readonly TAG = "calculate";
     protected attributes = this.attributes as CalculateAttributes;
 
     public getType(): string | undefined {

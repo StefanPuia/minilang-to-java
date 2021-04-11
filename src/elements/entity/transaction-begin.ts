@@ -1,8 +1,8 @@
 import { XMLSchemaElementAttributes } from "../../types";
 import { SetterElement } from "../assignment/setter";
-import { ElementTag } from "../element-tag";
 
 export class TransactionBegin extends SetterElement {
+    public static readonly TAG = "transaction-begin";
     protected attributes = this.attributes as TransactionBeginAttributes;
     public getType(): string | undefined {
         return "boolean";

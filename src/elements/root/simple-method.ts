@@ -1,6 +1,3 @@
-import { ElementTag } from "../element-tag";
-import { ContextVariable } from "../../types";
-import { ContextUtils } from "../../core/context-utils";
 import {
     MethodMode,
     StringBoolean,
@@ -8,8 +5,10 @@ import {
     VariableContext,
     XMLSchemaElementAttributes,
 } from "../../types";
+import { ElementTag } from "../element-tag";
 
 export class SimpleMethod extends ElementTag {
+    public static readonly TAG = "simple-method";
     protected attributes: SimpleMethodAttributes = this.attributes;
     private exceptions: Set<string> = new Set();
 

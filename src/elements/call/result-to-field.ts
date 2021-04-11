@@ -3,6 +3,7 @@ import { XMLSchemaElementAttributes } from "../../types";
 import { ResultTo } from "./result-to";
 
 export class ResultToField extends ResultTo {
+    public static readonly TAG = "result-to-field";
     protected attributes = this.attributes as ResultToFieldAttributes;
     private fromField?: string;
 

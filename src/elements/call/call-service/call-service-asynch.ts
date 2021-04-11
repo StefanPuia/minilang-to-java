@@ -1,7 +1,10 @@
-import { StringBoolean, XMLSchemaElementAttributes } from "../../types";
-import { CallService } from "./call-service";
+import { StringBoolean, XMLSchemaElementAttributes } from "../../../types";
+import { AbstractCallService } from "./abstract-call-service";
 
-export class CallServiceAsynch extends CallService {
+export class CallServiceAsynch extends AbstractCallService {
+    public static readonly TAG = "call-service-asynch";
+    protected attributes = this.attributes as CallServiceAsynchAttributes;
+
     public getType(): string | undefined {
         return;
     }

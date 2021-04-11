@@ -2,6 +2,7 @@ import { XMLSchemaElementAttributes } from "../../types";
 import { SetterElement } from "./setter";
 
 export class FirstFromList extends SetterElement {
+    public static readonly TAG = "first-from-list";
     protected attributes = this.attributes as FirstFromListAttributes;
 
     public getType(): string | undefined {

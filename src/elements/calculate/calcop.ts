@@ -2,6 +2,7 @@ import { XMLSchemaElementAttributes } from "../../types";
 import { ElementTag } from "../element-tag";
 
 export class Calcop extends ElementTag {
+    public static readonly TAG = "calcop";
     protected attributes = this.attributes as CalcopAttributes;
 
     private getOperator(): Operator {

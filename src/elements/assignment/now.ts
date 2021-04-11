@@ -2,6 +2,7 @@ import ConvertUtils from "../../core/convert-utils";
 import { BaseSetterAttributes, SetterElement } from "./setter";
 
 export class Now extends SetterElement {
+    public static readonly TAG = "now";
     public getField(): string {
         return this.attributes.field;
     }

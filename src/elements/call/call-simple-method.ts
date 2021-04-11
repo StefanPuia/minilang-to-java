@@ -3,6 +3,7 @@ import { SetterElement } from "../assignment/setter";
 import { ResultToField } from "./result-to-field";
 
 export class CallSimpleMethod extends SetterElement {
+    public static readonly TAG = "call-simple-method";
     protected attributes = this.attributes as CallSimpleMethodAttributes;
 
     public getType(): string {

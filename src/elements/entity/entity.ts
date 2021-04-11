@@ -98,12 +98,43 @@ export abstract class EntityElement extends SetterElement {
     protected getUnsupportedAttributes() {
         return ["delegator-name"];
     }
+
+    protected getEcbName() {
+        return `${this.getField()}Condition`;
+    }
+
+    protected getConditionBuilder(): string[] {
+        const ecbDeclared = this.getVariableFromContext(this.getEcbName());
+        this.converter.addImport("EntityConditionBuilder");
+        this.setVariableToContext({
+            name: this.getEcbName(),
+            type: "EntityConditionBuilder",
+        });
+        const declaration = ecbDeclared ? "" : "EntityConditionBuilder ";
+        return [
+            `${declaration}${this.getEcbName()} = EntityConditionBuilder.create()`,
+            ...this.parseChildren()
+                .filter((tag) =>
+                    [
+                        "condition-expr",
+                        "condition-list",
+                        "condition-object",
+                    ].includes(tag.getTagName())
+                )
+                .map((tag) => tag.convert())
+                .flat()
+                .map(this.prependIndentationMapper)
+                .map((line, index, list) =>
+                    index === list.length - 1 ? `${line};` : line
+                ),
+        ];
+    }
 }
 
 export interface EntityElementAttributes extends XMLSchemaElementAttributes {
     "entity-name": string;
-    "delegator-name": string;
+    "delegator-name"?: string;
     "filter-by-date"?: StringBoolean;
     "distinct"?: StringBoolean;
-    "use-cache": StringBoolean;
+    "use-cache"?: StringBoolean;
 }
