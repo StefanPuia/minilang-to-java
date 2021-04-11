@@ -18,6 +18,16 @@ export class IfCompareField extends IfComparing {
             attributes["to-field"]
         );
     }
+
+    protected convertCondition(): string {
+        return this.getComparison(
+            ConvertUtils.parseFieldGetter(this.attributes.field) ??
+                this.attributes.field,
+            this.attributes.operator,
+            ConvertUtils.parseFieldGetter(this.attributes["to-field"]) ??
+                this.attributes["to-field"]
+        );
+    }
 }
 
 interface IfCompareFieldAttributes extends IfComparingAttributes {

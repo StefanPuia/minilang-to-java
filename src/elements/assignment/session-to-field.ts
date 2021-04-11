@@ -13,12 +13,10 @@ export class SessionToField extends ElementTag {
 
     public convert(): string[] {
         if (this.converter.getMethodMode() !== MethodMode.EVENT) {
-            this.converter.appendMessage(
-                "WARNING",
-                `"session-to-field" used outside of event environment. Line will be ignored.`
-            );
+            const message = `"session-to-field" used outside of event environment. Line will be ignored.`;
+            this.converter.appendMessage("WARNING", message);
             // TODO: don't ignore some fields? (userLogin)
-            return [];
+            return [`// ${message}`];
         }
         this.setVariableToContext({ name: "request" });
         return new Set(

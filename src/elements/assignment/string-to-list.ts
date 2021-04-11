@@ -1,8 +1,9 @@
+import { XMLSchemaElementAttributes } from "../../types";
 import { BaseSetterAttributes, SetterElement } from "./setter";
 
-export class FieldToList extends SetterElement {
-    public static readonly TAG = "field-to-list";
-    protected attributes = this.attributes as FieldToListAttributes;
+export class StringToList extends SetterElement {
+    public static readonly TAG = "string-to-list";
+    protected attributes = this.attributes as StringToListAttributes;
 
     public getType(): string | undefined {
         return;
@@ -13,7 +14,9 @@ export class FieldToList extends SetterElement {
     public convert(): string[] {
         return [
             ...this.createListIfNotExists(),
-            `${this.attributes.list}.add(${this.attributes.field});`,
+            `${this.attributes.list}.add(${this.converter.parseValue(
+                this.attributes.string
+            )});`,
         ];
     }
 
@@ -21,20 +24,26 @@ export class FieldToList extends SetterElement {
         if (!this.declared) {
             this.converter.addImport("List");
             this.converter.addImport("ArrayList");
-            const variable = this.getVariableFromContext(this.attributes.field);
-            const paramType = variable?.type ? `<${variable?.type}>` : "";
+            const paramType = "String";
             this.setVariableToContext({
                 name: this.attributes.list,
-                type: variable?.type ?? "List",
+                type: "List<String>",
                 count: 1,
-                typeParams: variable?.typeParams ?? [],
+                typeParams: ["String"],
             });
             return [`List${paramType} ${this.getField()} = new ArrayList<>();`];
         }
         return [];
     }
+
+    protected getUnsupportedAttributes() {
+        return ["arg-list", "message-field"];
+    }
 }
 
-interface FieldToListAttributes extends BaseSetterAttributes {
-    list: string;
+interface StringToListAttributes extends XMLSchemaElementAttributes {
+    "string": string;
+    "list": string;
+    "arg-list"?: string;
+    "message-field"?: string;
 }
