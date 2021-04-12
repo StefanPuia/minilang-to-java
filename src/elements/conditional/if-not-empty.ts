@@ -6,15 +6,11 @@ export class IfNotEmpty extends ConditionalElement {
     public static readonly TAG = "if-not-empty";
     protected attributes = this.attributes as IfNotEmptyAttributes;
 
-    public convert(): string[] {
+    protected convertCondition(): string {
         this.converter.addImport("UtilValidate");
-        return [
-            `if (${this.getNegated()}UtilValidate.isNotEmpty(${ConvertUtils.parseFieldGetter(
-                this.attributes.field
-            )})) {`,
-            ...this.convertChildren().map(this.prependIndentationMapper),
-            ...this.getElseBlock(),
-        ];
+        return `${this.getNegated()}UtilValidate.isNotEmpty(${ConvertUtils.parseFieldGetter(
+            this.attributes.field
+        )})`;
     }
 }
 
