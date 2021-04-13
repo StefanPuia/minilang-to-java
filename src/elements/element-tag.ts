@@ -1,15 +1,22 @@
-import { XMLSchemaAnyElement, XMLSchemaElement, XMLSchemaElementAttributes } from "../types";
+import {
+    Position,
+    XMLSchemaAnyElement,
+    XMLSchemaElement,
+    XMLSchemaElementAttributes,
+} from "../types";
 import { Converter } from "../core/converter";
 import { Tag } from "./tag";
 
 export abstract class ElementTag extends Tag {
     protected tag: XMLSchemaElement;
     protected attributes: XMLSchemaElementAttributes;
+    protected readonly position?: Position;
 
     constructor(tag: XMLSchemaAnyElement, converter: Converter, parent?: Tag) {
         super(tag, converter, parent);
         this.tag = tag as XMLSchemaElement;
         this.attributes = this.tag.attributes;
+        this.position = this.tag.position;
 
         this.checkUnsupportedTags();
     }
@@ -19,7 +26,8 @@ export abstract class ElementTag extends Tag {
             if (typeof this.attributes[attr] !== "undefined") {
                 this.converter.appendMessage(
                     "WARNING",
-                    `Attribute "${attr}" is not supported for tag "${this.getTagName()}"`
+                    `Attribute "${attr}" is not supported for tag "${this.getTagName()}"`,
+                    this.position
                 );
             }
         }
@@ -30,7 +38,9 @@ export abstract class ElementTag extends Tag {
     }
 
     public convertChildren(): string[] {
-        return this.parseChildren().map((tag) => tag.convert()).flat();
+        return this.parseChildren()
+            .map((tag) => tag.convert())
+            .flat();
     }
 
     public getValidChildren() {

@@ -8,7 +8,7 @@ export class FieldToRequest extends ElementTag {
     public convert(): string[] {
         if (this.converter.getMethodMode() !== MethodMode.EVENT) {
             const message = `"field-to-request" used outside of event environment. Line will be ignored.`;
-            this.converter.appendMessage("WARNING", message);
+            this.converter.appendMessage("WARNING", message, this.position);
             return [`// ${message}`];
         }
         this.setVariableToContext({ name: "request" });

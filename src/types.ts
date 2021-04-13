@@ -31,6 +31,7 @@ export interface XMLSchemaElement {
     name: string;
     attributes: XMLSchemaElementAttributes;
     elements?: XMLSchemaAnyElement[];
+    position?: Position;
 }
 
 export interface XMLSchemaElementAttributes {
@@ -72,4 +73,9 @@ export enum MethodMode {
     GENERIC,
     EVENT,
     SERVICE,
+}
+
+export interface Position {
+    line: number;
+    column: number;
 }

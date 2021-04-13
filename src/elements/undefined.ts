@@ -6,7 +6,7 @@ import { XMLSchemaElement } from "../types";
 export class UndefinedElement extends ElementTag {
     constructor(self: XMLSchemaElement, converter: Converter, parent?: Tag) {
         super(self, converter, parent);
-        this.converter.appendMessage("ERROR", this.getMessage());
+        this.converter.appendMessage("ERROR", this.getMessage(), this.position);
     }
 
     private getMessage() {

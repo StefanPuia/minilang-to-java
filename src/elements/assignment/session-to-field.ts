@@ -14,7 +14,7 @@ export class SessionToField extends ElementTag {
     public convert(): string[] {
         if (this.converter.getMethodMode() !== MethodMode.EVENT) {
             const message = `"session-to-field" used outside of event environment. Line will be ignored.`;
-            this.converter.appendMessage("WARNING", message);
+            this.converter.appendMessage("WARNING", message, this.position);
             // TODO: don't ignore some fields? (userLogin)
             return [`// ${message}`];
         }

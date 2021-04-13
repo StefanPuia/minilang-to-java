@@ -13,10 +13,11 @@ export class Break extends ElementTag {
             this.addException("IllegalStateException");
             this.converter.appendMessage(
                 "ERROR",
-                `"break" tag used outside of loop element.`
+                `"break" tag used outside of loop element.`,
+                this.position
             );
             return [
-                `throw new IllegalStateException("Cannot use a break outside a loop context")`,
+                `throw new IllegalStateException("Cannot use a break outside a loop context");`,
             ];
         }
     }

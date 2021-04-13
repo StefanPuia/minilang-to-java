@@ -23,7 +23,8 @@ export class ResultToRequest extends ResultTo {
         if (this.converter.getMethodMode() !== MethodMode.EVENT) {
             this.converter.appendMessage(
                 "ERROR",
-                `"${this.getTagName()}" used in a non-event environment`
+                `"${this.getTagName()}" used in a non-event environment`,
+                this.position
             );
         }
         return [

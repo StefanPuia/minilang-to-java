@@ -1,7 +1,7 @@
-import { ValidChildren, VariableContext, XMLSchemaAnyElement } from "../types";
 import { ContextUtils } from "../core/context-utils";
 import { Converter } from "../core/converter";
 import { ElementFactory } from "../core/element-factory";
+import { ValidChildren, VariableContext, XMLSchemaAnyElement } from "../types";
 
 export abstract class Tag {
     protected readonly converter: Converter;
@@ -104,9 +104,7 @@ export abstract class Tag {
                         "ERROR",
                         `"${childTag}" cannot appear inside "${this.getTagName()}" fewer than ${
                             allowed.min
-                        } times. Found ${count}.`,
-                        "",
-                        0
+                        } times. Found ${count}.`
                     );
                 }
                 if (count > allowed.max) {
@@ -114,9 +112,7 @@ export abstract class Tag {
                         "ERROR",
                         `"${childTag}" cannot appear inside "${this.getTagName()}" more than ${
                             allowed.max
-                        } times. Found ${count}.`,
-                        "",
-                        0
+                        } times. Found ${count}.`
                     );
                 }
             }
@@ -126,9 +122,7 @@ export abstract class Tag {
             if (!children[childTag] && validChildren[childTag].min > 0) {
                 this.converter.appendMessage(
                     "ERROR",
-                    `Required child "${childTag}" not found inside "${this.getTagName()}"`,
-                    "",
-                    0
+                    `Required child "${childTag}" not found inside "${this.getTagName()}"`
                 );
             }
         }
@@ -136,7 +130,7 @@ export abstract class Tag {
 
     public getParent(tagName?: string): Tag | undefined {
         if (typeof tagName !== "undefined") {
-            return this.getParents().find(el => el.getTagName() === tagName);
+            return this.getParents().find((el) => el.getTagName() === tagName);
         }
         return this.parent;
     }

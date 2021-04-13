@@ -8,18 +8,6 @@ export default class ConvertUtils {
         }) as XMLSchema;
     }
 
-    // public static parseComponentURL(url: string) {
-    //     return url.replace(
-    //         /^component:\/\/([\w-]+)/i,
-    //         (match: string, comp: string) => {
-    //             const component = Ofbiz.getComponent(comp);
-    //             if (!component)
-    //                 throw new Error(`Component '${comp}' not loaded`);
-    //             return component.getPath();
-    //         }
-    //     );
-    // }
-
     public static normalizeMS(millis: number) {
         const SEC = 1000;
         const MIN = SEC * 60;

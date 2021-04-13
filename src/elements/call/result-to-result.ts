@@ -32,7 +32,8 @@ export class ResultToResult extends ResultTo {
         ) {
             this.converter.appendMessage(
                 "ERROR",
-                `"${this.getTagName()}" used in a non-service or non-event environment`
+                `"${this.getTagName()}" used in a non-service or non-event environment`,
+                this.position
             );
         }
 

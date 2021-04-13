@@ -1,6 +1,6 @@
 import { BaseErrorHandler } from "../handlers/error/base-error";
 import { ErrorHandlerFactory } from "../handlers/error/error-handler-factory";
-import { MethodMode } from "../types";
+import { MethodMode, Position } from "../types";
 import ConvertUtils from "./convert-utils";
 import { ElementFactory } from "./element-factory";
 import { BaseVariableHandler } from "../handlers/context/base-variables";
@@ -48,11 +48,23 @@ export class Converter {
     }
 
     private getErrors() {
-        return this.errors.map(({ content }) => `// FIXME: ERROR: ${content}`);
+        return this.errors.map(({ content, position }) =>
+            `// FIXME: ERROR: ${content} ${this.getLineCol(position)}`.trim()
+        );
     }
 
     private getWarnings() {
-        return this.warnings.map(({ content }) => `// WARNING: ${content}`);
+        return this.warnings.map(({ content, position }) =>
+            `// WARNING: ${content} ${this.getLineCol(position)}`.trim()
+        );
+    }
+
+    public getLineCol(position?: Position): string {
+        if (position) {
+            const { line, column } = position;
+            return `${line + 1}:${column + 1}`;
+        }
+        return "";
     }
 
     private getImports() {
@@ -85,13 +97,13 @@ export class Converter {
     public appendMessage(
         type: "ERROR" | "WARNING",
         message: string,
-        line?: string,
-        lineNumber?: number
+        position?: Position,
+        line?: string
     ) {
         (type === "ERROR" ? this.errors : this.warnings).push({
             content: message,
             line,
-            lineNumber,
+            position,
         });
     }
 
@@ -215,5 +227,5 @@ export class Converter {
 interface Message {
     content: string;
     line?: string;
-    lineNumber?: number;
+    position?: Position;
 }
