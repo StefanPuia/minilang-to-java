@@ -51,7 +51,7 @@ export class CallService extends AbstractCallService {
         return (
             (this.parseChildren().find(
                 (el) => el instanceof ResultTo
-            ) as ResultTo)?.wrapConvert(serviceCall) ?? [serviceCall]
+            ) as ResultTo)?.wrapConvert(serviceCall, false) ?? [serviceCall]
         );
     }
 

@@ -33,7 +33,14 @@ export class ResultToField extends ResultTo {
         return this.attributes["result-name"];
     }
     public wrapConvert(assign: string, semicolon?: boolean): string[] {
-        return super.wrapConvert(`(${this.getType()}) ${assign}`, semicolon);
+        return super.wrapConvert(`${this.getCast()}${assign}`, semicolon);
+    }
+
+    private getCast() {
+        if (!ConvertUtils.requiresCast(this.getField(), this.getType())) {
+            return "";
+        }
+        return `(${this.getType()}) `;
     }
 }
 
