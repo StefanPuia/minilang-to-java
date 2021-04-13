@@ -7,15 +7,10 @@ export class Log extends Logging {
     public convert(): string[] {
         this.converter.addImport("Debug");
         return [
-            `Debug.${this.getMethod()}(${this.converter.parseValue(
+            `Debug.log(${this.getDebugLevel()}, null, ${this.converter.parseValue(
                 this.attributes.message
-            )});`,
+            )}, this.getClass().getName());`,
         ];
-    }
-
-    private getMethod() {
-        const level = this.attributes.level ?? "fatal";
-        return `log${level.charAt(0).toUpperCase()}${level.slice(1)}`;
     }
 }
 
