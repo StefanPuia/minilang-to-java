@@ -6,7 +6,7 @@
             "name": "Debug",
             "type": "node",
             "request": "launch",
-            "args": ["./src/reader.ts"],
+            "args": ["./src/server/serve.ts"],
             "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
             "sourceMaps": true,
             "cwd": "${workspaceRoot}",
