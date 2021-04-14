@@ -9,7 +9,9 @@ dotenv.config();
 const port = process.env.PORT ?? 5055;
 const app = express();
 
-app.use(express.json());
+app.use(express.json({
+    limit: "5mb"
+}));
 
 app.get("/", (req: Request, res: Response) => {
     res.sendFile(join(__dirname, "../../public/index.html"));

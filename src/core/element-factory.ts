@@ -98,7 +98,7 @@ export class ElementFactory {
                         return reject(err);
                     }
                     for (const file of results ?? []) {
-                        if (file.match(/.+\.ts/)) {
+                        if (file.match(/.+\.[tj]s/)) {
                             const classFile = require(file);
                             for (const clazz of Object.keys(classFile)) {
                                 if (classFile[clazz]?.TAG) {
