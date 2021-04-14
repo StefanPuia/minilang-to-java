@@ -70,9 +70,9 @@ export type Operator =
     | "is-empty";
 
 export enum MethodMode {
-    GENERIC,
-    EVENT,
-    SERVICE,
+    GENERIC = "GENERIC",
+    EVENT = "EVENT",
+    SERVICE = "SERVICE",
 }
 
 export interface Position {

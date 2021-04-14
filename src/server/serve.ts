@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { join } from "path";
 import { Converter } from "../core/converter";
-import { MethodMode } from "../types";
+import { MethodMode } from '../types';
 
 dotenv.config();
 
@@ -19,7 +19,9 @@ app.post("/convert", async (req, res) => {
     try {
         const output = await Converter.convert(
             req.body.input,
-            MethodMode.SERVICE
+            req.body.methodMode,
+            req.body.packageName,
+            req.body.className,
         );
         res.json({
             output: output,

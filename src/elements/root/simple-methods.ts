@@ -14,7 +14,7 @@ export class SimpleMethods extends ElementTag {
 
     public convert(): string[] {
         return [
-            "public class SomeClassName {",
+            `public class ${this.converter.getClassName()} {`,
             ...this.convertChildren().map(this.prependIndentationMapper),
             "}",
         ];

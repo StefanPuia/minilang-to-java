@@ -15,7 +15,7 @@
             "input output"
             "controls controls";
         grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 5em;
+        grid-template-rows: 1fr auto;
     }
 
     #input {
@@ -34,6 +34,19 @@
         grid-area: controls;
         color: white;
         font-family: "Courier New", Courier, monospace;
+        padding: 10px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        gap: 10px;
+    }
+
+    #controls input[type="text"] {
+        width: 35ch;
+        padding: 5px;
+    }
+    #controls #submit {
+        padding: 8px 20px;
     }
 </style>
 
@@ -41,8 +54,8 @@
     <div id="input"></div>
     <div id="output"></div>
     <div id="controls">
-        <input type="text" id="className" placeholder="Class name" />
-        <input type="text" id="classPath" placeholder="Class path" />
+        <input type="text" id="className" placeholder="Class Name" />
+        <input type="text" id="packageName" placeholder="Package Name" />
         <label><input type="radio" name="mode" value="SERVICE" />Service</label>
         <label><input type="radio" name="mode" value="EVENT" />Event</label>
         <label
@@ -62,39 +75,36 @@
     window.addEventListener("load", () => {
         const $input = document.querySelector("#input");
         const $output = document.querySelector("#output");
-        const $methodMode = document.querySelector(
-            "input[name='mode']:checked"
-        );
         const $className = document.querySelector("#className");
-        const $classPath = document.querySelector("#classPath");
+        const $packageName = document.querySelector("#packageName");
 
-        ace.edit("input", {
-            mode: "ace/mode/xml",
+        const options = {
             selectionStyle: "text",
             wrap: true,
             theme: "ace/theme/monokai",
+            fontSize: "15px",
+        };
+
+        ace.edit("input", {
+            ...options,
+            mode: "ace/mode/xml",
         });
 
         ace.edit("output", {
-            mode: "ace/mode/groovy",
-            selectionStyle: "text",
-            wrap: true,
-            theme: "ace/theme/monokai",
+            ...options,
+            mode: "ace/mode/java",
         });
 
-        ace.edit("input")
-            .getSession()
-            .setValue(localStorage.getItem("editor.inputText") ?? "");
-        $className.value = localStorage.getItem("editor.className") ?? "";
-        $classPath.value = localStorage.getItem("editor.classPath") ?? "";
-
         document.querySelector("#submit").addEventListener("click", () => {
+            const $methodMode = document.querySelector(
+                "input[name='mode']:checked"
+            );
             document.querySelector("#submit").disabled = "disabled";
             const input = ace.edit("input").getSession().getValue();
 
             localStorage.setItem("editor.inputText", input);
             localStorage.setItem("editor.className", $className.value);
-            localStorage.setItem("editor.classPath", $classPath.value);
+            localStorage.setItem("editor.packageName", $packageName.value);
             localStorage.setItem("editor.methodMode", $methodMode.value);
 
             fetch("/convert", {
@@ -106,7 +116,7 @@
                 body: JSON.stringify({
                     input,
                     className: $className.value,
-                    classPath: $classPath.value,
+                    packageName: $packageName.value,
                     methodMode: $methodMode.value,
                 }),
             })
@@ -128,5 +138,19 @@
                     document.querySelector("#submit").disabled = undefined;
                 });
         });
+
+        ace.edit("input")
+            .getSession()
+            .setValue(localStorage.getItem("editor.inputText") ?? "");
+        $className.value = localStorage.getItem("editor.className") ?? "";
+        $packageName.value = localStorage.getItem("editor.packageName") ?? "";
+        const methodMode = document.querySelector(
+            `input[name="mode"][value="${localStorage.getItem(
+                "editor.methodMode"
+            )}"]`
+        );
+        if (methodMode) {
+            methodMode.checked = "checked";
+        }
     });
 </script>
