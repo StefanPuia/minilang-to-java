@@ -10,6 +10,7 @@ export class Converter {
     private readonly source: string;
     private readonly methodMode: MethodMode;
     private readonly packageName?: string;
+    private readonly className?: string;
     private tabSize: number = 4;
     private imports: Set<string> = new Set();
     private errors: Message[] = [];
@@ -20,11 +21,13 @@ export class Converter {
     private constructor(
         source: string,
         mode: MethodMode,
-        packageName?: string
+        packageName?: string,
+        className?: string
     ) {
         this.source = source;
         this.methodMode = mode;
         this.packageName = packageName;
+        this.className = className;
     }
 
     private convert() {
@@ -81,13 +84,18 @@ export class Converter {
         return [];
     }
 
+    public getClassName(): string {
+        return this.className || "SomeClassName";
+    }
+
     public static async convert(
         source: string,
         mode: MethodMode,
-        packageName?: string
+        packageName?: string,
+        className?: string
     ) {
         await ElementFactory.loadClasses();
-        return new Converter(source, mode, packageName).convert();
+        return new Converter(source, mode, packageName, className).convert();
     }
 
     public getIndentSpaces() {
