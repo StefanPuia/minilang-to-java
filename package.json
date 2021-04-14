@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon --exec ts-node src/server/serve.ts"
+    "test": "nodemon --exec ts-node src/server/serve.ts",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
