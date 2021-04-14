@@ -1,0 +1,112 @@
+<title>OFBiz minilang to Java</title>
+
+<style>
+    body {
+        background-color: #2f3129;
+        margin: 0;
+        padding: 0;
+    }
+
+    #container {
+        height: 100vh;
+        width: 100vw;
+        display: grid;
+        grid-template-areas: "input output"
+                            "controls controls";
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 5em;
+    }
+
+    #input {
+        width: 100%;
+        height: 100%;
+        grid-area: input;
+    }
+
+    #output {
+        width: 100%;
+        height: 100%;
+        grid-area: output;
+    }
+
+    #controls {
+        grid-area: controls;
+    }
+</style>
+
+<div id="container">
+    <div id="inout">
+        <div id="input"></div>
+        <div id="output"></div>
+    </div>
+    <div id="controls">
+        <label><input type="radio" name="mode" value="SERVICE" />Service</label>
+        <label><input type="radio" name="mode" value="EVENT" />Event</label>
+        <label
+            ><input
+                type="radio"
+                name="mode"
+                value="GENERIC"
+                checked
+            />Generic</label
+        >
+        <button id="submit">Convert</button>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
+<script>
+    window.addEventListener("load", () => {
+        ace.edit("input", {
+            mode: "ace/mode/xml",
+            selectionStyle: "text",
+            wrap: true,
+            theme: "ace/theme/monokai",
+        });
+
+        ace.edit("output", {
+            mode: "ace/mode/groovy",
+            selectionStyle: "text",
+            wrap: true,
+            theme: "ace/theme/monokai",
+        });
+
+        const storedInput = localStorage.getItem("editor.inputText");
+        if (storedInput) {
+            ace.edit("input").getSession().setValue(storedInput);
+        }
+
+        document.querySelector("#submit").addEventListener("click", () => {
+            document.querySelector("#submit").disabled = "disabled";
+            const input = ace.edit("input").getSession().getValue();
+            localStorage.setItem("editor.inputText", input);
+            fetch("/convert", {
+                method: "post",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    input,
+                }),
+            })
+                .then((res) => {
+                    return res.json();
+                })
+                .then((data) => {
+                    if (data && data.output) {
+                        ace.edit("output").getSession().setValue(data.output);
+                    } else {
+                        ace.edit("output").getSession().setValue(data);
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                    ace.edit("output").getSession().setValue(err.toString());
+                })
+                .finally(() => {
+                    document.querySelector("#submit").disabled = undefined;
+                });
+        });
+    });
+</script>
