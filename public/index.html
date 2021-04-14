@@ -11,8 +11,9 @@
         height: 100vh;
         width: 100vw;
         display: grid;
-        grid-template-areas: "input output"
-                            "controls controls";
+        grid-template-areas:
+            "input output"
+            "controls controls";
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 5em;
     }
@@ -31,15 +32,17 @@
 
     #controls {
         grid-area: controls;
+        color: white;
+        font-family: "Courier New", Courier, monospace;
     }
 </style>
 
 <div id="container">
-    <div id="inout">
-        <div id="input"></div>
-        <div id="output"></div>
-    </div>
+    <div id="input"></div>
+    <div id="output"></div>
     <div id="controls">
+        <input type="text" id="className" placeholder="Class name" />
+        <input type="text" id="classPath" placeholder="Class path" />
         <label><input type="radio" name="mode" value="SERVICE" />Service</label>
         <label><input type="radio" name="mode" value="EVENT" />Event</label>
         <label
@@ -57,6 +60,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
 <script>
     window.addEventListener("load", () => {
+        const $input = document.querySelector("#input");
+        const $output = document.querySelector("#output");
+        const $methodMode = document.querySelector(
+            "input[name='mode']:checked"
+        );
+        const $className = document.querySelector("#className");
+        const $classPath = document.querySelector("#classPath");
+
         ace.edit("input", {
             mode: "ace/mode/xml",
             selectionStyle: "text",
@@ -71,15 +82,21 @@
             theme: "ace/theme/monokai",
         });
 
-        const storedInput = localStorage.getItem("editor.inputText");
-        if (storedInput) {
-            ace.edit("input").getSession().setValue(storedInput);
-        }
+        ace.edit("input")
+            .getSession()
+            .setValue(localStorage.getItem("editor.inputText") ?? "");
+        $className.value = localStorage.getItem("editor.className") ?? "";
+        $classPath.value = localStorage.getItem("editor.classPath") ?? "";
 
         document.querySelector("#submit").addEventListener("click", () => {
             document.querySelector("#submit").disabled = "disabled";
             const input = ace.edit("input").getSession().getValue();
+
             localStorage.setItem("editor.inputText", input);
+            localStorage.setItem("editor.className", $className.value);
+            localStorage.setItem("editor.classPath", $classPath.value);
+            localStorage.setItem("editor.methodMode", $methodMode.value);
+
             fetch("/convert", {
                 method: "post",
                 headers: {
@@ -88,6 +105,9 @@
                 },
                 body: JSON.stringify({
                     input,
+                    className: $className.value,
+                    classPath: $classPath.value,
+                    methodMode: $methodMode.value,
                 }),
             })
                 .then((res) => {
