@@ -10,7 +10,7 @@ export class UndefinedElement extends ElementTag {
     }
 
     private getMessage() {
-        return `Parser not defined for ${this.getType()} ${this.getTag()}`.trim();
+        return `Parser not defined for ${this.getType()} ${this.getTagName()}`.trim();
     }
 
     private getType() {
@@ -20,8 +20,8 @@ export class UndefinedElement extends ElementTag {
         );
     }
 
-    private getTag() {
-        return this.tag.name || "";
+    public getTag() {
+        return this.tag;
     }
 
     public convert(): string[] {

@@ -50,4 +50,12 @@ export abstract class ElementTag extends Tag {
     protected getUnsupportedAttributes(): string[] {
         return [];
     }
+
+    public getAttributes() {
+        return this.attributes;
+    }
+
+    public getPosition(): Position | undefined {
+        return this.position;
+    }
 }

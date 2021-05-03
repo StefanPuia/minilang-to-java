@@ -1,7 +1,8 @@
 import { ContextUtils } from "../core/context-utils";
 import { Converter } from "../core/converter";
 import { ElementFactory } from "../core/element-factory";
-import { ValidChildren, VariableContext, XMLSchemaAnyElement } from "../types";
+import { Validation, ValidationMap } from "../core/validate";
+import { Position, ValidChildren, VariableContext, XMLSchemaAnyElement, XMLSchemaElementAttributes } from "../types";
 
 export abstract class Tag {
     protected readonly converter: Converter;
@@ -80,52 +81,9 @@ export abstract class Tag {
                           )
                           .filter((tag) => tag !== null) ?? ([] as Tag[])
                     : [];
-            this.validateChildren();
+            this.validate();
         }
         return children;
-    }
-
-    private validateChildren() {
-        const validChildren = this.getValidChildren();
-        const children = this.parseChildren()
-            .filter((el) => !el.getTagName()?.startsWith("!"))
-            .reduce((collector, element) => {
-                collector[element.getTagName()] =
-                    (collector[element.getTagName()] ?? 0) + 1;
-                return collector;
-            }, {} as Record<string, number>);
-
-        for (const childTag of Object.keys(children)) {
-            const count = children[childTag];
-            const allowed = validChildren[childTag];
-            if (allowed) {
-                if (count < allowed.min) {
-                    this.converter.appendMessage(
-                        "ERROR",
-                        `"${childTag}" cannot appear inside "${this.getTagName()}" fewer than ${
-                            allowed.min
-                        } times. Found ${count}.`
-                    );
-                }
-                if (count > allowed.max) {
-                    this.converter.appendMessage(
-                        "ERROR",
-                        `"${childTag}" cannot appear inside "${this.getTagName()}" more than ${
-                            allowed.max
-                        } times. Found ${count}.`
-                    );
-                }
-            }
-        }
-
-        for (const childTag of Object.keys(validChildren)) {
-            if (!children[childTag] && validChildren[childTag].min > 0) {
-                this.converter.appendMessage(
-                    "ERROR",
-                    `Required child "${childTag}" not found inside "${this.getTagName()}"`
-                );
-            }
-        }
     }
 
     public getParent(tagName?: string): Tag | undefined {
@@ -156,5 +114,25 @@ export abstract class Tag {
         _array: string[]
     ) {
         return `${this.converter.getIndentSpaces()}${line}`;
+    }
+
+    public getValidation(): ValidationMap {
+        return {};
+    }
+
+    private validate() {
+        Validation.validate(this, this.converter);
+    }
+
+    public getAttributes(): XMLSchemaElementAttributes {
+        return {};
+    }
+
+    public getPosition(): Position | undefined {
+        return undefined;
+    }
+
+    public getTag(): XMLSchemaAnyElement {
+        return this.tag;
     }
 }
