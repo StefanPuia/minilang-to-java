@@ -36,7 +36,7 @@ export class Set extends SetterElement {
                 "set-if-empty",
             ],
             requiredAttributes: ["field"],
-            requireAnyAttribute: ["from-field", "from", "value"],
+            requireAnyAttribute: ["from-field", "from", "value"], // TODO: actual implementation works with default value only, as well
             constantPlusExpressionAttributes: ["value"],
             constantAttributes: ["type", "set-if-null", "set-if-empty"],
             expressionAttributes: ["field"],
