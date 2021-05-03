@@ -1,5 +1,5 @@
 import { XMLSchemaElementAttributes } from "../../types";
-import { BaseSetterAttributes, SetterElement } from "./setter";
+import { BaseSetterRawAttributes, SetterElement } from "./setter";
 
 export class StringToList extends SetterElement {
     public static readonly TAG = "string-to-list";

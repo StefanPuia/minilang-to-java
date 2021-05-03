@@ -19,6 +19,7 @@ export abstract class Tag {
         this.prependIndentationMapper = this.prependIndentationMapper.bind(
             this
         );
+        this.validate();
     }
 
     public abstract convert(): string[];
@@ -81,7 +82,6 @@ export abstract class Tag {
                           )
                           .filter((tag) => tag !== null) ?? ([] as Tag[])
                     : [];
-            this.validate();
         }
         return children;
     }
@@ -124,7 +124,7 @@ export abstract class Tag {
         Validation.validate(this, this.converter);
     }
 
-    public getAttributes(): XMLSchemaElementAttributes {
+    public getTagAttributes(): XMLSchemaElementAttributes {
         return {};
     }
 

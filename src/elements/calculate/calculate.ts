@@ -1,4 +1,4 @@
-import { BaseSetterAttributes, SetterElement } from "../assignment/setter";
+import { BaseSetterRawAttributes, SetterElement } from "../assignment/setter";
 
 export class Calculate extends SetterElement {
     public static readonly TAG = "calculate";
@@ -60,7 +60,7 @@ export class Calculate extends SetterElement {
     }
 }
 
-interface CalculateAttributes extends BaseSetterAttributes {
+interface CalculateAttributes extends BaseSetterRawAttributes {
     "rounding-mode"?:
         | "Ceiling"
         | "Floor"

@@ -8,18 +8,13 @@ export abstract class AbstractCallService extends CallerElement {
             (this.attributes["include-user-login"] ?? "true") === "true"
         ) {
             this.setVariableToContext({ name: "userLogin" });
-            return new Set(
-                {
-                    type: "element",
-                    name: "set",
-                    attributes: {
-                        "field": `${this.attributes["in-map-name"]}.userLogin`,
-                        "from-field": "userLogin",
-                    },
-                },
-                this.converter,
-                this.parent
-            ).convert();
+            return Set.getInstance({
+                converter: this.converter,
+                parent: this.parent,
+                field: `${this.attributes["in-map-name"]}.userLogin`,
+                from: `userLogin`,
+                type: "GenericValue",
+            }).convert();
         }
         return [];
     }

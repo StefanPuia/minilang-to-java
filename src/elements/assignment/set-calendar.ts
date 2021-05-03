@@ -1,5 +1,5 @@
 import { StringBoolean } from "../../types";
-import { BaseSetterAttributes, SetterElement } from "./setter";
+import { BaseSetterRawAttributes, SetterElement } from "./setter";
 
 export class SetCalendar extends SetterElement {
     public static readonly TAG = "set-calendar";
@@ -39,7 +39,7 @@ export class SetCalendar extends SetterElement {
 }
 
 type PeriodAlign = "year" | "month" | "week" | "day";
-interface SetCalendarAttributes extends BaseSetterAttributes {
+interface SetCalendarAttributes extends BaseSetterRawAttributes {
     "from"?: string;
     "from-field"?: string;
     "value"?: string;

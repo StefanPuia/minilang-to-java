@@ -15,7 +15,7 @@ export abstract class ElementTag extends Tag {
     constructor(tag: XMLSchemaAnyElement, converter: Converter, parent?: Tag) {
         super(tag, converter, parent);
         this.tag = tag as XMLSchemaElement;
-        this.attributes = this.tag.attributes;
+        this.attributes = this.tag.attributes ?? {};
         this.position = this.tag.position;
 
         this.checkUnsupportedTags();
@@ -51,11 +51,11 @@ export abstract class ElementTag extends Tag {
         return [];
     }
 
-    public getAttributes() {
-        return this.attributes;
+    public getTagAttributes() {
+        return this.tag.attributes ?? {};
     }
 
     public getPosition(): Position | undefined {
-        return this.position;
+        return this.tag.position;
     }
 }

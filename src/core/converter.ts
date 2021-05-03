@@ -38,39 +38,26 @@ export class Converter {
             this.getImports(),
             this.newLine(),
             ...converted,
+            this.newLine(),
         ].filter(Boolean);
         this.appendMessage(
             "INFO",
             this.getParseStats(this.source, start, new Date().getTime())
         );
 
-        return [
-            ...lines,
-            "",
-            ...this.getErrors(),
-            "",
-            ...this.getWarnings(),
-            "",
-            ...this.getInfos(),
-        ].join("\n");
+        return [...lines, ...this.getDisplayMessages()].join("\n");
     }
 
     private newLine() {
         return "\n";
     }
 
-    private getErrors() {
-        return this.getMessages("ERROR").map(
-            (msg) => `// FIXME: ERROR: ${msg}`
-        );
-    }
-
-    private getWarnings() {
-        return this.getMessages("WARNING").map((msg) => `// WARNING: ${msg}`);
-    }
-
-    private getInfos() {
-        return this.getMessages("INFO").map((msg) => `// ${msg}`);
+    private getDisplayMessages(): string[] {
+        return (["ERROR", "WARNING", "INFO"] as MessageType[])
+            .map((type) =>
+                this.getMessages(type).map((msg) => `// ${type}: ${msg}`)
+            )
+            .flat();
     }
 
     private getMessages(type: MessageType) {

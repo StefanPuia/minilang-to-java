@@ -81,4 +81,5 @@ export interface Position {
 }
 
 export type Constant = string;
-export type Expression = string;
+export type FlexibleStringExpander = string;
+export type FlexibleMapAccessor = string;

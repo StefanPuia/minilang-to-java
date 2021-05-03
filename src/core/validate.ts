@@ -77,19 +77,29 @@ abstract class BaseValidator {
     }
 
     protected abstract execute(): void;
+
+    protected addError(message: string) {
+        this.converter.appendMessage("ERROR", message, this.tag.getPosition());
+    }
+
+    protected addWarning(message: string) {
+        this.converter.appendMessage(
+            "WARNING",
+            message,
+            this.tag.getPosition()
+        );
+    }
 }
 
 class AttributeNames extends BaseValidator {
     protected rule!: string[];
 
     protected execute(): void {
-        Object.keys(this.tag.getAttributes())
+        Object.keys(this.tag.getTagAttributes())
             .filter((attr) => !this.rule.includes(attr))
             .forEach((invalidAttribute) => {
-                this.converter.appendMessage(
-                    "ERROR",
-                    `Attribute "${invalidAttribute}" is not valid for tag "${this.tag.getTagName()}"`,
-                    this.tag.getPosition()
+                this.addError(
+                    `Attribute "${invalidAttribute}" is not valid for tag "${this.tag.getTagName()}"`
                 );
             });
     }
@@ -99,19 +109,17 @@ class ConstantAttributes extends BaseValidator {
     protected rule!: string[];
 
     protected execute(): void {
-        Object.keys(this.tag.getAttributes())
+        Object.keys(this.tag.getTagAttributes())
             .filter((attr) => this.rule.includes(attr))
             .filter(
                 (attr) =>
                     !Validation.isConstantAttribute(
-                        this.tag.getAttributes()[attr] as string
+                        this.tag.getTagAttributes()[attr] as string
                     )
             )
             .forEach((invalidAttribute) => {
-                this.converter.appendMessage(
-                    "ERROR",
-                    `Constant attribute "${invalidAttribute}" cannot contain an expression`,
-                    this.tag.getPosition()
+                this.addError(
+                    `Constant attribute "${invalidAttribute}" cannot contain an expression`
                 );
             });
     }
@@ -121,19 +129,17 @@ class ExpressionAttributes extends BaseValidator {
     protected rule!: string[];
 
     protected execute(): void {
-        Object.keys(this.tag.getAttributes())
+        Object.keys(this.tag.getTagAttributes())
             .filter((attr) => this.rule.includes(attr))
             .filter(
                 (attr) =>
                     !Validation.isConstantAttribute(
-                        this.tag.getAttributes()[attr] as string
+                        this.tag.getTagAttributes()[attr] as string
                     )
             )
             .forEach((invalidAttribute) => {
-                this.converter.appendMessage(
-                    "ERROR",
-                    `Expression attribute "${invalidAttribute}" cannot contain a script (remove script)`,
-                    this.tag.getPosition()
+                this.addError(
+                    `Expression attribute "${invalidAttribute}" cannot contain a script (remove script)`
                 );
             });
     }
@@ -143,34 +149,30 @@ class ConstantPlusExpressionAttributes extends BaseValidator {
     protected rule!: string[];
 
     protected execute(): void {
-        Object.keys(this.tag.getAttributes())
+        Object.keys(this.tag.getTagAttributes())
             .filter((attr) => this.rule.includes(attr))
             .filter(
                 (attr) =>
                     !Validation.isConstantPlusExpressionAttribute(
-                        this.tag.getAttributes()[attr] as string
+                        this.tag.getTagAttributes()[attr] as string
                     )
             )
             .forEach((invalidAttribute) => {
-                this.converter.appendMessage(
-                    "ERROR",
-                    `Constant+expr attribute "${invalidAttribute}" is missing a constant value (expression-only constants are not allowed)`,
-                    this.tag.getPosition()
+                this.addError(
+                    `Constant+expr attribute "${invalidAttribute}" is missing a constant value (expression-only constants are not allowed)`
                 );
             });
 
-        Object.keys(this.tag.getAttributes())
+        Object.keys(this.tag.getTagAttributes())
             .filter((attr) => this.rule.includes(attr))
             .filter((attr) =>
                 Validation.containsScript(
-                    this.tag.getAttributes()[attr] as string
+                    this.tag.getTagAttributes()[attr] as string
                 )
             )
             .forEach((invalidAttribute) => {
-                this.converter.appendMessage(
-                    "ERROR",
-                    `Constant+expr attribute "${invalidAttribute}" cannot contain a script (remove script)`,
-                    this.tag.getPosition()
+                this.addError(
+                    `Constant+expr attribute "${invalidAttribute}" cannot contain a script (remove script)`
                 );
             });
     }
@@ -180,18 +182,16 @@ class DeprecatedAttributes extends BaseValidator {
     protected rule!: DeprecatedAttributeRule[];
 
     protected execute(): void {
-        Object.keys(this.tag.getAttributes())
+        Object.keys(this.tag.getTagAttributes())
             .map((attr) =>
                 this.rule.find((deprecated) => deprecated.name === attr)
             )
             .filter(Boolean)
             .forEach((deprecatedAttribute) => {
-                this.converter.appendMessage(
-                    "WARNING",
+                this.addWarning(
                     `Attribute "${deprecatedAttribute!.name}" is deprecated (${
                         deprecatedAttribute!.fixInstruction
-                    })`,
-                    this.tag.getPosition()
+                    })`
                 );
             });
     }
@@ -203,11 +203,10 @@ class RequireAnyAttribute extends BaseValidator {
     protected execute(): void {
         if (
             !this.rule.find((required) =>
-                Reflect.has(this.tag.getAttributes(), required)
+                Reflect.has(this.tag.getTagAttributes(), required)
             )
         ) {
-            this.converter.appendMessage(
-                "ERROR",
+            this.addError(
                 `Element "${this.tag.getTagName()}" must include one of "${this.rule.join(
                     `", "`
                 )}" attributes.`
@@ -222,13 +221,11 @@ class RequiredAttributes extends BaseValidator {
     protected execute(): void {
         this.rule
             .filter(
-                (required) => !Reflect.has(this.tag.getAttributes(), required)
+                (required) =>
+                    !Reflect.has(this.tag.getTagAttributes(), required)
             )
             .forEach((required) => {
-                this.converter.appendMessage(
-                    "ERROR",
-                    `Required attribute "${required}" is missing.`
-                );
+                this.addError(`Required attribute "${required}" is missing.`);
             });
     }
 }
@@ -257,8 +254,7 @@ class NoChildElements extends ChildValidator {
 
     protected execute(): void {
         if (this.rule && this.children.length) {
-            this.converter.appendMessage(
-                "ERROR",
+            this.addError(
                 `Element "${this.tag.getTagName()}" does not allow children.`
             );
         }
@@ -274,8 +270,7 @@ class ChildElements extends ChildValidator {
                 (child) => !this.rule.find((allowed) => allowed === child.name)
             )
             .forEach((child) => {
-                this.converter.appendMessage(
-                    "ERROR",
+                this.addError(
                     `Child element "${child}" is not valid for tag "${this.tag.getTagName()}".`
                 );
             });
@@ -291,8 +286,7 @@ class RequireAnyChildElement extends ChildValidator {
                 this.children.find((el) => el.name === required)
             )
         ) {
-            this.converter.appendMessage(
-                "ERROR",
+            this.addError(
                 `Element "${this.tag.getTagName()}" must include one of "${this.rule.join(
                     `", "`
                 )}" child elements.`
@@ -310,8 +304,7 @@ class RequiredChildElements extends ChildValidator {
                 (required) => !this.children.find((el) => el.name === required)
             )
             .forEach((required) => {
-                this.converter.appendMessage(
-                    "ERROR",
+                this.addError(
                     `Required child element "${required}" is missing.`
                 );
             });

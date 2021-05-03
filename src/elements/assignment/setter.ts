@@ -2,7 +2,7 @@ import ConvertUtils from "../../core/convert-utils";
 import { Converter } from "../../core/converter";
 import { ElementTag } from "../element-tag";
 import { Tag } from "../tag";
-import { XMLSchemaAnyElement, XMLSchemaElementAttributes } from "../../types";
+import { FlexibleMapAccessor, XMLSchemaAnyElement, XMLSchemaElementAttributes } from "../../types";
 
 export abstract class SetterElement extends ElementTag {
     protected declared = false;
@@ -92,6 +92,6 @@ export abstract class SetterElement extends ElementTag {
     public abstract getField(): string | undefined;
 }
 
-export interface BaseSetterAttributes extends XMLSchemaElementAttributes {
+export interface BaseSetterRawAttributes extends XMLSchemaElementAttributes {
     field: string;
 }
