@@ -13,8 +13,7 @@ export class Converter {
     private readonly className?: string;
     private tabSize: number = 4;
     private imports: Set<string> = new Set();
-    private errors: Message[] = [];
-    private warnings: Message[] = [];
+    private messages: Message[] = [];
     private errorHandler: BaseErrorHandler | undefined;
     private contextVariableHandler: BaseVariableHandler | undefined;
 
@@ -31,19 +30,29 @@ export class Converter {
     }
 
     private convert() {
+        const start = new Date().getTime();
         const parsed = ConvertUtils.parseXML(this.source);
         const converted = ElementFactory.parseWithRoot(parsed, this);
-        return [
+        const lines = [
             this.getPackageName(),
             this.getImports(),
             this.newLine(),
             ...converted,
-            this.newLine(),
+        ].filter(Boolean);
+        this.appendMessage(
+            "INFO",
+            this.getParseStats(this.source, start, new Date().getTime())
+        );
+
+        return [
+            ...lines,
+            "",
             ...this.getErrors(),
+            "",
             ...this.getWarnings(),
-        ]
-            .filter(Boolean)
-            .join("\n");
+            "",
+            ...this.getInfos(),
+        ].join("\n");
     }
 
     private newLine() {
@@ -51,15 +60,32 @@ export class Converter {
     }
 
     private getErrors() {
-        return this.errors.map(({ content, position }) =>
-            `// FIXME: ERROR: ${content} ${this.getLineCol(position)}`.trim()
+        return this.getMessages("ERROR").map(
+            (msg) => `// FIXME: ERROR: ${msg}`
         );
     }
 
     private getWarnings() {
-        return this.warnings.map(({ content, position }) =>
-            `// WARNING: ${content} ${this.getLineCol(position)}`.trim()
-        );
+        return this.getMessages("WARNING").map((msg) => `// WARNING: ${msg}`);
+    }
+
+    private getInfos() {
+        return this.getMessages("INFO").map((msg) => `// ${msg}`);
+    }
+
+    private getMessages(type: MessageType) {
+        return this.messages
+            .filter((msg) => msg.type === type)
+            .map(({ content, position }) =>
+                `${content} ${this.getLineCol(position)}`.trim()
+            );
+    }
+
+    private getParseStats(source: string, start: number, end: number): string {
+        return `Finished parsing ${source.split("\n").length} lines in ${(
+            (end - start) /
+            Math.pow(10, 3)
+        ).toFixed(3)} seconds.`;
     }
 
     public getLineCol(position?: Position): string {
@@ -88,13 +114,12 @@ export class Converter {
         return this.className || "SomeClassName";
     }
 
-    public static async convert(
+    public static convert(
         source: string,
         mode: MethodMode,
         packageName?: string,
         className?: string
     ) {
-        await ElementFactory.loadClasses();
         return new Converter(source, mode, packageName, className).convert();
     }
 
@@ -103,12 +128,13 @@ export class Converter {
     }
 
     public appendMessage(
-        type: "ERROR" | "WARNING",
+        type: MessageType,
         message: string,
         position?: Position,
         line?: string
     ) {
-        (type === "ERROR" ? this.errors : this.warnings).push({
+        this.messages.push({
+            type,
             content: message,
             line,
             position,
@@ -233,7 +259,10 @@ export class Converter {
 }
 
 interface Message {
+    type: MessageType;
     content: string;
     line?: string;
     position?: Position;
 }
+
+type MessageType = "ERROR" | "WARNING" | "INFO";

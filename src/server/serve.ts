@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import { join } from "path";
 import { Converter } from "../core/converter";
+import { ElementFactory } from "../core/element-factory";
 
 dotenv.config();
 
@@ -25,9 +26,9 @@ app.get("/", (_req: Request, res: Response) => {
     res.sendFile(join(__dirname, "../../public/index.html"));
 });
 
-app.post("/convert", async (req, res) => {
+app.post("/convert", (req, res) => {
     try {
-        const output = await Converter.convert(
+        const output = Converter.convert(
             req.body.input,
             req.body.methodMode,
             req.body.packageName,
@@ -42,6 +43,7 @@ app.post("/convert", async (req, res) => {
     }
 });
 
-app.listen(port, () => {
+app.listen(port, async () => {
+    await ElementFactory.loadClasses();
     console.log(`Server running on on port ${port}`);
 });
