@@ -20,6 +20,7 @@ export class SimpleMethod extends ElementTag {
         this.addDefaultVariablesToContext();
         const children = this.convertChildren();
         return [
+            ...this.getDescription(),
             `${this.getMethodHeader()} ${this.getThrows()}{`,
             ...[...this.getVariables(), ...children, ...this.getReturn()].map(
                 this.prependIndentationMapper
@@ -33,6 +34,12 @@ export class SimpleMethod extends ElementTag {
             return `throws ${Array.from(this.exceptions).join(", ")} `;
         }
         return "";
+    }
+
+    private getDescription() {
+        return this.attributes["short-description"]
+            ? [`// ${this.attributes["short-description"]}`]
+            : [];
     }
 
     private getMethodHeader() {
