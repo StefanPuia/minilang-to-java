@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "nodemon --exec ts-node src/server/serve.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "unhandled": "ts-node src/scripts/unhandled.ts"
   },
   "author": "",
   "license": "ISC",

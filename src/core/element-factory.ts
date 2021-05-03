@@ -57,6 +57,10 @@ export class ElementFactory {
         }
     }
 
+    public static hasHandler(tagName: string) {
+        return typeof ElementFactory.TAG_MAP[tagName] !== "undefined";
+    }
+
     private static makeErrorComment(
         message: string,
         converter: Converter,
