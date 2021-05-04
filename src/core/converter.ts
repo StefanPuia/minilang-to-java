@@ -1,6 +1,6 @@
 import { BaseErrorHandler } from "../handlers/error/base-error";
 import { ErrorHandlerFactory } from "../handlers/error/error-handler-factory";
-import { MethodMode, Position } from "../types";
+import { MessageType, MethodMode, Position } from "../types";
 import ConvertUtils from "./convert-utils";
 import { ElementFactory } from "./element-factory";
 import { BaseVariableHandler } from "../handlers/context/base-variables";
@@ -53,7 +53,7 @@ export class Converter {
     }
 
     private getDisplayMessages(): string[] {
-        return (["ERROR", "WARNING", "INFO"] as MessageType[])
+        return (["ERROR", "WARNING", "DEPRECATE", "INFO"] as MessageType[])
             .map((type) =>
                 this.getMessages(type).map((msg) => `// ${type}: ${msg}`)
             )
@@ -252,4 +252,3 @@ interface Message {
     position?: Position;
 }
 
-type MessageType = "ERROR" | "WARNING" | "INFO";

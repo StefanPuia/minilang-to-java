@@ -14,7 +14,7 @@ export class FieldToList extends SetterElement {
 
     public getValidation(): ValidationMap {
         this.converter.appendMessage(
-            "WARNING",
+            "DEPRECATE",
             "<field-to-list> element is deprecated (use <set>)",
             this.position
         );

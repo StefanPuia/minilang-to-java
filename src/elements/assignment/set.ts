@@ -58,7 +58,7 @@ export class Set extends SetterElement {
             value,
         } = this.attributes;
 
-        return {
+        const attributes = {
             field,
             from: fromField ?? (from as FlexibleMapAccessor),
             value: value,
@@ -68,6 +68,11 @@ export class Set extends SetterElement {
             setIfNull: setIfNull === "true",
             setIfEmpty: setIfEmpty === "true",
         };
+        if (!attributes.from && !attributes.value) {
+            attributes.value = attributes.default;
+            attributes.default = undefined;
+        }
+        return attributes;
     }
 
     public getField(): string {

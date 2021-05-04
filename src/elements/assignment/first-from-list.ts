@@ -14,7 +14,7 @@ export class FirstFromList extends SetterElement {
 
     public getValidation(): ValidationMap {
         this.converter.appendMessage(
-            "WARNING",
+            "DEPRECATE",
             "<first-from-list> element is deprecated (use <set>)",
             this.position
         );

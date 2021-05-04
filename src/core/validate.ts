@@ -1,5 +1,5 @@
 import { Tag } from "../elements/tag";
-import { XMLSchemaElement } from "../types";
+import { MessageType, XMLSchemaElement } from "../types";
 import { Converter } from "./converter";
 
 export abstract class Validation {
@@ -78,13 +78,9 @@ abstract class BaseValidator {
 
     protected abstract execute(): void;
 
-    protected addError(message: string) {
-        this.converter.appendMessage("ERROR", message, this.tag.getPosition());
-    }
-
-    protected addWarning(message: string) {
+    protected addMessage(message: string, type: MessageType = "ERROR") {
         this.converter.appendMessage(
-            "WARNING",
+            type,
             message,
             this.tag.getPosition()
         );
@@ -98,7 +94,7 @@ class AttributeNames extends BaseValidator {
         Object.keys(this.tag.getTagAttributes())
             .filter((attr) => !this.rule.includes(attr))
             .forEach((invalidAttribute) => {
-                this.addError(
+                this.addMessage(
                     `Attribute "${invalidAttribute}" is not valid for tag "${this.tag.getTagName()}"`
                 );
             });
@@ -118,7 +114,7 @@ class ConstantAttributes extends BaseValidator {
                     )
             )
             .forEach((invalidAttribute) => {
-                this.addError(
+                this.addMessage(
                     `Constant attribute "${invalidAttribute}" cannot contain an expression`
                 );
             });
@@ -138,7 +134,7 @@ class ExpressionAttributes extends BaseValidator {
                     )
             )
             .forEach((invalidAttribute) => {
-                this.addError(
+                this.addMessage(
                     `Expression attribute "${invalidAttribute}" cannot contain a script (remove script)`
                 );
             });
@@ -158,7 +154,7 @@ class ConstantPlusExpressionAttributes extends BaseValidator {
                     )
             )
             .forEach((invalidAttribute) => {
-                this.addError(
+                this.addMessage(
                     `Constant+expr attribute "${invalidAttribute}" is missing a constant value (expression-only constants are not allowed)`
                 );
             });
@@ -171,7 +167,7 @@ class ConstantPlusExpressionAttributes extends BaseValidator {
                 )
             )
             .forEach((invalidAttribute) => {
-                this.addError(
+                this.addMessage(
                     `Constant+expr attribute "${invalidAttribute}" cannot contain a script (remove script)`
                 );
             });
@@ -188,10 +184,11 @@ class DeprecatedAttributes extends BaseValidator {
             )
             .filter(Boolean)
             .forEach((deprecatedAttribute) => {
-                this.addWarning(
+                this.addMessage(
                     `Attribute "${deprecatedAttribute!.name}" is deprecated (${
                         deprecatedAttribute!.fixInstruction
-                    })`
+                    })`,
+                    "DEPRECATE"
                 );
             });
     }
@@ -206,7 +203,7 @@ class RequireAnyAttribute extends BaseValidator {
                 Reflect.has(this.tag.getTagAttributes(), required)
             )
         ) {
-            this.addError(
+            this.addMessage(
                 `Element "${this.tag.getTagName()}" must include one of "${this.rule.join(
                     `", "`
                 )}" attributes.`
@@ -225,7 +222,7 @@ class RequiredAttributes extends BaseValidator {
                     !Reflect.has(this.tag.getTagAttributes(), required)
             )
             .forEach((required) => {
-                this.addError(`Required attribute "${required}" is missing.`);
+                this.addMessage(`Required attribute "${required}" is missing.`);
             });
     }
 }
@@ -254,7 +251,7 @@ class NoChildElements extends ChildValidator {
 
     protected execute(): void {
         if (this.rule && this.children.length) {
-            this.addError(
+            this.addMessage(
                 `Element "${this.tag.getTagName()}" does not allow children.`
             );
         }
@@ -270,7 +267,7 @@ class ChildElements extends ChildValidator {
                 (child) => !this.rule.find((allowed) => allowed === child.name)
             )
             .forEach((child) => {
-                this.addError(
+                this.addMessage(
                     `Child element "${child}" is not valid for tag "${this.tag.getTagName()}".`
                 );
             });
@@ -286,7 +283,7 @@ class RequireAnyChildElement extends ChildValidator {
                 this.children.find((el) => el.name === required)
             )
         ) {
-            this.addError(
+            this.addMessage(
                 `Element "${this.tag.getTagName()}" must include one of "${this.rule.join(
                     `", "`
                 )}" child elements.`
@@ -304,7 +301,7 @@ class RequiredChildElements extends ChildValidator {
                 (required) => !this.children.find((el) => el.name === required)
             )
             .forEach((required) => {
-                this.addError(
+                this.addMessage(
                     `Required child element "${required}" is missing.`
                 );
             });

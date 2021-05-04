@@ -90,7 +90,7 @@ export class Now extends BaseNow {
 abstract class DeprecatedNow extends BaseNow {
     public getValidation() {
         this.converter.appendMessage(
-            "WARNING",
+            "DEPRECATE",
             `"${this.getTagName()}" deprecated - use <now>`,
             this.position
         );
