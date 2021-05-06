@@ -49,7 +49,7 @@ export interface ValidChildren {
 
 export type ContextVariable = {
     name: string;
-    count: number;
+    count?: number;
     type?: string;
     typeParams: string[];
 };
@@ -83,5 +83,6 @@ export interface Position {
 export type Constant = string;
 export type FlexibleStringExpander = string;
 export type FlexibleMapAccessor = string;
+export type FlexibleMessage = string;
 
 export type MessageType = "ERROR" | "WARNING" | "INFO" | "DEPRECATE";

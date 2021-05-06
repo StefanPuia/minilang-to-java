@@ -1,3 +1,4 @@
+import ConvertUtils from "../../core/convert-utils";
 import { ValidationMap } from "../../core/validate";
 import {
     FlexibleMapAccessor,
@@ -97,10 +98,39 @@ export class SetCalendar extends SetterElement {
         return this.getAttributes().field;
     }
     public convert(): string[] {
-        // return this.wrapCondition(this.wrapConvert(""));
-        const message = "set-calendar WIP";
-        this.converter.appendMessage("ERROR", message, this.position);
-        return [`// ERROR: ${message}`];
+        return this.wrapCondition(
+            this.wrapConvert(
+                [
+                    "Timestamp.valueOf(",
+                    `${ConvertUtils.parseFieldGetter(
+                        this.getAttributes().from
+                    )}.toLocalDateTime()`,
+                    ...[
+                        "years",
+                        "months",
+                        "days",
+                        "hours",
+                        "minutes",
+                        "seconds",
+                    ]
+                        .map((method) => this.getPlusMethod(method as AddType))
+                        .flat(),
+                    ")",
+                ].join("")
+            )
+        );
+    }
+
+    private getPlusMethod(method: AddType): string[] {
+        const value = this.getAttributes()[method];
+        if (value) {
+            return [
+                `.plus${method.charAt(0).toUpperCase()}${method.substr(
+                    1
+                )}(${this.converter.parseValue(value)})`,
+            ];
+        }
+        return [];
     }
 
     private getValue(): string {
@@ -158,3 +188,5 @@ interface SetCalendarAttributes {
     locale: FlexibleStringExpander;
     timeZone: FlexibleStringExpander;
 }
+
+type AddType = "years" | "months" | "days" | "hours" | "minutes" | "seconds";

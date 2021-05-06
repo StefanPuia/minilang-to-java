@@ -1,8 +1,29 @@
+import { ValidationMap } from "../../core/validate";
 import { BaseSetterRawAttributes, SetterElement } from "../assignment/setter";
 
 export class Calculate extends SetterElement {
     public static readonly TAG = "calculate";
     protected attributes = this.attributes as CalculateAttributes;
+
+    public getValidation(): ValidationMap {
+        this.converter.appendMessage(
+            "DEPRECATE",
+            "<calculate> element is deprecated (use <set>)",
+            this.position
+        );
+        return {
+            attributeNames: [
+                "field",
+                "decimal-scale",
+                "decimal-format",
+                "rounding-mode",
+                "type",
+            ],
+            requiredAttributes: ["field"],
+            expressionAttributes: ["field"],
+            childElements: ["calcop", "number"],
+        };
+    }
 
     public getType(): string | undefined {
         return this.attributes.type ?? "BigDecimal";
@@ -74,3 +95,4 @@ interface CalculateAttributes extends BaseSetterRawAttributes {
     "decimal-format"?: string;
     "type"?: "String" | "Double" | "Float" | "Long" | "Integer" | "BigDecimal";
 }
+

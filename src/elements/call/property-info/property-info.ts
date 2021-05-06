@@ -10,6 +10,8 @@ export abstract class PropertyInfo extends ElementTag {
             ...this.convertChildren(),
         ];
     }
+
+    public abstract getMessage(): string;
 }
 
 interface PropertyInfoAttributes extends XMLSchemaElementAttributes {

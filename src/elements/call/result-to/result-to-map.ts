@@ -1,4 +1,4 @@
-import { XMLSchemaElementAttributes } from "../../types";
+import { XMLSchemaElementAttributes } from "../../../types";
 import { ResultTo } from "./result-to";
 
 export class ResultToMap extends ResultTo {
@@ -9,18 +9,29 @@ export class ResultToMap extends ResultTo {
         return;
     }
 
-    public getType(): string | undefined {
+    public getType(): string {
         this.converter.addImport("Map");
-        return "Map";
+        return "Map<String, Object>";
     }
-    public getField(): string | undefined {
+
+    public getField(): string {
         return this.attributes["map-name"];
     }
+
     public convert(): string[] {
-        return this.wrapConvert("null");
+        this.converter.addImport("HashMap");
+        return this.wrapConvert(
+            `new HashMap<>(${this.attributes["!from-field"] ?? ""})`
+        );
+    }
+
+    public ofServiceCall(resultName: string): string[] {
+        this.attributes["!from-field"] = resultName;
+        return this.convert();
     }
 }
 
 interface ResultToMapAttributes extends XMLSchemaElementAttributes {
     "map-name": string;
+    "!from-field"?: string;
 }

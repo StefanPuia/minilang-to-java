@@ -53,19 +53,9 @@ export class Converter {
     }
 
     private getDisplayMessages(): string[] {
-        return (["ERROR", "WARNING", "DEPRECATE", "INFO"] as MessageType[])
-            .map((type) =>
-                this.getMessages(type).map((msg) => `// ${type}: ${msg}`)
-            )
-            .flat();
-    }
-
-    private getMessages(type: MessageType) {
-        return this.messages
-            .filter((msg) => msg.type === type)
-            .map(({ content, position }) =>
-                `${content} ${this.getLineCol(position)}`.trim()
-            );
+        return this.messages.map(({ content, position, type }) =>
+            `// ${type}: ${content} ${this.getLineCol(position)}`.trim()
+        );
     }
 
     private getParseStats(source: string, start: number, end: number): string {
@@ -251,4 +241,3 @@ interface Message {
     line?: string;
     position?: Position;
 }
-

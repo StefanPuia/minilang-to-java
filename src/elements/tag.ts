@@ -51,7 +51,6 @@ export abstract class Tag {
     }) {
         const contextVariable = {
             typeParams: [],
-            count: 1,
             ...variable,
         };
         if (this.hasOwnContext()) {

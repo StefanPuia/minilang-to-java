@@ -1,11 +1,11 @@
-import ConvertUtils from "../../core/convert-utils";
-import { XMLSchemaElementAttributes } from "../../types";
+import ConvertUtils from "../../../core/convert-utils";
+import { XMLSchemaElementAttributes } from "../../../types";
 import { ResultTo } from "./result-to";
 
 export class ResultToField extends ResultTo {
     public static readonly TAG = "result-to-field";
     protected attributes = this.attributes as ResultToFieldAttributes;
-    private fromField?: string;
+    private fromField?: string = this.attributes["!from-field"];
 
     public getType(): string {
         return this.converter.guessFieldType(this.getField()) ?? "Object";
@@ -42,9 +42,16 @@ export class ResultToField extends ResultTo {
         }
         return `(${this.getType()}) `;
     }
+    public ofServiceCall(resultName: string): string[] {
+        return this.getInstance<ResultToFieldAttributes>(ResultToField, {
+            ...this.attributes,
+            "!from-field": resultName,
+        }).convert();
+    }
 }
 
 interface ResultToFieldAttributes extends XMLSchemaElementAttributes {
     "result-name": string;
     "field"?: string;
+    "!from-field"?: string;
 }

@@ -79,11 +79,7 @@ abstract class BaseValidator {
     protected abstract execute(): void;
 
     protected addMessage(message: string, type: MessageType = "ERROR") {
-        this.converter.appendMessage(
-            type,
-            message,
-            this.tag.getPosition()
-        );
+        this.converter.appendMessage(type, message, this.tag.getPosition());
     }
 }
 
@@ -175,22 +171,32 @@ class ConstantPlusExpressionAttributes extends BaseValidator {
 }
 
 class DeprecatedAttributes extends BaseValidator {
-    protected rule!: DeprecatedAttributeRule[];
+    protected rule!: (DeprecatedAttributeRule | string)[];
 
     protected execute(): void {
         Object.keys(this.tag.getTagAttributes())
             .map((attr) =>
-                this.rule.find((deprecated) => deprecated.name === attr)
+                this.rule.find(
+                    (deprecated) => this.getAttribute(deprecated) === attr
+                )
             )
             .filter(Boolean)
-            .forEach((deprecatedAttribute) => {
+            .forEach((deprecated) => {
                 this.addMessage(
-                    `Attribute "${deprecatedAttribute!.name}" is deprecated (${
-                        deprecatedAttribute!.fixInstruction
-                    })`,
+                    `Attribute "${this.getAttribute(
+                        deprecated!
+                    )}" is deprecated ${this.getFixInstruction(deprecated!)}`,
                     "DEPRECATE"
                 );
             });
+    }
+
+    private getAttribute(attr: DeprecatedAttributeRule | string): string {
+        return typeof attr === "string" ? attr : attr.name;
+    }
+
+    private getFixInstruction(attr: DeprecatedAttributeRule | string): string {
+        return typeof attr === "string" ? "" : `(${attr!.fixInstruction})`;
     }
 }
 
@@ -268,7 +274,7 @@ class ChildElements extends ChildValidator {
             )
             .forEach((child) => {
                 this.addMessage(
-                    `Child element "${child}" is not valid for tag "${this.tag.getTagName()}".`
+                    `Child element "${child.name}" is not valid for tag "${this.tag.getTagName()}".`
                 );
             });
     }
@@ -313,7 +319,7 @@ export interface ValidationMap {
     constantAttributes?: string[];
     expressionAttributes?: string[];
     constantPlusExpressionAttributes?: string[];
-    deprecatedAttributes?: DeprecatedAttributeRule[];
+    deprecatedAttributes?: (DeprecatedAttributeRule | string)[];
     requireAnyAttribute?: string[];
     requiredAttributes?: string[];
     scriptAttributes?: string[];

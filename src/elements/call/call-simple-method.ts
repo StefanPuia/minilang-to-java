@@ -1,6 +1,6 @@
 import { XMLSchemaElementAttributes } from "../../types";
 import { SetterElement } from "../assignment/setter";
-import { ResultToField } from "./result-to-field";
+import { ResultToField } from "./result-to/result-to-field";
 
 export class CallSimpleMethod extends SetterElement {
     public static readonly TAG = "call-simple-method";

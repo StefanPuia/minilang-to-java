@@ -58,4 +58,24 @@ export abstract class ElementTag extends Tag {
     public getPosition(): Position | undefined {
         return this.tag.position;
     }
+
+
+    public getInstance<
+        T extends XMLSchemaElementAttributes,
+        E extends ElementTag = ElementTag
+    >(elementTag: ElementTagConstructor<E>, attributes: T): E {
+        return new elementTag(
+            {
+                type: "element",
+                name: this.getTagName(),
+                attributes,
+            },
+            this.converter,
+            this.parent
+        );
+    }
+}
+
+interface ElementTagConstructor<E extends ElementTag> {
+    new (el: XMLSchemaAnyElement, converter: Converter, parent?: Tag): E;
 }

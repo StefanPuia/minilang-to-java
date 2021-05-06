@@ -1,3 +1,4 @@
+import { ValidationMap } from "../../core/validate";
 import {
     MethodMode,
     StringBoolean,
@@ -9,11 +10,76 @@ import { ElementTag } from "../element-tag";
 
 export class SimpleMethod extends ElementTag {
     public static readonly TAG = "simple-method";
-    protected attributes: SimpleMethodAttributes = this.attributes;
+    protected attributes: SimpleMethodRawAttributes = this.attributes;
     private exceptions: Set<string> = new Set();
 
-    public getValidChildren(): ValidChildren {
-        return {};
+    public getValidation(): ValidationMap {
+        return {
+            deprecatedAttributes: [
+                "parameter-map-name",
+                "locale-name",
+                "delegator-name",
+                "security-name",
+                "dispatcher-name",
+                "user-login-name",
+            ],
+            requiredAttributes: ["method-name"],
+        };
+    }
+
+    private getAttributes(): SimpleMethodAttributes {
+        const {
+            "method-name": methodName,
+            "short-description": shortDescription,
+            "login-required": loginRequired,
+            "use-transaction": useTransaction,
+            "default-error-code": defaultErrorCode,
+            "default-success-code": defaultSuccessCode,
+            "event-request-object-name": eventRequestObjectName,
+            "event-response-object-name": eventResponseObjectName,
+            "event-session-object-name": eventSessionObjectName,
+            "event-response-code-name": eventResponseCodeName,
+            "event-error-message-name": eventErrorMessageName,
+            "event-error-message-list-name": eventErrorMessageListName,
+            "event-event-message-name": eventEventMessageName,
+            "event-event-message-list-name": eventEventMessageListName,
+            "service-response-message-name": serviceResponseMessageName,
+            "service-error-message-name": serviceErrorMessageName,
+            "service-error-message-list-name": serviceErrorMessageListName,
+            "service-error-message-map-name": serviceErrorMessageMapName,
+            "service-success-message-name": serviceSuccessMessageName,
+            "service-success-message-list-name": serviceSuccessMessageListName,
+        } = this.attributes;
+
+        return {
+            methodName,
+            shortDescription: shortDescription ?? "",
+            defaultErrorCode: defaultErrorCode ?? "error",
+            defaultSuccessCode: defaultSuccessCode ?? "success",
+            eventRequestName: eventRequestObjectName ?? "request",
+            eventSessionName: eventSessionObjectName ?? "session",
+            eventResponseName: eventResponseObjectName ?? "response",
+            eventResponseCodeName: eventResponseCodeName ?? "_response_code_",
+            eventErrorMessageName: eventErrorMessageName ?? "_error_message_",
+            eventErrorMessageListName:
+                eventErrorMessageListName ?? "_error_message_list_",
+            eventEventMessageName: eventEventMessageName ?? "_event_message_",
+            eventEventMessageListName:
+                eventEventMessageListName ?? "_event_message_list_",
+            serviceResponseMessageName:
+                serviceResponseMessageName ?? "responseMessage",
+            serviceErrorMessageName: serviceErrorMessageName ?? "errorMessage",
+            serviceErrorMessageListName:
+                serviceErrorMessageListName ?? "errorMessageList",
+            serviceErrorMessageMapName:
+                serviceErrorMessageMapName ?? "errorMessageMap",
+            serviceSuccessMessageName:
+                serviceSuccessMessageName ?? "successMessage",
+            serviceSuccessMessageListName:
+                serviceSuccessMessageListName ?? "successMessageList",
+            loginRequired: loginRequired !== "false",
+            useTransaction: useTransaction !== "false",
+        };
     }
 
     public convert(): string[] {
@@ -37,13 +103,11 @@ export class SimpleMethod extends ElementTag {
     }
 
     private getDescription() {
-        return this.attributes["short-description"]
-            ? [`// ${this.attributes["short-description"]}`]
-            : [];
+        return [`// ${this.getAttributes().shortDescription}`];
     }
 
     private getMethodHeader() {
-        const name = this.attributes["method-name"];
+        const name = this.getAttributes().methodName;
         switch (this.converter.getMethodMode()) {
             case MethodMode.EVENT:
                 this.addVarToContext("request", "HttpServletRequest", true);
@@ -140,11 +204,15 @@ export class SimpleMethod extends ElementTag {
     }
 
     public getDefaultSuccessCode() {
-        return this.attributes["default-success-code"] ?? "success";
+        return this.getAttributes().defaultSuccessCode;
+    }
+
+    public getDefaultErrorCode() {
+        return this.getAttributes().defaultErrorCode;
     }
 }
 
-interface SimpleMethodAttributes extends XMLSchemaElementAttributes {
+interface SimpleMethodRawAttributes extends XMLSchemaElementAttributes {
     "method-name": string;
     "short-description"?: string;
     "login-required"?: StringBoolean;
@@ -165,4 +233,27 @@ interface SimpleMethodAttributes extends XMLSchemaElementAttributes {
     "service-error-message-map-name"?: string;
     "service-success-message-name"?: string;
     "service-success-message-list-name"?: string;
+}
+
+interface SimpleMethodAttributes {
+    methodName: string;
+    shortDescription: string;
+    defaultErrorCode: string;
+    defaultSuccessCode: string;
+    eventRequestName: string;
+    eventSessionName: string;
+    eventResponseName: string;
+    eventResponseCodeName: string;
+    eventErrorMessageName: string;
+    eventErrorMessageListName: string;
+    eventEventMessageName: string;
+    eventEventMessageListName: string;
+    serviceResponseMessageName: string;
+    serviceErrorMessageName: string;
+    serviceErrorMessageListName: string;
+    serviceErrorMessageMapName: string;
+    serviceSuccessMessageName: string;
+    serviceSuccessMessageListName: string;
+    loginRequired: boolean;
+    useTransaction: boolean;
 }

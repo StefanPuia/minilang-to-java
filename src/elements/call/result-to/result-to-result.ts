@@ -1,4 +1,5 @@
-import { MethodMode, XMLSchemaElementAttributes } from "../../types";
+import ConvertUtils from "../../../core/convert-utils";
+import { MethodMode, XMLSchemaElementAttributes } from "../../../types";
 import { ResultTo } from "./result-to";
 
 export class ResultToResult extends ResultTo {
@@ -21,7 +22,17 @@ export class ResultToResult extends ResultTo {
         }`;
     }
     public convert(): string[] {
-        return this.wrapConvert("null");
+        return this.wrapConvert(
+            `${
+                (this.attributes["!from-field"] &&
+                    ConvertUtils.parseFieldGetter(
+                        `${
+                            this.attributes["!from-field"]
+                        }.${this.getResultAttribute()}`
+                    )) ||
+                "null"
+            }`
+        );
     }
 
     public wrapConvert(assign: string): string[] {
@@ -39,9 +50,16 @@ export class ResultToResult extends ResultTo {
 
         return [...super.wrapConvert(assign)];
     }
+    public ofServiceCall(resultName: string): string[] {
+        return this.getInstance<ResultToResultAttributes>(ResultToResult, {
+            ...this.attributes,
+            "!from-field": resultName,
+        }).convert();
+    }
 }
 
 interface ResultToResultAttributes extends XMLSchemaElementAttributes {
     "result-name": string;
     "service-result-name"?: string;
+    "!from-field"?: string;
 }
