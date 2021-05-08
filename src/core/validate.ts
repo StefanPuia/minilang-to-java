@@ -15,6 +15,7 @@ export abstract class Validation {
             scriptAttributes,
             noChildElements,
             childElements,
+            unhandledChildElements,
             requireAnyChildElement,
             requiredChildElements,
         } = tag.getValidation();
@@ -31,6 +32,9 @@ export abstract class Validation {
         new ScriptAttributes(tag, converter).validate(scriptAttributes);
         new NoChildElements(tag, converter).validate(noChildElements);
         new ChildElements(tag, converter).validate(childElements);
+        new UnhandledChildElements(tag, converter).validate(
+            unhandledChildElements
+        );
         new RequireAnyChildElement(tag, converter).validate(
             requireAnyChildElement
         );
@@ -274,7 +278,27 @@ class ChildElements extends ChildValidator {
             )
             .forEach((child) => {
                 this.addMessage(
-                    `Child element "${child.name}" is not valid for tag "${this.tag.getTagName()}".`
+                    `Child element "${
+                        child.name
+                    }" is not valid for tag "${this.tag.getTagName()}".`
+                );
+            });
+    }
+}
+
+class UnhandledChildElements extends ChildValidator {
+    protected rule!: string[];
+
+    protected execute(): void {
+        this.children
+            .filter((child) =>
+                this.rule.find((unhandled) => unhandled === child.name)
+            )
+            .forEach((child) => {
+                this.addMessage(
+                    `Child element "${
+                        child.name
+                    }" is unhandled for tag "${this.tag.getTagName()}".`
                 );
             });
     }
@@ -325,6 +349,7 @@ export interface ValidationMap {
     scriptAttributes?: string[];
     noChildElements?: boolean;
     childElements?: string[];
+    unhandledChildElements?: string[];
     requireAnyChildElement?: string[];
     requiredChildElements?: string[];
 }

@@ -57,6 +57,15 @@ export class CallService extends AbstractCallService {
                 "result-to-session",
                 "result-to-result",
             ],
+            unhandledChildElements: [
+                "error-prefix",
+                "error-suffix",
+                "success-prefix",
+                "success-suffix",
+                "message-prefix",
+                "message-suffix",
+                "default-message",
+            ],
         };
     }
 
@@ -126,21 +135,73 @@ export class CallService extends AbstractCallService {
     public convert(): string[] {
         this.addException("GenericServiceException");
         this.setVariableToContext({ name: "dispatcher" });
-        return [
-            ...this.addUserLoginToMap(),
-            ...this.getServiceCall(),
-            ...this.getResultMappings(),
-        ];
+        const {
+            inMapName,
+            includeUserLogin,
+            serviceName,
+        } = this.getAttributes();
+        const [addUserLoginToContext, contextMapName] = this.addUserLoginToMap(
+            serviceName,
+            includeUserLogin,
+            inMapName
+        );
+        return this.wrapWithTryCatch([
+            ...addUserLoginToContext,
+            ...this.getServiceCallWithResultsTo(contextMapName),
+        ]);
     }
 
-    private getServiceCall(): string[] {
-        const serviceCall = `dispatcher.runSync(${this.getParameters().join(
-            ", "
-        )})`;
-        if (this.getResultMappings().length) {
-            return this.wrapConvert(serviceCall);
+    private wrapWithTryCatch(nested: string[]) {
+        const { breakOnError } = this.getAttributes();
+        if (breakOnError) {
+            this.converter.addImport("GenericServiceException");
+            return [
+                "try {",
+                ...nested.map(this.prependIndentationMapper),
+                "} catch (GenericServiceException e) {",
+                ...[
+                    ...(this.getParent<SimpleMethod>(
+                        "simple-method"
+                    )?.getReturnError("break-on-error triggered", "e") ?? []),
+                ].map(this.prependIndentationMapper),
+                "}",
+            ];
+        }
+        return nested;
+    }
+
+    private getServiceCallWithResultsTo(contextMap?: string): string[] {
+        const serviceCall = `dispatcher.runSync(${this.getParameters(
+            contextMap
+        ).join(", ")})`;
+        const resultMappings = this.getResultMappings();
+        if (resultMappings.length) {
+            return [...this.wrapConvert(serviceCall), ...resultMappings];
         }
         return [`${serviceCall};`];
+    }
+
+    private getParameters(contextMap?: string): string[] {
+        const {
+            serviceName,
+            inMapName,
+            requireNewTransaction,
+            transactionTimeout,
+        } = this.getAttributes();
+        const parameters: string[] = [`"${serviceName}"`];
+        if (contextMap || inMapName) {
+            parameters.push(contextMap ?? (inMapName as string));
+        } else {
+            this.converter.addImport("HashMap");
+            parameters.push("new HashMap<>()");
+        }
+        if (transactionTimeout) {
+            parameters.push(
+                `${transactionTimeout}`,
+                `${requireNewTransaction}`
+            );
+        }
+        return parameters;
     }
 
     private getResultMappings(): string[] {
@@ -152,25 +213,9 @@ export class CallService extends AbstractCallService {
     }
 
     protected getUnsupportedAttributes() {
-        return [
-            "include-user-login",
-            "break-on-error",
-            "error-code",
-            "success-code",
-            "require-new-transaction",
-            "transaction-timeout",
-        ];
+        return ["error-code", "success-code"];
     }
 }
-
-type AppendedMessageType =
-    | "error-prefix"
-    | "error-suffix"
-    | "success-prefix"
-    | "success-suffix"
-    | "message-prefix"
-    | "message-suffix"
-    | "default-message";
 
 interface CallServiceRawAttributes extends XMLSchemaElementAttributes {
     "service-name": string;
@@ -191,7 +236,7 @@ interface CallServiceAttributes {
     requireNewTransaction: boolean;
     errorCode?: string;
     successCode?: string;
-    transactionTimeout: number;
+    transactionTimeout?: number;
     errorPrefix: FlexibleMessage;
     errorSuffix: FlexibleMessage;
     successPrefix: FlexibleMessage;

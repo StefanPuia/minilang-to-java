@@ -2,7 +2,13 @@ import { ContextUtils } from "../core/context-utils";
 import { Converter } from "../core/converter";
 import { ElementFactory } from "../core/element-factory";
 import { Validation, ValidationMap } from "../core/validate";
-import { Position, ValidChildren, VariableContext, XMLSchemaAnyElement, XMLSchemaElementAttributes } from "../types";
+import {
+    Position,
+    ValidChildren,
+    VariableContext,
+    XMLSchemaAnyElement,
+    XMLSchemaElementAttributes,
+} from "../types";
 
 export abstract class Tag {
     protected readonly converter: Converter;
@@ -85,11 +91,13 @@ export abstract class Tag {
         return children;
     }
 
-    public getParent(tagName?: string): Tag | undefined {
+    public getParent<T extends Tag>(tagName?: string): T | undefined {
         if (typeof tagName !== "undefined") {
-            return this.getParents().find((el) => el.getTagName() === tagName);
+            return this.getParents().find(
+                (el) => el.getTagName() === tagName
+            ) as T;
         }
-        return this.parent;
+        return this.parent as T;
     }
 
     protected getParentVariableContext() {

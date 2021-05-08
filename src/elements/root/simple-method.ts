@@ -177,6 +177,22 @@ export class SimpleMethod extends ElementTag {
         return [];
     }
 
+    public getReturnError(message?: string, throwable?: string): string[] {
+        const errorMessage = throwable ? `${throwable}.getMessage()` : `"${message}"`;
+        switch (this.converter.getMethodMode()) {
+            case MethodMode.EVENT:
+                return [
+                    `request.setAttribute("_ERROR_MESSAGE_", ${errorMessage});`,
+                    `return "error";`,
+                ];
+
+            case MethodMode.SERVICE:
+                return [`return ServiceUtil.returnError(${errorMessage});`];
+        }
+        const params = [errorMessage, throwable].filter(Boolean);
+        return [`throw new Exception(${params.join(", ")});`];
+    }
+
     protected hasOwnContext() {
         return true;
     }
