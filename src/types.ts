@@ -85,4 +85,6 @@ export type FlexibleStringExpander = string;
 export type FlexibleMapAccessor = string;
 export type FlexibleMessage = string;
 
+export type JavaClassName = string;
+
 export type MessageType = "ERROR" | "WARNING" | "INFO" | "DEPRECATE";

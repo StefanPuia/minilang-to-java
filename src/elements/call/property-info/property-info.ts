@@ -11,7 +11,9 @@ export abstract class PropertyInfo extends ElementTag {
         ];
     }
 
-    public abstract getMessage(): string;
+    public getMessage(): string {
+        return this.getTagName();
+    }
 }
 
 interface PropertyInfoAttributes extends XMLSchemaElementAttributes {
