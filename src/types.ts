@@ -88,3 +88,11 @@ export type FlexibleMessage = string;
 export type JavaClassName = string;
 
 export type MessageType = "ERROR" | "WARNING" | "INFO" | "DEPRECATE";
+
+export interface ConverterInit {
+    source: string,
+    methodMode: MethodMode,
+    packageName?: string,
+    className?: string,
+    logging: Partial<Record<MessageType, boolean>>
+}

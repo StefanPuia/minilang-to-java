@@ -22,12 +22,12 @@ export abstract class Validation {
         } = tag.getValidation();
 
         new AttributeNames(tag, converter).validate(attributeNames);
-        new ConstantAttributes(tag, converter).validate(constantAttributes);
+        // new ConstantAttributes(tag, converter).validate(constantAttributes);
         new UnhandledAttributes(tag, converter).validate(unhandledAttributes);
-        new ExpressionAttributes(tag, converter).validate(expressionAttributes);
-        new ConstantPlusExpressionAttributes(tag, converter).validate(
-            constantPlusExpressionAttributes
-        );
+        // new ExpressionAttributes(tag, converter).validate(expressionAttributes);
+        // new ConstantPlusExpressionAttributes(tag, converter).validate(
+        //     constantPlusExpressionAttributes
+        // );
         new DeprecatedAttributes(tag, converter).validate(deprecatedAttributes);
         new RequireAnyAttribute(tag, converter).validate(requireAnyAttribute);
         new RequiredAttributes(tag, converter).validate(requiredAttributes);

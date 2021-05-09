@@ -28,12 +28,13 @@ app.get("/", (_req: Request, res: Response) => {
 
 app.post("/convert", (req, res) => {
     try {
-        const output = Converter.convert(
-            req.body.input,
-            req.body.methodMode,
-            req.body.packageName,
-            req.body.className
-        );
+        const output = Converter.convert({
+            source: req.body.input,
+            methodMode: req.body.methodMode,
+            packageName: req.body.packageName,
+            className: req.body.className,
+            logging: {},
+        });
         res.json({
             output: output,
         });

@@ -1,6 +1,6 @@
 import { BaseErrorHandler } from "../handlers/error/base-error";
 import { ErrorHandlerFactory } from "../handlers/error/error-handler-factory";
-import { MessageType, MethodMode, Position } from "../types";
+import { ConverterInit, MessageType, MethodMode, Position } from "../types";
 import ConvertUtils from "./convert-utils";
 import { ElementFactory } from "./element-factory";
 import { BaseVariableHandler } from "../handlers/context/base-variables";
@@ -16,17 +16,20 @@ export class Converter {
     private messages: Message[] = [];
     private errorHandler: BaseErrorHandler | undefined;
     private contextVariableHandler: BaseVariableHandler | undefined;
+    private loggingConfig: Record<MessageType, boolean>;
 
-    private constructor(
-        source: string,
-        mode: MethodMode,
-        packageName?: string,
-        className?: string
-    ) {
-        this.source = source;
-        this.methodMode = mode;
-        this.packageName = packageName;
-        this.className = className;
+    private constructor(init: ConverterInit) {
+        this.source = init.source;
+        this.methodMode = init.methodMode;
+        this.packageName = init.packageName;
+        this.className = init.className;
+        this.loggingConfig = {
+            ERROR: true,
+            WARNING: true,
+            DEPRECATE: true,
+            INFO: true,
+            ...init.logging,
+        };
     }
 
     private convert() {
@@ -53,9 +56,11 @@ export class Converter {
     }
 
     private getDisplayMessages(): string[] {
-        return this.messages.map(({ content, position, type }) =>
-            `// ${type}: ${content} ${this.getLineCol(position)}`.trim()
-        );
+        return this.messages
+            .filter(({ type }) => this.loggingConfig[type])
+            .map(({ content, position, type }) =>
+                `// ${type}: ${content} ${this.getLineCol(position)}`.trim()
+            );
     }
 
     private getParseStats(source: string, start: number, end: number): string {
@@ -91,13 +96,8 @@ export class Converter {
         return this.className || "SomeClassName";
     }
 
-    public static convert(
-        source: string,
-        mode: MethodMode,
-        packageName?: string,
-        className?: string
-    ) {
-        return new Converter(source, mode, packageName, className).convert();
+    public static convert(init: ConverterInit) {
+        return new Converter(init).convert();
     }
 
     public getIndentSpaces() {
