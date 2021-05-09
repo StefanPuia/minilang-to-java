@@ -18,6 +18,7 @@ export class IfCompare extends IfComparing {
             constantAttributes: ["operator", "type"],
             constantPlusExpressionAttributes: ["value"],
             expressionAttributes: ["field"],
+            unhandledAttributes: ["format"],
         };
     }
 
@@ -31,7 +32,7 @@ export class IfCompare extends IfComparing {
     }
 
     protected convertCondition() {
-        return `${this.getNegated()}${this.getComparison(
+        return `${this.getComparison(
             this.getField(),
             this.getAttributes().operator,
             this.getValue()
@@ -52,10 +53,6 @@ export class IfCompare extends IfComparing {
                 this.getAttributes().value
             ) ?? this.converter.parseValue(this.getAttributes().value)
         );
-    }
-
-    protected getUnsupportedAttributes() {
-        return ["format"];
     }
 
     protected getFieldType() {

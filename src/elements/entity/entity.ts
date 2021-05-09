@@ -9,11 +9,36 @@ import { Converter } from "../../core/converter";
 import { Tag } from "../tag";
 import { SelectField } from "./select-field";
 import { OrderBy } from "./order-by";
+import { ValidationMap } from "../../core/validate";
 
 export abstract class EntityElement extends SetterElement {
     constructor(self: XMLSchemaAnyElement, converter: Converter, parent?: Tag) {
         super(self, converter, parent);
         this.addException("GenericEntityException");
+    }
+
+    public getValidation(): ValidationMap {
+        return {
+            unhandledAttributes: ["delegator-name"],
+            attributeNames: [
+                "entity-name",
+                "use-cache",
+                "filter-by-date",
+                "list",
+                "distinct",
+                "delegator-name",
+            ],
+            requiredAttributes: ["entity-name", "list"],
+            expressionAttributes: ["list"],
+            childElements: [
+                "field-map",
+                "order-by",
+                "limit-range",
+                "limit-view",
+                "use-iterator",
+            ],
+            requiredChildElements: ["field-map"],
+        };
     }
 
     protected getFromFieldMap() {
@@ -98,10 +123,6 @@ export abstract class EntityElement extends SetterElement {
             }
             return line;
         });
-    }
-
-    protected getUnsupportedAttributes() {
-        return ["delegator-name"];
     }
 
     protected getEcbName() {

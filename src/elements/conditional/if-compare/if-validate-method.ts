@@ -29,7 +29,7 @@ export class IfValidateMethod extends IfComparing {
     }
 
     protected convertCondition() {
-        return `${this.getNegated()}${this.getValidator()}`;
+        return `${this.getValidator()}`;
     }
 
     private getValidator() {

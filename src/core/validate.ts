@@ -9,6 +9,7 @@ export abstract class Validation {
             constantAttributes,
             expressionAttributes,
             constantPlusExpressionAttributes,
+            unhandledAttributes,
             deprecatedAttributes,
             requireAnyAttribute,
             requiredAttributes,
@@ -22,6 +23,7 @@ export abstract class Validation {
 
         new AttributeNames(tag, converter).validate(attributeNames);
         new ConstantAttributes(tag, converter).validate(constantAttributes);
+        new UnhandledAttributes(tag, converter).validate(unhandledAttributes);
         new ExpressionAttributes(tag, converter).validate(expressionAttributes);
         new ConstantPlusExpressionAttributes(tag, converter).validate(
             constantPlusExpressionAttributes
@@ -204,6 +206,22 @@ class DeprecatedAttributes extends BaseValidator {
     }
 }
 
+class UnhandledAttributes extends BaseValidator {
+    protected rule!: string[];
+
+    protected execute(): void {
+        Object.keys(this.tag.getTagAttributes())
+            .map((attr) => this.rule.find((unhandled) => unhandled === attr))
+            .filter(Boolean)
+            .forEach((unhandled) => {
+                this.addMessage(
+                    `Attribute "${unhandled}" is unhandled for "${this.tag.getTagName()}"`,
+                    "ERROR"
+                );
+            });
+    }
+}
+
 class RequireAnyAttribute extends BaseValidator {
     protected rule!: string[];
 
@@ -342,6 +360,7 @@ export interface ValidationMap {
     attributeNames?: string[];
     constantAttributes?: string[];
     expressionAttributes?: string[];
+    unhandledAttributes?: string[];
     constantPlusExpressionAttributes?: string[];
     deprecatedAttributes?: (DeprecatedAttributeRule | string)[];
     requireAnyAttribute?: string[];

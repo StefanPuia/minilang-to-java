@@ -1,4 +1,5 @@
 import ConvertUtils from "../../core/convert-utils";
+import { ValidationMap } from "../../core/validate";
 import { StringBoolean, XMLSchemaElementAttributes } from "../../types";
 import { ElementTag } from "../element-tag";
 
@@ -17,8 +18,10 @@ export class StoreList extends ElementTag {
         ];
     }
 
-    protected getUnsupportedAttributes() {
-        return ["do-cache-clear", "delegator-name"];
+    public getValidation(): ValidationMap {
+        return {
+            unhandledAttributes: ["do-cache-clear", "delegator-name"],
+        };
     }
 }
 

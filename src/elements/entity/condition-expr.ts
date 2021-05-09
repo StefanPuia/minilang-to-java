@@ -1,6 +1,7 @@
 import { ElementTag } from "../element-tag";
 import { XMLSchemaElementAttributes, StringBoolean } from "../../types";
 import ConvertUtils from "../../core/convert-utils";
+import { ValidationMap } from "../../core/validate";
 
 export class ConditionExpr extends ElementTag {
     public static readonly TAG = "condition-expr";
@@ -9,6 +10,16 @@ export class ConditionExpr extends ElementTag {
     public convert(): string[] {
         const [method, ...args] = this.getMethodAndArgs();
         return this.wrapIgnoreCase([`.${method}(${args.join(", ")})`]);
+    }
+
+    public getValidation(): ValidationMap {
+        return {
+            unhandledAttributes: [
+                "ignore-if-null",
+                "ignore-if-empty",
+                "ignore",
+            ],
+        };
     }
 
     private wrapIgnoreCase(method: string[]) {
@@ -67,10 +78,6 @@ export class ConditionExpr extends ElementTag {
 
     private getFieldAndValue(): string[] {
         return [this.getField(), this.getValue() as string];
-    }
-
-    protected getUnsupportedAttributes() {
-        return ["ignore-if-null", "ignore-if-empty", "ignore"];
     }
 }
 

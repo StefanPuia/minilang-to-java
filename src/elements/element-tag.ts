@@ -17,20 +17,6 @@ export abstract class ElementTag extends Tag {
         this.tag = tag as XMLSchemaElement;
         this.attributes = this.tag.attributes ?? {};
         this.position = this.tag.position;
-
-        this.checkUnsupportedTags();
-    }
-
-    private checkUnsupportedTags() {
-        for (const attr of this.getUnsupportedAttributes()) {
-            if (typeof this.attributes[attr] !== "undefined") {
-                this.converter.appendMessage(
-                    "WARNING",
-                    `Attribute "${attr}" is not supported for tag "${this.getTagName()}"`,
-                    this.position
-                );
-            }
-        }
     }
 
     public getTagName() {
@@ -45,10 +31,6 @@ export abstract class ElementTag extends Tag {
 
     public getValidChildren() {
         return {};
-    }
-
-    protected getUnsupportedAttributes(): string[] {
-        return [];
     }
 
     public getTagAttributes() {

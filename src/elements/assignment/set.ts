@@ -23,6 +23,7 @@ export class Set extends SetterElement {
                     fixInstruction: 'replace with "default"',
                 },
             ],
+            unhandledAttributes: ["format"],
             attributeNames: [
                 "field",
                 "from-field",
@@ -176,10 +177,6 @@ export class Set extends SetterElement {
             }
         }
         return assigned;
-    }
-
-    protected getUnsupportedAttributes() {
-        return ["format"];
     }
 
     public static getInstance({

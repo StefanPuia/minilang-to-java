@@ -1,3 +1,4 @@
+import { ValidationMap } from "../../core/validate";
 import { StringBoolean } from "../../types";
 import { BaseSetterRawAttributes, SetterElement } from "../assignment/setter";
 
@@ -18,8 +19,10 @@ export class SequencedId extends SetterElement {
         );
     }
 
-    protected getUnsupportedAttributes() {
-        return ["get-long-only", "delegator-name", "stagger-max"];
+    public getValidation(): ValidationMap {
+        return {
+            unhandledAttributes: ["get-long-only", "delegator-name", "stagger-max"],
+        };
     }
 }
 

@@ -19,6 +19,7 @@ export class StringToList extends SetterElement {
         );
         return {
             attributeNames: ["list", "arg-list", "string", "message-field"],
+            unhandledAttributes: ["message-field"],
             requiredAttributes: ["list", "string"],
             expressionAttributes: ["list", "arg-list"],
             noChildElements: true,
@@ -67,10 +68,6 @@ export class StringToList extends SetterElement {
             return [`List${paramType} ${this.getField()} = new ArrayList<>();`];
         }
         return [];
-    }
-
-    protected getUnsupportedAttributes() {
-        return ["message-field"];
     }
 
     private getValue(): string {

@@ -33,6 +33,7 @@ export class CallService extends AbstractCallService {
                 "transaction-timeout",
                 "success-code",
             ],
+            unhandledAttributes: ["error-code", "success-code"],
             constantAttributes: [
                 "include-user-login",
                 "break-on-error",
@@ -210,10 +211,6 @@ export class CallService extends AbstractCallService {
         ) as ResultTo[])
             .map((resultTo) => resultTo.ofServiceCall(this.getField()))
             .flat();
-    }
-
-    protected getUnsupportedAttributes() {
-        return ["error-code", "success-code"];
     }
 }
 
