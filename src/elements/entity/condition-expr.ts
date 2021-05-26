@@ -68,7 +68,7 @@ export class ConditionExpr extends ElementTag {
                 undefined,
                 this.attributes.value
             ) ??
-            this.attributes.value
+            this.converter.parseValue(this.attributes.value ?? "")
         );
     }
 

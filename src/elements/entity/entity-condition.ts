@@ -15,10 +15,10 @@ export class EntityCondition extends EntityElement {
     public convert(): string[] {
         return [
             ...this.getConditionBuilder(),
-            ...this.wrapConvert(`EntityQuery.use(delegator)`),
+            ...this.wrapConvert(`EntityQuery.use(delegator)`, false),
             ...[
                 ...this.getSelectClause(),
-                `.from(${this.attributes["entity-name"]})`,
+                ...this.getFrom(),
                 `.where(${this.getEcbName()}.build())`,
                 ...this.getOrderByClause(),
                 ".queryList();",
