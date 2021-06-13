@@ -152,6 +152,7 @@ export class SimpleMethod extends ElementTag {
                 .getParameters(context),
             ...this.converter.getContextVariableHandler().getUserLogin(context),
             ...this.converter.getContextVariableHandler().getLocale(context),
+            ...this.converter.getContextVariableHandler().getTimeZone(context),
             ...this.converter.getContextVariableHandler().getReturnMap(context),
         ];
     }

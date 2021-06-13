@@ -1,39 +1,97 @@
 import ConvertUtils from "../../core/convert-utils";
-import { XMLSchemaElementAttributes } from "../../types";
+import { ValidationMap } from "../../core/validate";
+import {
+    FlexibleMapAccessor,
+    FlexibleStringExpander,
+    XMLSchemaElementAttributes,
+} from "../../types";
+import { Set } from "../assignment/set";
 import { SetterElement } from "../assignment/setter";
 
 export class SetServiceFields extends SetterElement {
     public static readonly TAG = "set-service-fields";
-    protected attributes = this.attributes as SetServiceFieldsAttributes;
+    protected attributes = this.attributes as SetServiceFieldsRawAttributes;
 
-    public getType(): string | undefined {
+    private getAttributes(): SetServiceFieldsAttributes {
+        return {
+            serviceName: this.attributes["service-name"],
+            map: this.attributes.map,
+            toMap: this.attributes["to-map"],
+            mode: this.attributes.mode ?? "IN",
+        };
+    }
+
+    public getValidation(): ValidationMap {
+        return {
+            attributeNames: ["service-name", "map", "to-map", "mode"],
+            requiredAttributes: ["service-name", "map", "to-map"],
+            constantPlusExpressionAttributes: ["service-name"],
+            expressionAttributes: ["map", "to-map"],
+            constantAttributes: ["mode"],
+            noChildElements: true,
+            deprecatedAttributes: ["error-list-name"],
+        };
+    }
+
+    public getType(): string {
         this.converter.addImport("Map");
         return "Map<String, Object>";
     }
-    public getField(): string | undefined {
-        return this.attributes["to-map"];
+    public getField(): string {
+        return this.getAttributes().toMap;
+    }
+
+    private getErrorMessageListParameter() {
+        return `${this.getAttributes().serviceName}ContextErrorMessages`;
     }
 
     public convert(): string[] {
         this.setVariableToContext({ name: "dctx" });
-        return this.wrapConvert(
-            `dctx.makeValidContext(${this.getParameters()})`
-        );
+        const targetMap = ConvertUtils.parseFieldGetter(this.getField()) ?? this.getField();
+        return [
+            ...this.getErrorMessageListDeclaration(),
+            `${targetMap}.putAll(dctx.getModelService("${
+                this.getAttributes().serviceName
+            }").makeValid(${this.getParameters()}))`,
+        ];
     }
 
     private getParameters(): string {
+        this.setVariableToContext({ name: "locale" });
+        this.setVariableToContext({ name: "timeZone" });
         return [
-            `"${this.attributes["service-name"]}"`,
-            `"${this.attributes.mode ?? "IN"}"`,
-            ConvertUtils.parseFieldGetter(this.attributes.map) ??
-                this.attributes.map,
+            ConvertUtils.parseFieldGetter(this.getAttributes().map) ??
+                this.getAttributes().map,
+            `"${this.getAttributes().mode}"`,
+            "true",
+            this.getErrorMessageListParameter(),
+            "timeZone",
+            "locale",
         ].join(", ");
+    }
+
+    private getErrorMessageListDeclaration() {
+        return Set.getInstance({
+            converter: this.converter,
+            parent: this.parent,
+            field: this.getErrorMessageListParameter(),
+            value: "NewList",
+            type: "List<Object>",
+        }).convert();
     }
 }
 
-interface SetServiceFieldsAttributes extends XMLSchemaElementAttributes {
+interface SetServiceFieldsRawAttributes extends XMLSchemaElementAttributes {
     "service-name": string;
     "map": string;
     "to-map": string;
     "mode"?: "IN" | "OUT";
+    "error-list-name"?: string; // this element gets deleted in the autoCorrect method
+}
+
+interface SetServiceFieldsAttributes {
+    serviceName: FlexibleStringExpander;
+    map: FlexibleMapAccessor;
+    toMap: FlexibleMapAccessor;
+    mode: "IN" | "OUT";
 }

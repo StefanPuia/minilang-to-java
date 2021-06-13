@@ -187,14 +187,16 @@ export class Set extends SetterElement {
         setIfEmpty,
         defaultValue,
         type,
+        value,
     }: {
         converter: Converter;
         parent?: Tag;
         field: string;
-        from: string;
+        from?: string;
         setIfEmpty?: boolean;
         defaultValue?: string;
         type?: string;
+        value?: string;
     }): Set {
         return new Set(
             {
@@ -203,6 +205,7 @@ export class Set extends SetterElement {
                 attributes: {
                     field,
                     from,
+                    value,
                     "set-if-empty": (setIfEmpty && "true") || "false",
                     "default-value": defaultValue,
                     type,

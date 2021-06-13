@@ -28,6 +28,10 @@ export class BaseVariableHandler {
         return [];
     }
 
+    protected getTimeZoneSource(): string[] {
+        return [];
+    }
+
     protected getReturnMapSource(): string[] {
         return [];
     }
@@ -72,6 +76,14 @@ export class BaseVariableHandler {
         if ((context["locale"]?.count ?? 0) > 0) {
             this.converter.addImport("Locale");
             return this.getLocaleSource();
+        }
+        return [];
+    }
+
+    public getTimeZone(context: VariableContext): string[] {
+        if ((context["timeZone"]?.count ?? 0) > 0) {
+            this.converter.addImport("TimeZone");
+            return this.getTimeZoneSource();
         }
         return [];
     }

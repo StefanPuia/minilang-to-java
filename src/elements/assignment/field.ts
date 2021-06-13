@@ -4,10 +4,11 @@ import { BaseSetterRawAttributes, SetterElement } from "./setter";
 
 export class Field extends SetterElement {
     public static readonly TAG = "field";
+    protected attributes = this.attributes as FieldRawAttributes;
+
     public getField(): string | undefined {
         return this.attributes.field;
     }
-    protected attributes = this.attributes as FieldRawAttributes;
 
     private getAttributes(): FieldAttributes {
         return {
