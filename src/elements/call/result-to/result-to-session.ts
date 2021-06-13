@@ -1,30 +1,43 @@
 import ConvertUtils from "../../../core/convert-utils";
-import { MethodMode, XMLSchemaElementAttributes } from "../../../types";
+import {
+    FlexibleMapAccessor,
+    FlexibleServletAccessor,
+    MethodMode,
+    XMLSchemaElementAttributes,
+} from "../../../types";
 import { ResultTo } from "./result-to";
 
 export class ResultToSession extends ResultTo {
     public static readonly TAG = "result-to-session";
-    protected attributes = this.attributes as ResultToSessionAttributes;
+    protected attributes = this.attributes as ResultToSessionRawAttributes;
+    private fromField = this.attributes["!from-field"];
+
+    private getAttributes(): ResultToSessionAttributes {
+        return {
+            resultName: this.attributes["result-name"],
+            sessionName:
+                this.attributes["session-name"] ??
+                this.attributes["result-name"],
+        };
+    }
 
     public getResultAttribute(): string | undefined {
-        return this.attributes["result-name"];
+        return this.getAttributes().resultName;
     }
 
     public getType(): string | undefined {
         return;
     }
     public getField(): string | undefined {
-        return this.attributes["result-name"];
+        return this.getResultAttribute();
     }
 
     public convert(): string[] {
         return this.wrapConvert(
             `${
-                (this.attributes["!from-field"] &&
+                (this.fromField &&
                     ConvertUtils.parseFieldGetter(
-                        `${
-                            this.attributes["!from-field"]
-                        }.${this.getResultAttribute()}`
+                        `${this.fromField}.${this.getResultAttribute()}`
                     )) ||
                 "null"
             }`
@@ -41,20 +54,28 @@ export class ResultToSession extends ResultTo {
         }
         return [
             `request.getSession().setAttribute("${
-                this.attributes["session-name"] ?? this.getResultAttribute()
+                this.getAttributes().sessionName
             }", ${assign});`,
         ];
     }
     public ofServiceCall(resultName: string): string[] {
-        return this.getInstance<ResultToSessionAttributes>(ResultToSession, {
-            ...this.attributes,
+        return this.getInstance<ResultToSessionRawAttributes>(ResultToSession, {
+            ...{
+                "result-name": this.getAttributes().resultName,
+                "session-name": this.getAttributes().sessionName,
+            },
             "!from-field": resultName,
         }).convert();
     }
 }
 
-interface ResultToSessionAttributes extends XMLSchemaElementAttributes {
+interface ResultToSessionRawAttributes extends XMLSchemaElementAttributes {
     "result-name": string;
     "session-name"?: string;
     "!from-field"?: string;
+}
+
+interface ResultToSessionAttributes {
+    resultName: FlexibleMapAccessor;
+    sessionName: FlexibleServletAccessor;
 }

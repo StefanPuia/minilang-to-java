@@ -83,6 +83,7 @@ export interface Position {
 export type Constant = string;
 export type FlexibleStringExpander = string;
 export type FlexibleMapAccessor = string;
+export type FlexibleServletAccessor = string;
 export type FlexibleMessage = string;
 
 export type JavaClassName = string;

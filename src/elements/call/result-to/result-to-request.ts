@@ -1,30 +1,43 @@
 import ConvertUtils from "../../../core/convert-utils";
-import { MethodMode, XMLSchemaElementAttributes } from "../../../types";
+import {
+    FlexibleMapAccessor,
+    FlexibleServletAccessor,
+    MethodMode,
+    XMLSchemaElementAttributes,
+} from "../../../types";
 import { ResultTo } from "./result-to";
 
 export class ResultToRequest extends ResultTo {
     public static readonly TAG = "result-to-request";
-    protected attributes = this.attributes as ResultToRequestAttributes;
+    protected attributes = this.attributes as ResultToRequestRawAttributes;
+    private fromField = this.attributes["!from-field"];
 
-    public getResultAttribute(): string | undefined {
-        return this.attributes["result-name"];
+    private getAttributes(): ResultToRequestAttributes {
+        return {
+            resultName: this.attributes["result-name"],
+            requestName:
+                this.attributes["request-name"] ??
+                this.attributes["result-name"],
+        };
     }
 
-    public getType(): string | undefined {
+    public getResultAttribute(): string {
+        return this.getAttributes().resultName;
+    }
+
+    public getType(): undefined {
         return;
     }
-    public getField(): string | undefined {
-        return this.attributes["result-name"];
+    public getField(): string {
+        return this.getResultAttribute();
     }
 
     public convert(): string[] {
         return this.wrapConvert(
             `${
-                (this.attributes["!from-field"] &&
+                (this.fromField &&
                     ConvertUtils.parseFieldGetter(
-                        `${
-                            this.attributes["!from-field"]
-                        }.${this.getResultAttribute()}`
+                        `${this.fromField}.${this.getResultAttribute()}`
                     )) ||
                 "null"
             }`
@@ -41,20 +54,28 @@ export class ResultToRequest extends ResultTo {
         }
         return [
             `request.setAttribute("${
-                this.attributes["request-name"] ?? this.getResultAttribute()
+                this.getAttributes().requestName
             }", ${assign});`,
         ];
     }
     public ofServiceCall(resultName: string): string[] {
-        return this.getInstance<ResultToRequestAttributes>(ResultToRequest, {
-            ...this.attributes,
+        return this.getInstance<ResultToRequestRawAttributes>(ResultToRequest, {
+            ...{
+                "result-name": this.getAttributes().resultName,
+                "request-name": this.getAttributes().requestName,
+            },
             "!from-field": resultName,
         }).convert();
     }
 }
 
-interface ResultToRequestAttributes extends XMLSchemaElementAttributes {
+interface ResultToRequestRawAttributes extends XMLSchemaElementAttributes {
     "result-name": string;
     "request-name"?: string;
     "!from-field"?: string;
+}
+
+interface ResultToRequestAttributes {
+    resultName: FlexibleMapAccessor;
+    requestName: FlexibleServletAccessor;
 }

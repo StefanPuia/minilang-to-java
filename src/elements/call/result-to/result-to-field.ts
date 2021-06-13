@@ -1,17 +1,27 @@
 import ConvertUtils from "../../../core/convert-utils";
-import { XMLSchemaElementAttributes } from "../../../types";
+import {
+    FlexibleMapAccessor,
+    XMLSchemaElementAttributes,
+} from "../../../types";
 import { ResultTo } from "./result-to";
 
 export class ResultToField extends ResultTo {
     public static readonly TAG = "result-to-field";
-    protected attributes = this.attributes as ResultToFieldAttributes;
+    protected attributes = this.attributes as ResultToFieldRawAttributes;
     private fromField?: string = this.attributes["!from-field"];
+
+    private getAttributes(): ResultToFieldAttributes {
+        return {
+            resultName: this.attributes["result-name"],
+            field: this.attributes.field ?? this.attributes["result-name"],
+        };
+    }
 
     public getType(): string {
         return this.converter.guessFieldType(this.getField()) ?? "Object";
     }
     public getField(): string {
-        return this.attributes.field ?? this.getResultAttribute();
+        return this.getAttributes().field ?? this.getResultAttribute();
     }
 
     public setFromField(fromField: string) {
@@ -30,7 +40,7 @@ export class ResultToField extends ResultTo {
         );
     }
     public getResultAttribute() {
-        return this.attributes["result-name"];
+        return this.getAttributes().resultName;
     }
     public wrapConvert(assign: string, semicolon?: boolean): string[] {
         return super.wrapConvert(`${this.getCast()}${assign}`, semicolon);
@@ -43,15 +53,23 @@ export class ResultToField extends ResultTo {
         return `(${this.getType()}) `;
     }
     public ofServiceCall(resultName: string): string[] {
-        return this.getInstance<ResultToFieldAttributes>(ResultToField, {
-            ...this.attributes,
+        return this.getInstance<ResultToFieldRawAttributes>(ResultToField, {
+            ...{
+                "field": this.getAttributes().field,
+                "result-name": this.getAttributes().resultName,
+            },
             "!from-field": resultName,
         }).convert();
     }
 }
 
-interface ResultToFieldAttributes extends XMLSchemaElementAttributes {
+interface ResultToFieldRawAttributes extends XMLSchemaElementAttributes {
     "result-name": string;
     "field"?: string;
     "!from-field"?: string;
+}
+
+interface ResultToFieldAttributes {
+    field: FlexibleMapAccessor;
+    resultName: FlexibleMapAccessor;
 }
