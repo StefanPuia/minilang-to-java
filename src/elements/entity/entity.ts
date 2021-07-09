@@ -1,44 +1,19 @@
+import { Converter } from "../../core/converter";
 import {
+    StringBoolean,
     XMLSchemaAnyElement,
     XMLSchemaElementAttributes,
-    StringBoolean,
 } from "../../types";
 import { SetterElement } from "../assignment/setter";
-import { FieldMap } from "./field-map";
-import { Converter } from "../../core/converter";
 import { Tag } from "../tag";
-import { SelectField } from "./select-field";
+import { FieldMap } from "./field-map";
 import { OrderBy } from "./order-by";
-import { ValidationMap } from "../../core/validate";
+import { SelectField } from "./select-field";
 
 export abstract class EntityElement extends SetterElement {
     constructor(self: XMLSchemaAnyElement, converter: Converter, parent?: Tag) {
         super(self, converter, parent);
         this.addException("GenericEntityException");
-    }
-
-    public getValidation(): ValidationMap {
-        return {
-            unhandledAttributes: ["delegator-name"],
-            attributeNames: [
-                "entity-name",
-                "use-cache",
-                "filter-by-date",
-                "list",
-                "distinct",
-                "delegator-name",
-            ],
-            requiredAttributes: ["entity-name", "list"],
-            expressionAttributes: ["list"],
-            childElements: [
-                "field-map",
-                "order-by",
-                "limit-range",
-                "limit-view",
-                "use-iterator",
-            ],
-            requiredChildElements: ["field-map"],
-        };
     }
 
     protected getFromFieldMap() {

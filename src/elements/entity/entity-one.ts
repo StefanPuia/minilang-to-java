@@ -8,12 +8,18 @@ export class EntityOne extends EntityElement {
 
     public getValidation(): ValidationMap {
         return {
-            ...super.getValidation(),
-            unhandledAttributes: [
-                ...(super.getValidation().unhandledAttributes ?? []),
+            attributeNames: [
+                "entity-name",
+                "use-cache",
                 "auto-field-map",
-                "for-update",
+                "value-field",
+                "delegator-name",
             ],
+            requiredAttributes: ["entity-name", "value-field"],
+            expressionAttributes: ["value-field", "delegator-name"],
+            childElements: ["field-map", "select-field"],
+            requiredChildElements: [],
+            unhandledAttributes: ["delegator-name", "auto-field-map"],
         };
     }
 

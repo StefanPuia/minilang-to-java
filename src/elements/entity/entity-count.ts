@@ -1,9 +1,30 @@
+import { ValidationMap } from "../../core/validate";
 import { XMLSchemaElementAttributes } from "../../types";
 import { EntityElement } from "./entity";
 
 export class EntityCount extends EntityElement {
     public static readonly TAG = "entity-count";
     protected attributes = this.attributes as EntityCountAttributes;
+
+    public getValidation(): ValidationMap {
+        return {
+            unhandledAttributes: ["delegator-name"],
+            attributeNames: ["entity-name", "delegator-name", "count-field"],
+            requiredAttributes: ["entity-name", "count-field"],
+            expressionAttributes: ["count-field", "delegator-name"],
+            childElements: [
+                "condition-expr",
+                "condition-list",
+                "condition-object",
+                "having-condition-list",
+            ],
+            requireAnyChildElement: [
+                "condition-expr",
+                "condition-list",
+                "condition-object",
+            ],
+        };
+    }
 
     public getType(): string | undefined {
         return "long";
