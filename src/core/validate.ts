@@ -6,6 +6,7 @@ export abstract class Validation {
     public static validate(tag: Tag, converter: Converter) {
         const {
             attributeNames,
+            attributeValues,
             constantAttributes,
             expressionAttributes,
             constantPlusExpressionAttributes,
@@ -22,6 +23,7 @@ export abstract class Validation {
         } = tag.getValidation();
 
         new AttributeNames(tag, converter).validate(attributeNames);
+        new AttributeValues(tag, converter).validate(attributeValues);
         // new ConstantAttributes(tag, converter).validate(constantAttributes);
         new UnhandledAttributes(tag, converter).validate(unhandledAttributes);
         // new ExpressionAttributes(tag, converter).validate(expressionAttributes);
@@ -98,6 +100,32 @@ class AttributeNames extends BaseValidator {
             .forEach((invalidAttribute) => {
                 this.addMessage(
                     `Attribute "${invalidAttribute}" is not valid for tag "${this.tag.getTagName()}"`
+                );
+            });
+    }
+}
+
+class AttributeValues extends BaseValidator {
+    protected rule!: AttributeValue[];
+
+    protected execute(): void {
+        this.rule
+            .filter(({ name }) =>
+                Reflect.has(this.tag.getTagAttributes(), name)
+            )
+            .filter(
+                ({ name, values }) =>
+                    !values.includes(
+                        this.tag.getTagAttributes()[name] as string
+                    )
+            )
+            .forEach(({ name, values }) => {
+                this.addMessage(
+                    `Attribute "${name}" does not have a valid value (${
+                        this.tag.getTagAttributes()[name]
+                    }) for tag "${this.tag.getTagName()}". Must be one of ['${values.join(
+                        "', '"
+                    )}']`
                 );
             });
     }
@@ -358,6 +386,7 @@ class RequiredChildElements extends ChildValidator {
 
 export interface ValidationMap {
     attributeNames?: string[];
+    attributeValues?: AttributeValue[];
     constantAttributes?: string[];
     expressionAttributes?: string[];
     unhandledAttributes?: string[];
@@ -376,4 +405,9 @@ export interface ValidationMap {
 interface DeprecatedAttributeRule {
     name: string;
     fixInstruction: string;
+}
+
+interface AttributeValue {
+    name: string;
+    values: string[];
 }
