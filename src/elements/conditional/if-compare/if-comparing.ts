@@ -1,3 +1,4 @@
+import { ConditionBehavior } from "../../../behavior/condition";
 import {
     FlexibleMapAccessor,
     JavaClassName,
@@ -5,7 +6,10 @@ import {
 } from "../../../types";
 import { ConditionalElement } from "../conditional";
 
-export abstract class IfComparing extends ConditionalElement {
+export abstract class IfComparing
+    extends ConditionalElement
+    implements ConditionBehavior
+{
     protected attributes = this.attributes as IfComparingRawAttributes;
 
     public convert(): string[] {
@@ -37,6 +41,10 @@ export abstract class IfComparing extends ConditionalElement {
     protected getFieldType() {
         const variable = this.getVariableFromContext(this.attributes.field);
         return variable?.type ?? this.attributes.type;
+    }
+
+    public convertConditionOnly(): string {
+        return this.convertCondition();
     }
 }
 export interface IfComparingRawAttributes extends XMLSchemaElementAttributes {

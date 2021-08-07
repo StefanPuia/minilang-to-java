@@ -73,7 +73,7 @@ export abstract class Tag {
         }
     }
 
-    protected parseChildren(): Tag[] {
+    protected parseChildren(): Array<Tag> {
         let children: Tag[] = this.children ?? [];
         if (this.children === undefined) {
             children = this.children =

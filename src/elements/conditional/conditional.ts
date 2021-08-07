@@ -1,8 +1,9 @@
+import { ConditionBehavior } from "../../behavior/condition";
 import ConvertUtils from "../../core/convert-utils";
 import { Operator } from "../../types";
 import { ElementTag } from "../element-tag";
 
-export abstract class ConditionalElement extends ElementTag {
+export abstract class ConditionalElement extends ElementTag implements ConditionBehavior {
     public convert(): string[] {
         if (this.parseChildren().length) {
             return [
@@ -50,6 +51,10 @@ export abstract class ConditionalElement extends ElementTag {
         return "true";
     }
 
+    public convertConditionOnly(): string {
+        return this.convertCondition();
+    }
+
     protected getThenBlock(): string[] {
         const thenElement = this.parseChildren().find(
             (el) => el.getTagName() === "then"
@@ -83,12 +88,6 @@ export abstract class ConditionalElement extends ElementTag {
                 return `UtilValidate.isEmpty(${field})`;
             case "contains":
                 return `${field}.contains(${value})`;
-            case "equals":
-                if (value === "true") return field;
-                if (value === "false") return `!${field}`;
-                return primitive
-                    ? `${field} == ${strippedVal}`
-                    : `${value}.equals(${field})`;
             case "not-equals":
                 if (strippedVal === "true") return `!${field}`;
                 if (strippedVal === "false") return field;
@@ -111,6 +110,13 @@ export abstract class ConditionalElement extends ElementTag {
                 return primitive
                     ? `${field} <= ${strippedVal}`
                     : `${value}.compareTo(${field}) <= 0`;
+            case "equals":
+            default:
+                if (value === "true") return field;
+                if (value === "false") return `!${field}`;
+                return primitive
+                    ? `${field} == ${strippedVal}`
+                    : `${value}.equals(${field})`;
         }
     }
 }
