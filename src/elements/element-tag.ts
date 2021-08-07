@@ -15,22 +15,8 @@ export abstract class ElementTag extends Tag {
     constructor(tag: XMLSchemaAnyElement, converter: Converter, parent?: Tag) {
         super(tag, converter, parent);
         this.tag = tag as XMLSchemaElement;
-        this.attributes = this.tag.attributes;
+        this.attributes = this.tag.attributes ?? {};
         this.position = this.tag.position;
-
-        this.checkUnsupportedTags();
-    }
-
-    private checkUnsupportedTags() {
-        for (const attr of this.getUnsupportedAttributes()) {
-            if (typeof this.attributes[attr] !== "undefined") {
-                this.converter.appendMessage(
-                    "WARNING",
-                    `Attribute "${attr}" is not supported for tag "${this.getTagName()}"`,
-                    this.position
-                );
-            }
-        }
     }
 
     public getTagName() {
@@ -43,19 +29,31 @@ export abstract class ElementTag extends Tag {
             .flat();
     }
 
-    public getValidChildren() {
-        return {};
-    }
-
-    protected getUnsupportedAttributes(): string[] {
-        return [];
-    }
-
-    public getAttributes() {
-        return this.attributes;
+    public getTagAttributes() {
+        return this.tag.attributes ?? {};
     }
 
     public getPosition(): Position | undefined {
-        return this.position;
+        return this.tag.position;
     }
+
+
+    public getInstance<
+        T extends XMLSchemaElementAttributes,
+        E extends ElementTag = ElementTag
+    >(elementTag: ElementTagConstructor<E>, attributes: T): E {
+        return new elementTag(
+            {
+                type: "element",
+                name: this.getTagName(),
+                attributes,
+            },
+            this.converter,
+            this.parent
+        );
+    }
+}
+
+interface ElementTagConstructor<E extends ElementTag> {
+    new (el: XMLSchemaAnyElement, converter: Converter, parent?: Tag): E;
 }

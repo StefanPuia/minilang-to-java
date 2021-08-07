@@ -1,23 +1,48 @@
 import ConvertUtils from "../../../core/convert-utils";
-import { Operator } from "../../../types";
-import { IfComparing, IfComparingAttributes } from "./if-comparing";
+import { ValidationMap } from "../../../core/validate";
+import { FlexibleStringExpander, Operator } from "../../../types";
+import {
+    IfComparing,
+    IfComparingAttributes,
+    IfComparingRawAttributes,
+} from "./if-comparing";
 
 export class IfCompare extends IfComparing {
     public static readonly TAG = "if-compare";
-    protected attributes = this.attributes as IfCompareAttributes;
+    protected attributes = this.attributes as IfCompareRawAttributes;
+
+    public getValidation(): ValidationMap {
+        return {
+            attributeNames: ["field", "format", "operator", "type", "value"],
+            requiredAttributes: ["field", "operator", "value"],
+            constantAttributes: ["operator", "type"],
+            constantPlusExpressionAttributes: ["value"],
+            expressionAttributes: ["field"],
+            unhandledAttributes: ["format"],
+        };
+    }
+
+    protected getAttributes(): IfCompareAttributes {
+        return {
+            ...super.getAttributes(),
+            operator: this.attributes.operator as Operator,
+            value: this.attributes.value,
+            format: this.attributes.format,
+        };
+    }
 
     protected convertCondition() {
-        return `${this.getNegated()}${this.getComparison(
+        return `${this.getComparison(
             this.getField(),
-            this.attributes.operator,
+            this.getAttributes().operator,
             this.getValue()
         )}`;
     }
 
     protected getField() {
         return (
-            ConvertUtils.parseFieldGetter(this.attributes.field) ??
-            this.attributes.field
+            ConvertUtils.parseFieldGetter(this.getAttributes().field) ??
+            this.getAttributes().field
         );
     }
 
@@ -25,23 +50,27 @@ export class IfCompare extends IfComparing {
         return (
             this.converter.parseValueOrInitialize(
                 this.getFieldType(),
-                this.attributes.value
-            ) ?? this.converter.parseValue(this.attributes.value)
+                this.getAttributes().value
+            ) ?? this.converter.parseValue(this.getAttributes().value)
         );
     }
 
-    protected getUnsupportedAttributes() {
-        return ["format"];
-    }
-
     protected getFieldType() {
-        const variable = this.getVariableFromContext(this.attributes.field);
-        return variable?.type ?? this.attributes.type;
+        const variable = this.getVariableFromContext(
+            this.getAttributes().field
+        );
+        return variable?.type ?? this.getAttributes().type;
     }
+}
+
+interface IfCompareRawAttributes extends IfComparingRawAttributes {
+    operator: string;
+    value: string;
+    format?: string;
 }
 
 interface IfCompareAttributes extends IfComparingAttributes {
     operator: Operator;
-    value: string;
-    format?: string;
+    value: FlexibleStringExpander;
+    format?: FlexibleStringExpander;
 }

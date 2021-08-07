@@ -1,6 +1,6 @@
 import { BaseErrorHandler } from "../handlers/error/base-error";
 import { ErrorHandlerFactory } from "../handlers/error/error-handler-factory";
-import { MethodMode, Position } from "../types";
+import { ConverterInit, MessageType, MethodMode, Position } from "../types";
 import ConvertUtils from "./convert-utils";
 import { ElementFactory } from "./element-factory";
 import { BaseVariableHandler } from "../handlers/context/base-variables";
@@ -16,17 +16,20 @@ export class Converter {
     private messages: Message[] = [];
     private errorHandler: BaseErrorHandler | undefined;
     private contextVariableHandler: BaseVariableHandler | undefined;
+    private loggingConfig: Record<MessageType, boolean>;
 
-    private constructor(
-        source: string,
-        mode: MethodMode,
-        packageName?: string,
-        className?: string
-    ) {
-        this.source = source;
-        this.methodMode = mode;
-        this.packageName = packageName;
-        this.className = className;
+    private constructor(init: ConverterInit) {
+        this.source = init.source;
+        this.methodMode = init.methodMode;
+        this.packageName = init.packageName;
+        this.className = init.className;
+        this.loggingConfig = {
+            ERROR: true,
+            WARNING: true,
+            DEPRECATE: true,
+            INFO: true,
+            ...init.logging,
+        };
     }
 
     private convert() {
@@ -38,46 +41,25 @@ export class Converter {
             this.getImports(),
             this.newLine(),
             ...converted,
+            this.newLine(),
         ].filter(Boolean);
         this.appendMessage(
             "INFO",
             this.getParseStats(this.source, start, new Date().getTime())
         );
 
-        return [
-            ...lines,
-            "",
-            ...this.getErrors(),
-            "",
-            ...this.getWarnings(),
-            "",
-            ...this.getInfos(),
-        ].join("\n");
+        return [...lines, ...this.getDisplayMessages()].join("\n");
     }
 
     private newLine() {
         return "\n";
     }
 
-    private getErrors() {
-        return this.getMessages("ERROR").map(
-            (msg) => `// FIXME: ERROR: ${msg}`
-        );
-    }
-
-    private getWarnings() {
-        return this.getMessages("WARNING").map((msg) => `// WARNING: ${msg}`);
-    }
-
-    private getInfos() {
-        return this.getMessages("INFO").map((msg) => `// ${msg}`);
-    }
-
-    private getMessages(type: MessageType) {
+    private getDisplayMessages(): string[] {
         return this.messages
-            .filter((msg) => msg.type === type)
-            .map(({ content, position }) =>
-                `${content} ${this.getLineCol(position)}`.trim()
+            .filter(({ type }) => this.loggingConfig[type])
+            .map(({ content, position, type }) =>
+                `// ${type}: ${content} ${this.getLineCol(position)}`.trim()
             );
     }
 
@@ -114,13 +96,8 @@ export class Converter {
         return this.className || "SomeClassName";
     }
 
-    public static convert(
-        source: string,
-        mode: MethodMode,
-        packageName?: string,
-        className?: string
-    ) {
-        return new Converter(source, mode, packageName, className).convert();
+    public static convert(init: ConverterInit) {
+        return new Converter(init).convert();
     }
 
     public getIndentSpaces() {
@@ -264,5 +241,3 @@ interface Message {
     line?: string;
     position?: Position;
 }
-
-type MessageType = "ERROR" | "WARNING" | "INFO";

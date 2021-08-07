@@ -22,4 +22,12 @@ export class EventVariableHandler extends BaseVariableHandler {
     protected getDispatchContextSource(): string[] {
         return [`DispatchContext dctx = dispatcher.getDispatchContext();`];
     }
+    protected getLocaleSource(): string[] {
+        return [`Locale locale = (Locale) request.getAttribute("locale");`];
+    }
+    protected getTimeZoneSource(): string[] {
+        return [
+            `TimeZone timeZone = (TimeZone) request.getAttribute("timeZone");`,
+        ];
+    }
 }

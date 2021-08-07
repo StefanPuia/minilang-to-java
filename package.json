@@ -1,24 +1,27 @@
 {
-  "name": "minilang-to-java",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "nodemon --exec ts-node src/server/serve.ts",
-    "build": "tsc",
-    "unhandled": "ts-node src/scripts/unhandled.ts"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "typescript": "^4.2.3",
-    "xml-js": "git+https://git.stefanpuia.co.uk/stefanpuia/xml-js.git"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.11",
-    "@types/node": "^14.14.37",
-    "ts-node": "^9.1.1"
-  }
+    "name": "minilang-to-java",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start:watch": "nodemon --exec ts-node src/server/serve.ts",
+        "build": "tsc",
+        "check:unhandled": "ts-node src/scripts/unhandled.ts",
+        "dep:check": "ncu",
+        "dep:update": "ncu -u"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "dotenv": "^10.0.0",
+        "express": "^4.17.1",
+        "typescript": "^4.3.5",
+        "xml-js": "git+https://git.stefanpuia.co.uk/stefanpuia/xml-js.git"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.13",
+        "@types/node": "^16.3.0",
+        "npm-check-updates": "^11.8.2",
+        "ts-node": "^10.0.0"
+    }
 }

@@ -113,8 +113,4 @@ export abstract class ConditionalElement extends ElementTag {
                     : `${value}.compareTo(${field}) <= 0`;
         }
     }
-
-    protected getNegated() {
-        return this.parent?.getTagName() === "not" ? "!" : "";
-    }
 }

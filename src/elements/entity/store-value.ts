@@ -1,5 +1,6 @@
 import { ElementTag } from "../element-tag";
 import { XMLSchemaElementAttributes, StringBoolean } from "../../types";
+import { ValidationMap } from "../../core/validate";
 
 export class StoreValue extends ElementTag {
     public static readonly TAG = "store-value";
@@ -9,8 +10,10 @@ export class StoreValue extends ElementTag {
         return [`${this.attributes["value-field"]}.store();`];
     }
 
-    protected getUnsupportedAttributes() {
-        return ["do-cache-clear"];
+    public getValidation(): ValidationMap {
+        return {
+            unhandledAttributes: ["do-cache-clear"],
+        };
     }
 }
 

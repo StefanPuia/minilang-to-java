@@ -46,6 +46,7 @@ export default class ConvertUtils {
         "java.sql.Date": "Date",
         "java.sql.Time": "Time",
         "java.sql.Timestamp": "Timestamp",
+        "java.text.MessageFormat": "MessageFormat",
         "java.time.LocalDate": "LocalDate",
         "java.time.LocalDateTime": "LocalDateTime",
         "java.time.LocalTime": "LocalTime",
@@ -55,6 +56,7 @@ export default class ConvertUtils {
         "java.util.List": "List",
         "java.util.Locale": "Locale",
         "java.util.Map": "Map",
+        "java.util.Optional": "Optional",
         "java.util.TimeZone": "TimeZone",
         "javax.servlet.http.HttpServletRequest": "HttpServletRequest",
         "javax.servlet.http.HttpServletResponse": "HttpServletResponse",
@@ -157,5 +159,13 @@ export default class ConvertUtils {
 
     public static stripQuotes(value: string) {
         return (value ?? "").replace(/^"(.+)"$/, "$1");
+    }
+
+    public static validVariableName(varName: string) {
+        return varName
+            .replace(/(?:^\w|[A-Z]|[^a-zA-Z]\w)/g, function (word, index) {
+                return index === 0 ? word.toLowerCase() : word.toUpperCase();
+            })
+            .replace(/[^a-zA-Z]/g, "");
     }
 }

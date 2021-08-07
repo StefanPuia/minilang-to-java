@@ -48,12 +48,23 @@
     #controls #submit {
         padding: 8px 20px;
     }
+    #controls #splitSizes {
+        width: 4em;
+    }
 </style>
 
 <div id="container">
     <div id="input"></div>
     <div id="output"></div>
     <div id="controls">
+        <input
+            type="range"
+            min="-1"
+            max="1"
+            step="1"
+            value="0"
+            id="splitSizes"
+        />
         <input type="text" id="className" placeholder="Class Name" />
         <input type="text" id="packageName" placeholder="Package Name" />
         <label><input type="radio" name="mode" value="SERVICE" />Service</label>
@@ -152,5 +163,23 @@
         if (methodMode) {
             methodMode.checked = "checked";
         }
+
+        const $splitSizes = document.querySelector("#controls #splitSizes");
+        $splitSizes.addEventListener("change", (e) => {
+            const $container = document.querySelector("#container");
+            const sizeMap = {
+                [-1]: "10em 1fr",
+                [0]: "1fr 1fr",
+                [1]: "1fr 10em",
+            };
+            $container.style.gridTemplateColumns = sizeMap[$splitSizes.value];
+            ["input", "output"].forEach((el) => {
+                const session = ace.edit(el).getSession();
+                session.setWrapLimitRange(
+                    Math.max(session.getScreenLength(), 10),
+                    null
+                );
+            });
+        });
     });
 </script>

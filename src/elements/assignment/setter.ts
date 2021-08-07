@@ -1,8 +1,11 @@
 import ConvertUtils from "../../core/convert-utils";
 import { Converter } from "../../core/converter";
+import {
+    XMLSchemaAnyElement,
+    XMLSchemaElementAttributes
+} from "../../types";
 import { ElementTag } from "../element-tag";
 import { Tag } from "../tag";
-import { XMLSchemaAnyElement, XMLSchemaElementAttributes } from "../../types";
 
 export abstract class SetterElement extends ElementTag {
     protected declared = false;
@@ -14,7 +17,8 @@ export abstract class SetterElement extends ElementTag {
         if (typeof field !== "undefined") {
             const { mapName } = ConvertUtils.mapMatch(field);
             this.mapName = mapName;
-            this.declared = !!this.getVariableFromContext(mapName ?? field);
+            this.declared =
+                (this.getVariableFromContext(mapName ?? field)?.count ?? 0) > 0;
             const { type, typeParams } = this.getBaseType();
             this.converter.addImport(type);
             this.setVariableToContext({
@@ -92,6 +96,6 @@ export abstract class SetterElement extends ElementTag {
     public abstract getField(): string | undefined;
 }
 
-export interface BaseSetterAttributes extends XMLSchemaElementAttributes {
+export interface BaseSetterRawAttributes extends XMLSchemaElementAttributes {
     field: string;
 }

@@ -28,6 +28,10 @@ export class BaseVariableHandler {
         return [];
     }
 
+    protected getTimeZoneSource(): string[] {
+        return [];
+    }
+
     protected getReturnMapSource(): string[] {
         return [];
     }
@@ -37,7 +41,7 @@ export class BaseVariableHandler {
     }
 
     public getDelegator(context: VariableContext): string[] {
-        if (context["delegator"]?.count > 0) {
+        if ((context["delegator"]?.count ?? 0) > 0) {
             this.converter.addImport("Delegator");
             return this.getDelegatorSource();
         }
@@ -45,7 +49,7 @@ export class BaseVariableHandler {
     }
 
     public getDispatcher(context: VariableContext): string[] {
-        if (context["dispatcher"]?.count > 0) {
+        if ((context["dispatcher"]?.count ?? 0) > 0) {
             this.converter.addImport("LocalDispatcher");
             return this.getDispatcherSource();
         }
@@ -53,7 +57,7 @@ export class BaseVariableHandler {
     }
 
     public getParameters(context: VariableContext): string[] {
-        if (context["parameters"]?.count > 0) {
+        if ((context["parameters"]?.count ?? 0) > 0) {
             this.converter.addImport("Map");
             return this.getParametersSource();
         }
@@ -61,7 +65,7 @@ export class BaseVariableHandler {
     }
 
     public getUserLogin(context: VariableContext): string[] {
-        if (context["userLogin"]?.count > 0) {
+        if ((context["userLogin"]?.count ?? 0) > 0) {
             this.converter.addImport("GenericValue");
             return this.getUserLoginSource();
         }
@@ -69,15 +73,23 @@ export class BaseVariableHandler {
     }
 
     public getLocale(context: VariableContext): string[] {
-        if (context["locale"]?.count > 0) {
+        if ((context["locale"]?.count ?? 0) > 0) {
             this.converter.addImport("Locale");
             return this.getLocaleSource();
         }
         return [];
     }
 
+    public getTimeZone(context: VariableContext): string[] {
+        if ((context["timeZone"]?.count ?? 0) > 0) {
+            this.converter.addImport("TimeZone");
+            return this.getTimeZoneSource();
+        }
+        return [];
+    }
+
     public getReturnMap(context: VariableContext): string[] {
-        if (context["_returnMap"]?.count > 0) {
+        if ((context["_returnMap"]?.count ?? 0) > 0) {
             this.converter.addImport("Map");
             return this.getReturnMapSource();
         }
@@ -85,7 +97,7 @@ export class BaseVariableHandler {
     }
 
     public getDispatchContext(context: VariableContext): string[] {
-        if (context["dctx"]?.count > 0) {
+        if ((context["dctx"]?.count ?? 0) > 0) {
             this.converter.addImport("DispatchContext");
             return this.getDispatchContextSource();
         }

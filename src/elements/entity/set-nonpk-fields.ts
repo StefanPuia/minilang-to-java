@@ -1,4 +1,4 @@
-import { StringBoolean, XMLSchemaElementAttributes } from "../../types";
+import { ValidationMap } from "../../core/validate";
 import { CallObjectMethod } from "../call/call-object-method";
 import { ElementTag } from "../element-tag";
 import { SetPKFieldsAttributes } from "./set-pk-fields";
@@ -31,7 +31,9 @@ export class SetNonPKFields extends ElementTag {
         ).convert();
     }
 
-    protected getUnsupportedAttributes() {
-        return ["set-if-null"];
+    public getValidation(): ValidationMap {
+        return {
+            unhandledAttributes: ["set-if-null"],
+        };
     }
 }

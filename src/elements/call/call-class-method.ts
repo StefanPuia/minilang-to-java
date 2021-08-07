@@ -1,33 +1,62 @@
 import ConvertUtils from "../../core/convert-utils";
-import { XMLSchemaElementAttributes } from "../../types";
+import { ValidationMap } from "../../core/validate";
+import { FlexibleMapAccessor, XMLSchemaElementAttributes } from "../../types";
 import { CallerElement } from "./caller";
 
 export class CallClassMethod extends CallerElement {
     public static readonly TAG = "call-class-method";
+    protected attributes = this.attributes as CallClassMethodRawAttributes;
+
+    public getValidation(): ValidationMap {
+        return {
+            attributeNames: ["class-name", "method-name", "ret-field"],
+            constantAttributes: ["class-name", "method-name"],
+            requiredAttributes: ["class-name", "method-name"],
+            childElements: ["string", "field"],
+        };
+    }
+
+    private getAttributes(): CallClassMethodAttributes {
+        return {
+            className: this.attributes["class-name"],
+            methodName: this.attributes["method-name"],
+            retField: this.attributes["ret-field"],
+        };
+    }
+
     public getType() {
+        const retField = this.getField();
         return (
-            (this.attributes["ret-field"] &&
-                this.converter.guessFieldType(this.attributes["ret-field"])) ||
-            "Object"
+            (retField && this.converter.guessFieldType(retField)) || "Object"
         );
     }
-    public getField() {
-        return this.attributes["ret-field"];
+    public getField(): string | undefined {
+        return this.getAttributes().retField;
     }
-    protected attributes = this.attributes as CallClassMethodAttributes;
 
     public convert(): string[] {
-        this.converter.addImport(this.attributes["class-name"]);
+        this.converter.appendMessage(
+            "DEPRECATE",
+            "<call-class-method> element is deprecated (use <script>)",
+            this.position
+        );
+        this.converter.addImport(this.getAttributes().className);
         return this.wrapConvert(
-            `${ConvertUtils.unqualify(this.attributes["class-name"])}.${
-                this.attributes["method-name"]
+            `${ConvertUtils.unqualify(this.getAttributes().className)}.${
+                this.getAttributes().methodName
             }(${this.getFields()})`
         );
     }
 }
 
-interface CallClassMethodAttributes extends XMLSchemaElementAttributes {
+interface CallClassMethodRawAttributes extends XMLSchemaElementAttributes {
     "class-name": string;
     "method-name": string;
     "ret-field"?: string;
+}
+
+interface CallClassMethodAttributes {
+    className: string;
+    methodName: string;
+    retField?: FlexibleMapAccessor;
 }

@@ -1,12 +1,83 @@
 import ConvertUtils from "../../core/convert-utils";
-import { StringBoolean, XMLSchemaElementAttributes } from "../../types";
+import { Converter } from "../../core/converter";
+import { ValidationMap } from "../../core/validate";
+import {
+    FlexibleMapAccessor,
+    FlexibleStringExpander,
+    StringBoolean,
+    XMLSchemaElementAttributes,
+} from "../../types";
+import { Tag } from "../tag";
 import { SetterElement } from "./setter";
 
 export class Set extends SetterElement {
     public static readonly TAG = "set";
-    protected attributes = this.attributes as SetAttributes;
+    protected attributes = this.attributes as SetRawAttributes;
+
+    public getValidation(): ValidationMap {
+        return {
+            deprecatedAttributes: [
+                { name: "from-field", fixInstruction: 'replace with "from"' },
+                {
+                    name: "default-value",
+                    fixInstruction: 'replace with "default"',
+                },
+            ],
+            unhandledAttributes: ["format"],
+            attributeNames: [
+                "field",
+                "from-field",
+                "from",
+                "value",
+                "default-value",
+                "default",
+                "format",
+                "type",
+                "set-if-null",
+                "set-if-empty",
+            ],
+            requiredAttributes: ["field"],
+            requireAnyAttribute: ["from-field", "from", "value"], // TODO: actual implementation works with default value only, as well
+            constantPlusExpressionAttributes: ["value"],
+            constantAttributes: ["type", "set-if-null", "set-if-empty"],
+            expressionAttributes: ["field"],
+            noChildElements: true,
+        };
+    }
+
+    private getAttributes(): SetAttributes {
+        const {
+            field,
+            type,
+            "default": defaultVal,
+            "default-value": defaultValue,
+            format,
+            "set-if-empty": setIfEmpty,
+            "set-if-null": setIfNull,
+            "from-field": fromField,
+            from,
+            value,
+        } = this.attributes;
+
+        const attributes = {
+            field,
+            from: fromField ?? (from as FlexibleMapAccessor),
+            value: value,
+            default: defaultValue ?? defaultVal,
+            type,
+            format,
+            setIfNull: setIfNull === "true",
+            setIfEmpty: setIfEmpty === "true",
+        };
+        if (!attributes.from && !attributes.value) {
+            attributes.value = attributes.default;
+            attributes.default = undefined;
+        }
+        return attributes;
+    }
+
     public getField(): string {
-        return this.attributes.field;
+        return this.getAttributes().field;
     }
 
     public convert(): string[] {
@@ -16,16 +87,16 @@ export class Set extends SetterElement {
     }
 
     private getConditions() {
-        if (this.attributes["set-if-empty"] === "true") {
+        if (this.getAttributes().setIfEmpty) {
             this.converter.addImport("UtilValidate");
         }
         return [
-            this.attributes["set-if-empty"] === "true" &&
-                `UtilValidate.isEmpty(${this.attributes.field})`,
-            this.attributes["set-if-null"] === "true" &&
+            this.getAttributes().setIfEmpty &&
+                `UtilValidate.isEmpty(${this.getAttributes().field})`,
+            this.getAttributes().setIfNull &&
                 `${
-                    ConvertUtils.parseFieldGetter(this.attributes.field) ??
-                    this.attributes.field
+                    ConvertUtils.parseFieldGetter(this.getAttributes().field) ??
+                    this.getAttributes().field
                 } == null`,
         ]
             .filter(Boolean)
@@ -46,17 +117,15 @@ export class Set extends SetterElement {
 
     public getType() {
         const selfType =
-            this.attributes.type ??
+            this.getAttributes().type ??
             this.converter.guessFieldType(
-                this.attributes.field,
-                this.attributes.value
+                this.getAttributes().field,
+                this.getAttributes().value
             );
         if (selfType) {
             return selfType;
         }
-        const from = ConvertUtils.parseFieldGetter(
-            this.attributes.from ?? this.attributes["from-field"]
-        );
+        const from = ConvertUtils.parseFieldGetter(this.getAttributes().from);
         if (from) {
             const { mapName } = ConvertUtils.mapMatch(from);
             if (!mapName) {
@@ -67,16 +136,14 @@ export class Set extends SetterElement {
     }
 
     private getDefault() {
-        return this.attributes.default ?? this.attributes["default-value"];
+        return this.getAttributes().default;
     }
 
     private getAssigned() {
-        const from = ConvertUtils.parseFieldGetter(
-            this.attributes.from ?? this.attributes["from-field"]
-        );
+        const from = ConvertUtils.parseFieldGetter(this.getAttributes().from);
         const value = this.converter.parseValueOrInitialize(
             this.getBaseType().type,
-            this.attributes.value
+            this.getAttributes().value
         );
 
         if (from) {
@@ -112,20 +179,64 @@ export class Set extends SetterElement {
         return assigned;
     }
 
-    protected getUnsupportedAttributes() {
-        return ["format"];
+    public static getInstance({
+        converter,
+        parent,
+        field,
+        from,
+        setIfEmpty,
+        defaultValue,
+        type,
+        value,
+    }: {
+        converter: Converter;
+        parent?: Tag;
+        field: string;
+        from?: string;
+        setIfEmpty?: boolean;
+        defaultValue?: string;
+        type?: string;
+        value?: string;
+    }): Set {
+        return new Set(
+            {
+                type: "element",
+                name: "set",
+                attributes: {
+                    field,
+                    from,
+                    value,
+                    "set-if-empty": (setIfEmpty && "true") || "false",
+                    "default-value": defaultValue,
+                    type,
+                },
+            },
+            converter,
+            parent
+        );
     }
 }
 
-interface SetAttributes extends XMLSchemaElementAttributes {
-    field: string;
-    from?: string;
+interface SetRawAttributes extends XMLSchemaElementAttributes {
+    "field": string;
+    "from"?: string;
     "from-field"?: string;
-    value?: string;
-    default?: string;
+    "value"?: string;
+    "default"?: string;
     "default-value"?: string;
-    type?: string;
-    format?: string;
+    "type"?: string;
+    "format"?: string;
     "set-if-null": StringBoolean;
     "set-if-empty": StringBoolean;
+}
+
+interface SetAttributes {
+    field: FlexibleMapAccessor;
+    from: FlexibleMapAccessor;
+    value?: FlexibleStringExpander;
+    default?: FlexibleStringExpander;
+    type?: string;
+    format?: FlexibleStringExpander;
+    setIfNull: boolean;
+    setIfEmpty: boolean;
 }

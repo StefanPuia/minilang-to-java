@@ -6,11 +6,10 @@ export abstract class CallerElement extends SetterElement {
     protected getFields(): string {
         return [
             ...this.parseChildren()
-                .filter((tag) => tag instanceof Field)
-                .map((tag) => (tag as Field).convert()),
-            ...this.parseChildren()
-                .filter((tag) => tag instanceof StringTag)
-                .map((tag) => (tag as StringTag).convert()),
+                .filter(
+                    (tag) => tag instanceof Field || tag instanceof StringTag
+                )
+                .map((tag) => tag.convert()),
         ].join(", ");
     }
 }

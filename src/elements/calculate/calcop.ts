@@ -1,12 +1,29 @@
-import { XMLSchemaElementAttributes } from "../../types";
+import { ValidationMap } from "../../core/validate";
+import { FlexibleMapAccessor, XMLSchemaElementAttributes } from "../../types";
 import { ElementTag } from "../element-tag";
 
 export class Calcop extends ElementTag {
     public static readonly TAG = "calcop";
-    protected attributes = this.attributes as CalcopAttributes;
+    protected attributes = this.attributes as CalcopRawAttributes;
+
+    public getValidation(): ValidationMap {
+        return {
+            attributeNames: ["field", "operator"],
+            requiredAttributes: ["operator"],
+            expressionAttributes: ["field"],
+            childElements: ["calcop", "number"],
+        };
+    }
+
+    private getAttributes(): CalcopAttributes {
+        return {
+            operator: "add",
+            ...this.attributes,
+        };
+    }
 
     private getOperator(): Operator {
-        return this.attributes.operator ?? "add";
+        return this.getAttributes().operator;
     }
 
     private negate() {
@@ -17,7 +34,7 @@ export class Calcop extends ElementTag {
     }
 
     private getFields(): string[] {
-        return [this.attributes.field, ...this.convertChildren()].filter(
+        return [this.getAttributes().field, ...this.convertChildren()].filter(
             Boolean
         ) as string[];
     }
@@ -46,7 +63,12 @@ export class Calcop extends ElementTag {
 
 type Operator = "get" | "add" | "subtract" | "multiply" | "divide" | "negative";
 
-interface CalcopAttributes extends XMLSchemaElementAttributes {
+interface CalcopRawAttributes extends XMLSchemaElementAttributes {
     field?: string;
     operator?: Operator;
+}
+
+interface CalcopAttributes {
+    field?: FlexibleMapAccessor;
+    operator: Operator;
 }

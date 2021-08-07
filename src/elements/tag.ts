@@ -2,7 +2,12 @@ import { ContextUtils } from "../core/context-utils";
 import { Converter } from "../core/converter";
 import { ElementFactory } from "../core/element-factory";
 import { Validation, ValidationMap } from "../core/validate";
-import { Position, ValidChildren, VariableContext, XMLSchemaAnyElement, XMLSchemaElementAttributes } from "../types";
+import {
+    Position,
+    VariableContext,
+    XMLSchemaAnyElement,
+    XMLSchemaElementAttributes,
+} from "../types";
 
 export abstract class Tag {
     protected readonly converter: Converter;
@@ -16,13 +21,12 @@ export abstract class Tag {
         this.parent = parent;
         this.converter = converter;
 
-        this.prependIndentationMapper = this.prependIndentationMapper.bind(
-            this
-        );
+        this.prependIndentationMapper =
+            this.prependIndentationMapper.bind(this);
+        this.validate();
     }
 
     public abstract convert(): string[];
-    public abstract getValidChildren(): ValidChildren;
     public abstract getTagName(): string;
 
     protected hasOwnContext(): boolean {
@@ -50,7 +54,6 @@ export abstract class Tag {
     }) {
         const contextVariable = {
             typeParams: [],
-            count: 1,
             ...variable,
         };
         if (this.hasOwnContext()) {
@@ -81,16 +84,17 @@ export abstract class Tag {
                           )
                           .filter((tag) => tag !== null) ?? ([] as Tag[])
                     : [];
-            this.validate();
         }
         return children;
     }
 
-    public getParent(tagName?: string): Tag | undefined {
+    public getParent<T extends Tag>(tagName?: string): T | undefined {
         if (typeof tagName !== "undefined") {
-            return this.getParents().find((el) => el.getTagName() === tagName);
+            return this.getParents().find(
+                (el) => el.getTagName() === tagName
+            ) as T;
         }
-        return this.parent;
+        return this.parent as T;
     }
 
     protected getParentVariableContext() {
@@ -124,7 +128,7 @@ export abstract class Tag {
         Validation.validate(this, this.converter);
     }
 
-    public getAttributes(): XMLSchemaElementAttributes {
+    public getTagAttributes(): XMLSchemaElementAttributes {
         return {};
     }
 
