@@ -38,7 +38,7 @@ app.post("/convert", (req, res) => {
         res.json({
             output: output,
         });
-    } catch (err) {
+    } catch (err: any) {
         console.log(err);
         res.json({ output: err.toString() });
     }
