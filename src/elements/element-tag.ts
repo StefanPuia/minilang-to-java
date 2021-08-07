@@ -29,10 +29,6 @@ export abstract class ElementTag extends Tag {
             .flat();
     }
 
-    public getValidChildren() {
-        return {};
-    }
-
     public getTagAttributes() {
         return this.tag.attributes ?? {};
     }

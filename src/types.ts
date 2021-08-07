@@ -38,15 +38,6 @@ export interface XMLSchemaElementAttributes {
     [name: string]: unknown;
 }
 
-export interface ValidChild {
-    min: number;
-    max: number;
-}
-
-export interface ValidChildren {
-    [tag: string]: ValidChild;
-}
-
 export type ContextVariable = {
     name: string;
     count?: number;

@@ -4,7 +4,6 @@ import { ElementFactory } from "../core/element-factory";
 import { Validation, ValidationMap } from "../core/validate";
 import {
     Position,
-    ValidChildren,
     VariableContext,
     XMLSchemaAnyElement,
     XMLSchemaElementAttributes,
@@ -22,14 +21,12 @@ export abstract class Tag {
         this.parent = parent;
         this.converter = converter;
 
-        this.prependIndentationMapper = this.prependIndentationMapper.bind(
-            this
-        );
+        this.prependIndentationMapper =
+            this.prependIndentationMapper.bind(this);
         this.validate();
     }
 
     public abstract convert(): string[];
-    public abstract getValidChildren(): ValidChildren;
     public abstract getTagName(): string;
 
     protected hasOwnContext(): boolean {

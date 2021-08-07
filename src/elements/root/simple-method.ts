@@ -2,7 +2,6 @@ import { ValidationMap } from "../../core/validate";
 import {
     MethodMode,
     StringBoolean,
-    ValidChildren,
     VariableContext,
     XMLSchemaElementAttributes,
 } from "../../types";
@@ -179,7 +178,9 @@ export class SimpleMethod extends ElementTag {
     }
 
     public getReturnError(message?: string, throwable?: string): string[] {
-        const errorMessage = throwable ? `${throwable}.getMessage()` : `"${message}"`;
+        const errorMessage = throwable
+            ? `${throwable}.getMessage()`
+            : `"${message}"`;
         switch (this.converter.getMethodMode()) {
             case MethodMode.EVENT:
                 return [

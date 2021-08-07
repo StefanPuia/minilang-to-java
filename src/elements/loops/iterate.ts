@@ -1,14 +1,29 @@
-import { XMLSchemaElementAttributes } from "../../types";
+import { ValidationMap } from "../../core/validate";
+import { FlexibleMapAccessor, XMLSchemaElementAttributes } from "../../types";
 import { LoopingElement } from "./looping";
 
 export class Iterate extends LoopingElement {
     public static readonly TAG = "iterate";
-    protected attributes = this.attributes as IterateAttributes;
+    protected attributes = this.attributes as IterateRawAttributes;
+
+    public getValidation(): ValidationMap {
+        return {
+            attributeNames: ["entry", "list"],
+            expressionAttributes: ["entry", "list"],
+            requiredAttributes: ["entry", "list"],
+        };
+    }
+
+    private getAttributes(): IterateAttributes {
+        return {
+            ...this.attributes,
+        };
+    }
 
     public convert(): string[] {
         return [
-            `for (${this.getItemType()} ${this.attributes.entry} : ${
-                this.attributes.list
+            `for (${this.getItemType()} ${this.getAttributes().entry} : ${
+                this.getAttributes().list
             }) {`,
             ...this.convertChildren().map(this.prependIndentationMapper),
             "}",
@@ -17,13 +32,18 @@ export class Iterate extends LoopingElement {
 
     private getItemType() {
         return (
-            this.getVariableFromContext(this.attributes.list)?.typeParams[0] ??
-            "Object"
+            this.getVariableFromContext(this.getAttributes().list)
+                ?.typeParams[0] ?? "Object"
         );
     }
 }
 
-interface IterateAttributes extends XMLSchemaElementAttributes {
+interface IterateRawAttributes extends XMLSchemaElementAttributes {
     list: string;
     entry: string;
+}
+
+interface IterateAttributes {
+    entry: FlexibleMapAccessor;
+    list: FlexibleMapAccessor;
 }
