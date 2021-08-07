@@ -17,6 +17,7 @@ export abstract class Validation {
             scriptAttributes,
             noChildElements,
             childElements,
+            childElementPredicate,
             unhandledChildElements,
             requireAnyChildElement,
             requiredChildElements,
@@ -44,6 +45,9 @@ export abstract class Validation {
         );
         new RequiredChildElements(tag, converter).validate(
             requiredChildElements
+        );
+        new ChildMethodValidator(tag, converter).validate(
+            childElementPredicate
         );
     }
 
@@ -79,7 +83,7 @@ abstract class BaseValidator {
     }
 
     public validate(rule: unknown) {
-        if (rule) {
+        if (typeof rule !== "undefined") {
             this.setRule(rule).execute();
         }
     }
@@ -314,6 +318,20 @@ class NoChildElements extends ChildValidator {
     }
 }
 
+class ChildMethodValidator extends ChildValidator {
+    protected rule!: [(elements?: XMLSchemaElement[]) => boolean, string?];
+
+    protected execute(): void {
+        const [predicate, message] = this.rule;
+        if (!predicate(this.children)) {
+            this.addMessage(
+                message ??
+                    `Children of element "${this.tag.getTagName()}" failed validation criteria.`
+            );
+        }
+    }
+}
+
 class ChildElements extends ChildValidator {
     protected rule!: string[];
 
@@ -384,6 +402,11 @@ class RequiredChildElements extends ChildValidator {
     }
 }
 
+type ChildElementPredicateRule = [
+    (elements?: XMLSchemaElement[]) => boolean,
+    string?
+];
+
 export interface ValidationMap {
     attributeNames?: string[];
     attributeValues?: AttributeValue[];
@@ -400,7 +423,13 @@ export interface ValidationMap {
     unhandledChildElements?: string[];
     requireAnyChildElement?: string[];
     requiredChildElements?: string[];
+    childElementPredicate?: ChildElementPredicateRule;
 }
+
+export const noEmptyChildren: ChildElementPredicateRule = [
+    (elements) => (elements?.length ?? 0) > 0,
+    "At least one child element must be present.",
+];
 
 interface DeprecatedAttributeRule {
     name: string;
