@@ -46,6 +46,7 @@ export default class ConvertUtils {
         "java.sql.Date": "Date",
         "java.sql.Time": "Time",
         "java.sql.Timestamp": "Timestamp",
+        "java.text.MessageFormat": "MessageFormat",
         "java.time.LocalDate": "LocalDate",
         "java.time.LocalDateTime": "LocalDateTime",
         "java.time.LocalTime": "LocalTime",
@@ -55,10 +56,16 @@ export default class ConvertUtils {
         "java.util.List": "List",
         "java.util.Locale": "Locale",
         "java.util.Map": "Map",
+        "java.util.Optional": "Optional",
         "java.util.TimeZone": "TimeZone",
         "javax.servlet.http.HttpServletRequest": "HttpServletRequest",
         "javax.servlet.http.HttpServletResponse": "HttpServletResponse",
+        "org.apache.oro.text.regex.Pattern": "Pattern",
+        "org.apache.oro.text.regex.PatternMatcher": "PatternMatcher",
+        "org.apache.oro.text.regex.Perl5Matcher": "Perl5Matcher",
         "org.ofbiz.base.util.Debug": "Debug",
+        "org.ofbiz.base.util.ObjectType": "ObjectType",
+        "org.ofbiz.base.util.PatternFactory": "PatternFactory",
         "org.ofbiz.base.util.ScriptUtil": "ScriptUtil",
         "org.ofbiz.base.util.UtilDateTime": "UtilDateTime",
         "org.ofbiz.base.util.UtilMisc": "UtilMisc",
@@ -72,6 +79,7 @@ export default class ConvertUtils {
         "org.ofbiz.entity.util.EntityQuery": "EntityQuery",
         "org.ofbiz.entity.util.EntityUtil": "EntityUtil",
         "org.ofbiz.entity.util.EntityUtilProperties": "EntityUtilProperties",
+        "org.ofbiz.minilang.SimpleMapProcessor": "SimpleMapProcessor",
         "org.ofbiz.service.DispatchContext": "DispatchContext",
         "org.ofbiz.service.GenericServiceException": "GenericServiceException",
         "org.ofbiz.service.LocalDispatcher": "LocalDispatcher",
@@ -157,5 +165,13 @@ export default class ConvertUtils {
 
     public static stripQuotes(value: string) {
         return (value ?? "").replace(/^"(.+)"$/, "$1");
+    }
+
+    public static validVariableName(varName: string) {
+        return varName
+            .replace(/(?:^\w|[A-Z]|[^a-zA-Z]\w)/g, function (word, index) {
+                return index === 0 ? word.toLowerCase() : word.toUpperCase();
+            })
+            .replace(/[^a-zA-Z]/g, "");
     }
 }

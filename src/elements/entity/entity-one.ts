@@ -1,9 +1,27 @@
+import { ValidationMap } from "../../core/validate";
 import { StringBoolean } from "../../types";
 import { EntityElement, EntityElementAttributes } from "./entity";
 
 export class EntityOne extends EntityElement {
     public static readonly TAG = "entity-one";
     protected attributes = this.attributes as EntityOneAttributes;
+
+    public getValidation(): ValidationMap {
+        return {
+            attributeNames: [
+                "entity-name",
+                "use-cache",
+                "auto-field-map",
+                "value-field",
+                "delegator-name",
+            ],
+            requiredAttributes: ["entity-name", "value-field"],
+            expressionAttributes: ["value-field", "delegator-name"],
+            childElements: ["field-map", "select-field"],
+            requiredChildElements: [],
+            unhandledAttributes: ["delegator-name", "auto-field-map"],
+        };
+    }
 
     public getType(): string {
         return "GenericValue";
@@ -33,14 +51,6 @@ export class EntityOne extends EntityElement {
             ...this.getOrderByClause(),
             ...this.getUseCache(),
             `.query${whereClause.length ? "One" : "First"}();`,
-        ];
-    }
-
-    protected getUnsupportedAttributes() {
-        return [
-            ...super.getUnsupportedAttributes(),
-            "auto-field-map",
-            "for-update",
         ];
     }
 }

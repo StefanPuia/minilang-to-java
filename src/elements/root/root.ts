@@ -1,10 +1,6 @@
-import { ElementTag } from "../element-tag";
-import {
-    VariableContext,
-    XMLSchemaAnyElement,
-    XMLSchemaElement,
-} from "../../types";
 import { Converter } from "../../core/converter";
+import { XMLSchemaAnyElement, XMLSchemaElement } from "../../types";
+import { ElementTag } from "../element-tag";
 import { Tag } from "../tag";
 
 export class Root extends ElementTag {

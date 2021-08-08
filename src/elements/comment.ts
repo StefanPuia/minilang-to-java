@@ -1,11 +1,6 @@
 import { Tag } from "./tag";
-import { ValidChildren } from "../types";
 
 export class Comment extends Tag {
-    public getValidChildren(): ValidChildren {
-        return {};
-    }
-
     public getTagName(): string {
         return "!comment";
     }

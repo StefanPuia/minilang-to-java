@@ -8,7 +8,7 @@ export class IfNotEmpty extends ConditionalElement {
 
     protected convertCondition(): string {
         this.converter.addImport("UtilValidate");
-        return `${this.getNegated()}UtilValidate.isNotEmpty(${ConvertUtils.parseFieldGetter(
+        return `UtilValidate.isNotEmpty(${ConvertUtils.parseFieldGetter(
             this.attributes.field
         )})`;
     }

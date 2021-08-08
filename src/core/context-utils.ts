@@ -7,9 +7,16 @@ export class ContextUtils {
     ) {
         if (context) {
             if (context[variable.name]) {
-                context[variable.name].count++;
+                if (variable.count) {
+                    context[variable.name].count = variable.count;
+                }
+                context[variable.name].count =
+                    (context[variable.name].count ?? 0) + 1;
             } else {
-                context[variable.name] = variable;
+                context[variable.name] = {
+                    count: 1,
+                    ...variable
+                };
             }
         }
     }

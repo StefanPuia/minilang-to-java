@@ -1,14 +1,14 @@
+import { Converter } from "../../core/converter";
 import {
+    StringBoolean,
     XMLSchemaAnyElement,
     XMLSchemaElementAttributes,
-    StringBoolean,
 } from "../../types";
 import { SetterElement } from "../assignment/setter";
-import { FieldMap } from "./field-map";
-import { Converter } from "../../core/converter";
 import { Tag } from "../tag";
-import { SelectField } from "./select-field";
+import { FieldMap } from "./field-map";
 import { OrderBy } from "./order-by";
+import { SelectField } from "./select-field";
 
 export abstract class EntityElement extends SetterElement {
     constructor(self: XMLSchemaAnyElement, converter: Converter, parent?: Tag) {
@@ -98,10 +98,6 @@ export abstract class EntityElement extends SetterElement {
             }
             return line;
         });
-    }
-
-    protected getUnsupportedAttributes() {
-        return ["delegator-name"];
     }
 
     protected getEcbName() {

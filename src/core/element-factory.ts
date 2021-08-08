@@ -1,6 +1,7 @@
 import { readdir, stat } from "fs";
 import { join, resolve } from "path";
 import { ScriptCdataTag, ScriptTextTag } from "../elements/call/groovy/script";
+import { ConstantTextTag } from "../elements/call/map-processor/constant";
 import { Comment } from "../elements/comment";
 import { Root } from "../elements/root/root";
 import { Tag } from "../elements/tag";
@@ -23,6 +24,8 @@ export class ElementFactory {
             switch (parent?.getTagName()) {
                 case "script":
                     return new ScriptTextTag(self, converter, parent);
+                case "constant":
+                    return new ConstantTextTag(self, converter, parent);
             }
             return this.makeErrorComment(
                 `Error parsing text element contained in "${

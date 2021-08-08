@@ -1,4 +1,9 @@
 {
     "editor.tabSize": 4,
-    "prettier.tabWidth": 4
+    "prettier.tabWidth": 4,
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "cSpell.language": "en-GB",
+    "cSpell.words": [
+        "delegator"
+    ]
 }

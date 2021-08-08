@@ -1,4 +1,5 @@
 import ConvertUtils from "../../core/convert-utils";
+import { ValidationMap } from "../../core/validate";
 import { StringBoolean, XMLSchemaElementAttributes } from "../../types";
 import { ElementTag } from "../element-tag";
 
@@ -18,8 +19,10 @@ export class RemoveRelated extends ElementTag {
         return [`delegator.removeRelated(${relationName}, ${value});`];
     }
 
-    protected getUnsupportedAttributes() {
-        return ["do-cache-clear"];
+    public getValidation(): ValidationMap {
+        return {
+            unhandledAttributes: ["do-cache-clear"],
+        };
     }
 }
 

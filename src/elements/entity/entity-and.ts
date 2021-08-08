@@ -1,8 +1,33 @@
+import { ValidationMap } from "../../core/validate";
 import { EntityElement, EntityElementAttributes } from "./entity";
 
 export class EntityAnd extends EntityElement {
     public static readonly TAG = "entity-and";
     protected attributes = this.attributes as EntityAndAttributes;
+
+    public getValidation(): ValidationMap {
+        return {
+            unhandledAttributes: ["delegator-name"],
+            attributeNames: [
+                "entity-name",
+                "use-cache",
+                "filter-by-date",
+                "list",
+                "distinct",
+                "delegator-name",
+            ],
+            requiredAttributes: ["entity-name", "list"],
+            expressionAttributes: ["list"],
+            childElements: [
+                "field-map",
+                "order-by",
+                "limit-range",
+                "limit-view",
+                "use-iterator",
+            ],
+            requiredChildElements: ["field-map"],
+        };
+    }
 
     public convert(): string[] {
         this.converter.addImport("List");

@@ -1,13 +1,9 @@
-import { XMLSchemaTextElement, ValidChildren } from "../types";
+import { XMLSchemaTextElement } from "../types";
 import { Comment } from "./comment";
 import { Tag } from "./tag";
 
 export abstract class TextTag extends Tag {
     protected tag = this.tag as XMLSchemaTextElement;
-
-    public getValidChildren(): ValidChildren {
-        return {};
-    }
 
     public getTagName(): string {
         return "!text";
