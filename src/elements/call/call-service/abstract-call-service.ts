@@ -1,4 +1,4 @@
-import { Set } from "../../assignment/set";
+import { SetElement } from "../../assignment/set";
 import { CallerElement } from "../caller";
 
 export abstract class AbstractCallService extends CallerElement {
@@ -12,7 +12,7 @@ export abstract class AbstractCallService extends CallerElement {
             const inMap = inMapName || `${serviceName}Context`;
             this.setVariableToContext({ name: "userLogin" });
             result.push(
-                ...Set.getInstance({
+                ...SetElement.getInstance({
                     converter: this.converter,
                     parent: this.parent,
                     field: `${inMap}.userLogin`,

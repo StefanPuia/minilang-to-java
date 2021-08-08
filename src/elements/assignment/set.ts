@@ -10,7 +10,7 @@ import {
 import { Tag } from "../tag";
 import { SetterElement } from "./setter";
 
-export class Set extends SetterElement {
+export class SetElement extends SetterElement {
     public static readonly TAG = "set";
     protected attributes = this.attributes as SetRawAttributes;
 
@@ -197,8 +197,8 @@ export class Set extends SetterElement {
         defaultValue?: string;
         type?: string;
         value?: string;
-    }): Set {
-        return new Set(
+    }): SetElement {
+        return new SetElement(
             {
                 type: "element",
                 name: "set",
@@ -207,13 +207,29 @@ export class Set extends SetterElement {
                     from,
                     value,
                     "set-if-empty": (setIfEmpty && "true") || "false",
-                    "default-value": defaultValue,
+                    "default": defaultValue,
                     type,
                 },
             },
             converter,
             parent
         );
+    }
+
+    public static getErrorMessageListDeclaration(
+        field: string,
+        converter: Converter,
+        parent?: Tag,
+        value: string = "NewList",
+        type: string = "List<String>"
+    ) {
+        return SetElement.getInstance({
+            converter,
+            parent,
+            field,
+            value,
+            type,
+        }).convert();
     }
 }
 

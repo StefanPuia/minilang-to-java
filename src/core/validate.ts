@@ -408,21 +408,52 @@ type ChildElementPredicateRule = [
 ];
 
 export interface ValidationMap {
+    /** fails if attribute found that is not in this list */
     attributeNames?: string[];
+
+    /** specify list of valid values for attributes */
     attributeValues?: AttributeValue[];
+
+    /** specified attributes have to be constants */
     constantAttributes?: string[];
+
+    /** specified attributes have to be expressions */
     expressionAttributes?: string[];
+
+    /** specified attributes are unhandled by the converter */
     unhandledAttributes?: string[];
+
+    /** specified attributes have to be constant+expression */
     constantPlusExpressionAttributes?: string[];
+
+    /** specified attributes are marked as deprecated (optional message) */
     deprecatedAttributes?: (DeprecatedAttributeRule | string)[];
+
+    /** require at least one of the specified attributes */
     requireAnyAttribute?: string[];
+
+    /** require all of the specified attributes */
     requiredAttributes?: string[];
+
+    /** TODO */
     scriptAttributes?: string[];
+
+    /** element cannot have child elements */
     noChildElements?: boolean;
+
+    /** validate list of children (fails if any children not declared are found) */
     childElements?: string[];
+
+    /** specified children are unhandled by the converter */
     unhandledChildElements?: string[];
+
+    /** require at least one of the specified child element */
     requireAnyChildElement?: string[];
+
+    /** require all of the specified child elements */
     requiredChildElements?: string[];
+
+    /** test child elements against a predicate */
     childElementPredicate?: ChildElementPredicateRule;
 }
 

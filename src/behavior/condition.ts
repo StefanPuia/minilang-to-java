@@ -1,3 +1,3 @@
-export interface ConditionBehavior {
+export interface ConditionBehaviour {
     convertConditionOnly(): string;
 }

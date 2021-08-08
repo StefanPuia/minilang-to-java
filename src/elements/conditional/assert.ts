@@ -1,11 +1,11 @@
-import { ConditionBehavior } from "../../behavior/condition";
+import { ConditionBehaviour } from "../../behavior/condition";
 import { noEmptyChildren, ValidationMap } from "../../core/validate";
 import {
     FlexibleMapAccessor,
     FlexibleStringExpander,
     XMLSchemaElementAttributes,
 } from "../../types";
-import { Set } from "../assignment/set";
+import { SetElement } from "../assignment/set";
 import { ElementTag } from "../element-tag";
 
 export class Assert extends ElementTag {
@@ -28,13 +28,17 @@ export class Assert extends ElementTag {
         };
     }
 
-    private isConditionBehavior(tag: any): tag is ConditionBehavior {
+    private isConditionBehavior(tag: any): tag is ConditionBehaviour {
         return "convertConditionOnly" in tag;
     }
 
     public convert(): string[] {
         return [
-            ...this.getErrorMessageListDeclaration(),
+            ...SetElement.getErrorMessageListDeclaration(
+                this.getAttributes().errorList,
+                this.converter,
+                this.parent
+            ),
             ...this.parseChildren()
                 .filter(this.isConditionBehavior)
                 .map((tag) => this.createAssertion(tag as any))
@@ -42,9 +46,9 @@ export class Assert extends ElementTag {
         ];
     }
 
-    private createAssertion(tag: ConditionBehavior): string[] {
+    private createAssertion(tag: ConditionBehaviour): string[] {
         const title = this.getAttributes().title ?? "";
-        const errorMessage = `Assertion [${title.replace(/"/, `\\"`)}] failed.`;
+        const errorMessage = `Assertion [${title.replace(/"/g, `\\"`)}] failed.`;
         return [
             `if (${tag.convertConditionOnly()}) {`,
             ...[
@@ -52,16 +56,6 @@ export class Assert extends ElementTag {
             ].map(this.prependIndentationMapper),
             `}`,
         ];
-    }
-
-    private getErrorMessageListDeclaration() {
-        return Set.getInstance({
-            converter: this.converter,
-            parent: this.parent,
-            field: this.getAttributes().errorList,
-            value: "NewList",
-            type: "List<String>",
-        }).convert();
     }
 }
 

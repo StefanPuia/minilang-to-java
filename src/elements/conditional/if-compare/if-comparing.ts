@@ -1,4 +1,4 @@
-import { ConditionBehavior } from "../../../behavior/condition";
+import { ConditionBehaviour } from "../../../behavior/condition";
 import {
     FlexibleMapAccessor,
     JavaClassName,
@@ -8,7 +8,7 @@ import { ConditionalElement } from "../conditional";
 
 export abstract class IfComparing
     extends ConditionalElement
-    implements ConditionBehavior
+    implements ConditionBehaviour
 {
     protected attributes = this.attributes as IfComparingRawAttributes;
 

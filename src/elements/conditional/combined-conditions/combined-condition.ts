@@ -1,8 +1,8 @@
-import { ConditionBehavior } from "../../../behavior/condition";
+import { ConditionBehaviour } from "../../../behavior/condition";
 import { ValidationMap } from "../../../core/validate";
 import { ElementTag } from "../../element-tag";
 
-export abstract class CombinedCondition extends ElementTag implements ConditionBehavior {
+export abstract class CombinedCondition extends ElementTag implements ConditionBehaviour {
     public getValidation(): ValidationMap {
         if (this.parseChildren().length === 0) {
             this.converter.appendMessage(

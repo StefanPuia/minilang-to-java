@@ -37,15 +37,13 @@ export abstract class ElementTag extends Tag {
         return this.tag.position;
     }
 
-
     public getInstance<
         T extends XMLSchemaElementAttributes,
         E extends ElementTag = ElementTag
     >(elementTag: ElementTagConstructor<E>, attributes: T): E {
         return new elementTag(
             {
-                type: "element",
-                name: this.getTagName(),
+                ...this.tag,
                 attributes,
             },
             this.converter,

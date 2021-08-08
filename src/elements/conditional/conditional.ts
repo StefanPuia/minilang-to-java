@@ -1,9 +1,9 @@
-import { ConditionBehavior } from "../../behavior/condition";
+import { ConditionBehaviour } from "../../behavior/condition";
 import ConvertUtils from "../../core/convert-utils";
 import { Operator } from "../../types";
 import { ElementTag } from "../element-tag";
 
-export abstract class ConditionalElement extends ElementTag implements ConditionBehavior {
+export abstract class ConditionalElement extends ElementTag implements ConditionBehaviour {
     public convert(): string[] {
         if (this.parseChildren().length) {
             return [

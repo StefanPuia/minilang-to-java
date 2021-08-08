@@ -5,7 +5,7 @@ import {
     FlexibleStringExpander,
     XMLSchemaElementAttributes,
 } from "../../types";
-import { Set } from "../assignment/set";
+import { SetElement } from "../assignment/set";
 import { SetterElement } from "../assignment/setter";
 
 export class SetServiceFields extends SetterElement {
@@ -47,9 +47,14 @@ export class SetServiceFields extends SetterElement {
 
     public convert(): string[] {
         this.setVariableToContext({ name: "dctx" });
-        const targetMap = ConvertUtils.parseFieldGetter(this.getField()) ?? this.getField();
+        const targetMap =
+            ConvertUtils.parseFieldGetter(this.getField()) ?? this.getField();
         return [
-            ...this.getErrorMessageListDeclaration(),
+            ...SetElement.getErrorMessageListDeclaration(
+                this.getErrorMessageListParameter(),
+                this.converter,
+                this.parent
+            ),
             `${targetMap}.putAll(dctx.getModelService("${
                 this.getAttributes().serviceName
             }").makeValid(${this.getParameters()}))`,
@@ -68,16 +73,6 @@ export class SetServiceFields extends SetterElement {
             "timeZone",
             "locale",
         ].join(", ");
-    }
-
-    private getErrorMessageListDeclaration() {
-        return Set.getInstance({
-            converter: this.converter,
-            parent: this.parent,
-            field: this.getErrorMessageListParameter(),
-            value: "NewList",
-            type: "List<Object>",
-        }).convert();
     }
 }
 

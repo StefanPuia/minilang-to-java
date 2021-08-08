@@ -5,7 +5,7 @@ import {
     MethodMode,
 } from "../../types";
 import { ElementTag } from "../element-tag";
-import { Set } from "./set";
+import { SetElement } from "./set";
 import { BaseSetterRawAttributes } from "./setter";
 
 export class RequestToField extends ElementTag {
@@ -43,7 +43,7 @@ export class RequestToField extends ElementTag {
             return [`// ${message}`];
         }
         this.setVariableToContext({ name: "request" });
-        return Set.getInstance({
+        return SetElement.getInstance({
             converter: this.converter,
             parent: this.parent,
             field: this.getField(),
