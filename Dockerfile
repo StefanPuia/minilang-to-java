@@ -11,4 +11,4 @@ COPY *          ./
 
 RUN npm ci && npm run build
 
-CMD node server/serve
+CMD node build/server/serve
