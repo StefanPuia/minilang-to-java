@@ -7,22 +7,22 @@
         "start:watch": "nodemon --exec npx ts-node src/server/serve.ts",
         "build": "tsc",
         "check:unhandled": "ts-node src/scripts/unhandled.ts",
-        "dep:check": "ncu",
-        "dep:update": "ncu -u",
+        "dep:check": " npm-check-updates",
+        "dep:update": " npm-check-updates -i",
         "docker:build": "docker build -t minilang-to-java ."
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "dotenv": "^10.0.0",
-        "express": "^4.17.1",
-        "typescript": "^4.4.0-beta",
-        "xml-js": "git+https://git.stefanpuia.co.uk/stefanpuia/xml-js.git"
+        "dotenv": "^14.2.0",
+        "express": "^4.17.2",
+        "typescript": "^4.5.5",
+        "xml-js": "git+https://github.com/stefan-puia/xml-js.git"
     },
     "devDependencies": {
         "@types/express": "^4.17.13",
-        "@types/node": "^16.4.13",
-        "npm-check-updates": "^11.8.3",
-        "ts-node": "^10.2.0"
+        "@types/node": "^17.0.10",
+        "npm-check-updates": "^12.1.0",
+        "ts-node": "^10.4.0"
     }
 }

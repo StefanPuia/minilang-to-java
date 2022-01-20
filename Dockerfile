@@ -1,9 +1,14 @@
-FROM node:lts-alpine3.12
+FROM node:lts-alpine
 
-COPY public/.     public
+RUN apk update
+RUN apk add git
 
 WORKDIR /app
-COPY build/.      .
-COPY node_modules ./node_modules
+
+COPY public     ./public
+COPY src        ./src
+COPY *          ./
+
+RUN npm ci && npm run build
 
 CMD node server/serve
