@@ -14,7 +14,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "dotenv": "^14.3.0",
+        "dotenv": "^14.3.2",
         "express": "^4.17.2",
         "typescript": "^4.5.5",
         "xml-js": "git+https://github.com/stefan-puia/xml-js.git"
