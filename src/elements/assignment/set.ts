@@ -221,7 +221,7 @@ export class SetElement extends SetterElement {
         converter: Converter,
         parent?: Tag,
         value: string = "NewList",
-        type: string = "List<String>"
+        type: string = "List<Object>"
     ) {
         return SetElement.getInstance({
             converter,
