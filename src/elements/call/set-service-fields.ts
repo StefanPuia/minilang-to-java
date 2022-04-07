@@ -55,9 +55,10 @@ export class SetServiceFields extends SetterElement {
                 this.converter,
                 this.parent
             ),
+            ...this.wrapConvert(this.converter.parseValue("NewMap")),
             `${targetMap}.putAll(dctx.getModelService("${
                 this.getAttributes().serviceName
-            }").makeValid(${this.getParameters()}))`,
+            }").makeValid(${this.getParameters()}));`
         ];
     }
 
