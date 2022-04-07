@@ -1,9 +1,6 @@
 import ConvertUtils from "../../core/convert-utils";
 import { Converter } from "../../core/converter";
-import {
-    XMLSchemaAnyElement,
-    XMLSchemaElementAttributes
-} from "../../types";
+import { XMLSchemaAnyElement, XMLSchemaElementAttributes } from "../../types";
 import { ElementTag } from "../element-tag";
 import { Tag } from "../tag";
 
@@ -35,7 +32,9 @@ export abstract class SetterElement extends ElementTag {
     public wrapDeclaration(assign: string) {
         this.converter.addImport(this.getBaseType()?.type);
         const declaration =
-            this.declared || !this.getType() ? "" : `${this.getType()} `;
+            this.declared || !this.getType()
+                ? ""
+                : `${ConvertUtils.unqualify(this.getType() ?? "")} `;
         return `${declaration}${assign}`;
     }
 
