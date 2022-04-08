@@ -1,3 +1,4 @@
+import { DEFAULT_TYPE } from "../../consts";
 import { ValidationMap } from "../../core/validate";
 import {
     MethodMode,
@@ -117,7 +118,7 @@ export class SimpleMethod extends ElementTag {
                 this.addVarToContext("dctx", "DispatchContext", true);
                 this.addVarToContext("context", "Map", true, [
                     "String",
-                    "Object",
+                    DEFAULT_TYPE,
                 ]);
                 return `public Map<String, Object> ${name}(final DispatchContext dctx, final Map<String, Object> context)`;
         }
@@ -127,7 +128,10 @@ export class SimpleMethod extends ElementTag {
     private addDefaultVariablesToContext() {
         this.addVarToContext("dispatcher", "LocalDispatcher");
         this.addVarToContext("delegator", "Delegator");
-        this.addVarToContext("parameters", "Map", false, ["String", "Object"]);
+        this.addVarToContext("parameters", "Map", false, [
+            "String",
+            DEFAULT_TYPE,
+        ]);
         this.addVarToContext("userLogin", "GenericValue");
         this.addVarToContext("locale", "Locale");
         this.addVarToContext("dctx", "DispatchContext");

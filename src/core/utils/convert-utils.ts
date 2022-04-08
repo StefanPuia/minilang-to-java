@@ -1,13 +1,12 @@
+import { DEFAULT_TYPE } from "../../consts";
+
 export default class ConvertUtils {
-    public static requiresCast(field?: string, type?: string): boolean {
-        if (typeof field === "undefined") {
-            return false;
-        }
-        const { mapName } = this.mapMatch(field);
-        if (type === "Object") {
-            return false;
-        }
-        return ["parameters", "context"].includes(mapName);
+    public static cast(
+        fromType: string = DEFAULT_TYPE,
+        toType: string = DEFAULT_TYPE
+    ): string {
+        // TODO: basic type verification
+        return fromType !== toType ? `(${fromType}) ` : "";
     }
 
     public static parseFieldGetter(field: string | undefined) {

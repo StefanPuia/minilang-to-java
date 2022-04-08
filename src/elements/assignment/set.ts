@@ -9,6 +9,7 @@ import {
 } from "../../types";
 import { Tag } from "../tag";
 import { SetterElement } from "./setter";
+import { DEFAULT_TYPE } from "../../consts";
 
 export class SetElement extends SetterElement {
     public static readonly TAG = "set";
@@ -129,10 +130,10 @@ export class SetElement extends SetterElement {
         if (from) {
             const { mapName } = ConvertUtils.mapMatch(from);
             if (!mapName) {
-                return this.getVariableFromContext(from)?.type ?? "Object";
+                return this.getVariableFromContext(from)?.type ?? DEFAULT_TYPE;
             }
         }
-        return "Object";
+        return DEFAULT_TYPE;
     }
 
     private getDefault() {

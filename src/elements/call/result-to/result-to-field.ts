@@ -1,3 +1,4 @@
+import { DEFAULT_TYPE } from "../../../consts";
 import ConvertUtils from "../../../core/utils/convert-utils";
 import { isNotUndefined } from "../../../core/utils/validate-utils";
 import {
@@ -23,7 +24,7 @@ export class ResultToField extends ResultTo {
     }
 
     public getType(): string {
-        return this.converter.guessFieldType(this.getField()) ?? "Object";
+        return this.converter.guessFieldType(this.getField()) ?? DEFAULT_TYPE;
     }
     public getField(): string {
         return this.getAttributes().field ?? this.getResultAttribute();
@@ -50,10 +51,9 @@ export class ResultToField extends ResultTo {
     }
 
     private getCast() {
-        if (!ConvertUtils.requiresCast(this.getField(), this.getType())) {
-            return "";
-        }
-        return `(${this.getType()}) `;
+        const existingType =
+            this.getVariableFromContext(this.getField())?.type ?? DEFAULT_TYPE;
+        return ConvertUtils.cast(existingType, this.getType());
     }
     public ofServiceCall(resultName: string): string[] {
         return this.getInstance<ResultToFieldRawAttributes>(ResultToField, {

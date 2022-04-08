@@ -1,3 +1,4 @@
+import { DEFAULT_TYPE } from "../../consts";
 import ConvertUtils from "../../core/utils/convert-utils";
 import { ValidationMap } from "../../core/validate";
 import { FlexibleMapAccessor, XMLSchemaElementAttributes } from "../../types";
@@ -38,7 +39,7 @@ export class IterateMap extends LoopingElement {
     private getMapTypes(): string[] {
         return (
             this.getVariableFromContext(this.getAttributes().map)
-                ?.typeParams || ["Object", "Object"]
+                ?.typeParams || [DEFAULT_TYPE, DEFAULT_TYPE]
         );
     }
 

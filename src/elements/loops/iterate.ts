@@ -1,3 +1,4 @@
+import { DEFAULT_TYPE } from "../../consts";
 import { ValidationMap } from "../../core/validate";
 import { FlexibleMapAccessor, XMLSchemaElementAttributes } from "../../types";
 import { LoopingElement } from "./looping";
@@ -33,7 +34,7 @@ export class Iterate extends LoopingElement {
     private getItemType() {
         return (
             this.getVariableFromContext(this.getAttributes().list)
-                ?.typeParams[0] ?? "Object"
+                ?.typeParams[0] ?? DEFAULT_TYPE
         );
     }
 }

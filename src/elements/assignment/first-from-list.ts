@@ -1,3 +1,4 @@
+import { DEFAULT_TYPE } from "../../consts";
 import { ValidationMap } from "../../core/validate";
 import { FlexibleMapAccessor, XMLSchemaElementAttributes } from "../../types";
 import { SetterElement } from "./setter";
@@ -29,7 +30,7 @@ export class FirstFromList extends SetterElement {
     public getType(): string | undefined {
         return (
             this.getVariableFromContext(this.getAttributes().list)
-                ?.typeParams[0] ?? "Object"
+                ?.typeParams[0] ?? DEFAULT_TYPE
         );
     }
     public getField(): string | undefined {

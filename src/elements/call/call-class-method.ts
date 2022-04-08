@@ -1,3 +1,4 @@
+import { DEFAULT_TYPE } from "../../consts";
 import ConvertUtils from "../../core/utils/convert-utils";
 import { unqualify } from "../../core/utils/import-utils";
 import { ValidationMap } from "../../core/validate";
@@ -28,7 +29,8 @@ export class CallClassMethod extends CallerElement {
     public getType() {
         const retField = this.getField();
         return (
-            (retField && this.converter.guessFieldType(retField)) || "Object"
+            (retField && this.converter.guessFieldType(retField)) ||
+            DEFAULT_TYPE
         );
     }
     public getField(): string | undefined {

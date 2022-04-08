@@ -31,12 +31,7 @@ export class Field extends SetterElement {
     }
 
     private getCast() {
-        return ConvertUtils.requiresCast(
-            this.getAttributes().field,
-            this.getType()
-        )
-            ? `(${this.getType()}) `
-            : "";
+        return ConvertUtils.cast(this.getAttributes().field, this.getType());
     }
 }
 
