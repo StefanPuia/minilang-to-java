@@ -1,10 +1,11 @@
-import ConvertUtils from "../../../core/convert-utils";
+import ConvertUtils from "../../../core/utils/convert-utils";
+import { unqualify } from "../../../core/utils/import-utils";
 import { ValidationMap } from "../../../core/validate";
 import { JavaClassName } from "../../../types";
 import {
     IfComparing,
     IfComparingAttributes,
-    IfComparingRawAttributes
+    IfComparingRawAttributes,
 } from "./if-comparing";
 
 export class IfValidateMethod extends IfComparing {
@@ -35,7 +36,7 @@ export class IfValidateMethod extends IfComparing {
     private getValidator() {
         const { class: validatorClass, method, field } = this.getAttributes();
         this.converter.addImport(validatorClass);
-        return `${ConvertUtils.unqualify(validatorClass)}.${method}(${
+        return `${unqualify(validatorClass)}.${method}(${
             ConvertUtils.parseFieldGetter(field) ?? field
         })`;
     }

@@ -1,5 +1,5 @@
 import { ContextUtils } from "../../core/context-utils";
-import ConvertUtils from "../../core/convert-utils";
+import ConvertUtils from "../../core/utils/convert-utils";
 import { XMLSchemaElementAttributes } from "../../types";
 import { SetElement } from "./set";
 import { SetterElement } from "./setter";

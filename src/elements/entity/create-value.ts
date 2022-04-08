@@ -5,7 +5,7 @@ import {
     FlexibleMapAccessor,
 } from "../../types";
 import { ValidationMap } from "../../core/validate";
-import ConvertUtils from "../../core/convert-utils";
+import ConvertUtils from "../../core/utils/convert-utils";
 
 export class CreateValue extends ElementTag {
     public static readonly TAG = "create-value";

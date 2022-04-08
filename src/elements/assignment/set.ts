@@ -1,4 +1,4 @@
-import ConvertUtils from "../../core/convert-utils";
+import ConvertUtils from "../../core/utils/convert-utils";
 import { Converter } from "../../core/converter";
 import { ValidationMap } from "../../core/validate";
 import {

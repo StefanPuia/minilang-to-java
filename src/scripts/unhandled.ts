@@ -1,7 +1,7 @@
 import { readFile } from "fs";
 import { join } from "path";
-import ConvertUtils from "../core/convert-utils";
 import { ElementFactory } from "../core/element-factory";
+import { parseXML } from "../core/utils/xml-utils";
 import { XMLSchemaElement } from "../types";
 
 readFile(
@@ -12,9 +12,10 @@ readFile(
             console.error(err);
         } else {
             await ElementFactory.loadClasses();
-            const parsed = ConvertUtils.parseXML(data);
-            const xsElements = (parsed
-                .elements[1] as XMLSchemaElement)?.elements?.filter(
+            const parsed = parseXML(data);
+            const xsElements = (
+                parsed.elements[1] as XMLSchemaElement
+            )?.elements?.filter(
                 (elem) => elem.type === "element" && elem.name === "xs:element"
             ) as XMLSchemaElement[];
 

@@ -1,5 +1,5 @@
 import { ProcessBehaviour } from "../../../behavior/process";
-import ConvertUtils from "../../../core/convert-utils";
+import ConvertUtils from "../../../core/utils/convert-utils";
 import { ValidationMap } from "../../../core/validate";
 import { StringBoolean, XMLSchemaElementAttributes } from "../../../types";
 import { ElementTag } from "../../element-tag";

@@ -5,7 +5,7 @@ import {
     StringBoolean,
 } from "../../types";
 import { ValidationMap } from "../../core/validate";
-import ConvertUtils from "../../core/convert-utils";
+import ConvertUtils from "../../core/utils/convert-utils";
 
 export class PropertyToField extends SetterElement {
     public static readonly TAG = "property-to-field";

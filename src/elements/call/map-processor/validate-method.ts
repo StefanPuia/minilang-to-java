@@ -1,5 +1,6 @@
 import { ProcessBehaviour } from "../../../behavior/process";
-import ConvertUtils from "../../../core/convert-utils";
+import ConvertUtils from "../../../core/utils/convert-utils";
+import { unqualify } from "../../../core/utils/import-utils";
 import { XMLSchemaElementAttributes } from "../../../types";
 import { ElementTag } from "../../element-tag";
 
@@ -22,7 +23,7 @@ export class ValidateMethod extends ElementTag implements ProcessBehaviour {
         errorListName: string
     ): string[] {
         this.converter.addImport(this.attributes.class);
-        const unqualified = ConvertUtils.unqualify(this.attributes.class);
+        const unqualified = unqualify(this.attributes.class);
         const fieldValue = `${mapName}.get("${fieldName}")`;
         return [
             `if (!${unqualified}.${this.attributes.method}(${fieldValue})) {`,

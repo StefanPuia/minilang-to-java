@@ -1,11 +1,13 @@
+import { NEWLINE } from "../consts";
+import { BaseVariableHandler } from "../handlers/context/base-variables";
+import { ContextVariableFactory } from "../handlers/context/context-variable-factory";
 import { BaseErrorHandler } from "../handlers/error/base-error";
 import { ErrorHandlerFactory } from "../handlers/error/error-handler-factory";
 import { ConverterInit, MessageType, MethodMode, Position } from "../types";
-import ConvertUtils from "./convert-utils";
+import ConvertUtils from "./utils/convert-utils";
 import { ElementFactory } from "./element-factory";
-import { BaseVariableHandler } from "../handlers/context/base-variables";
-import { ContextVariableFactory } from "../handlers/context/context-variable-factory";
-import { NEWLINE } from "../consts";
+import { parseXML } from "./utils/xml-utils";
+import { qualify } from "./utils/import-utils";
 
 export class Converter {
     private readonly source: string;
@@ -33,7 +35,7 @@ export class Converter {
 
     private convert() {
         const start = new Date().getTime();
-        const parsed = ConvertUtils.parseXML(this.source);
+        const parsed = parseXML(this.source);
         const converted = ElementFactory.parseWithRoot(parsed, this);
         const lines = [
             this.getPackageName(),
@@ -61,7 +63,7 @@ export class Converter {
     private getParseStats(source: string, start: number, end: number): string {
         return `Finished parsing ${source.split(NEWLINE).length} lines in ${(
             (end - start) /
-            Math.pow(10, 3)
+            1000
         ).toFixed(3)} seconds.`;
     }
 
@@ -99,7 +101,7 @@ export class Converter {
     }
 
     public getClassName(): string {
-        const [,className] = this.extractClassIdentifiers();
+        const [, className] = this.extractClassIdentifiers();
         return className || "Foo";
     }
 
@@ -132,7 +134,7 @@ export class Converter {
             ) {
                 return;
             }
-            const qualified = ConvertUtils.qualify(classPath) ?? classPath;
+            const qualified = qualify(classPath) ?? classPath;
             if (qualified.startsWith("java.lang.")) {
                 return;
             }

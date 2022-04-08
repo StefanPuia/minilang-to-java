@@ -1,4 +1,5 @@
-import ConvertUtils from "../../core/convert-utils";
+import ConvertUtils from "../../core/utils/convert-utils";
+import { unqualify } from "../../core/utils/import-utils";
 import { ValidationMap } from "../../core/validate";
 import { FlexibleMapAccessor } from "../../types";
 import { BaseSetterRawAttributes, SetterElement } from "./setter";
@@ -55,7 +56,7 @@ abstract class BaseNow extends SetterElement {
     }
 
     public getType(): string {
-        return ConvertUtils.unqualify(this.getAttributes().type);
+        return unqualify(this.getAttributes().type);
     }
 
     protected getAssigned(): string {

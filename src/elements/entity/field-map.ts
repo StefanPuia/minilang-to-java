@@ -1,4 +1,4 @@
-import ConvertUtils from "../../core/convert-utils";
+import ConvertUtils from "../../core/utils/convert-utils";
 import { ElementTag } from "../element-tag";
 import { XMLSchemaElementAttributes } from "../../types";
 

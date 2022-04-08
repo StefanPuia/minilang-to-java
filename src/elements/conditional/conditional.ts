@@ -1,5 +1,5 @@
 import { ConditionBehaviour } from "../../behavior/condition";
-import ConvertUtils from "../../core/convert-utils";
+import ConvertUtils from "../../core/utils/convert-utils";
 import { Operator } from "../../types";
 import { ElementTag } from "../element-tag";
 

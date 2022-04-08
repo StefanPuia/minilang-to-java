@@ -1,4 +1,4 @@
-import ConvertUtils from "../../core/convert-utils";
+import ConvertUtils from "../../core/utils/convert-utils";
 import { FlexibleMapAccessor } from "../../types";
 import { BaseSetterRawAttributes, SetterElement } from "./setter";
 

@@ -1,4 +1,5 @@
-import ConvertUtils from "../../core/convert-utils";
+import ConvertUtils from "../../core/utils/convert-utils";
+import { unqualify } from "../../core/utils/import-utils";
 import { ValidationMap } from "../../core/validate";
 import { FlexibleMapAccessor, XMLSchemaElementAttributes } from "../../types";
 import { CallerElement } from "./caller";
@@ -42,7 +43,7 @@ export class CallClassMethod extends CallerElement {
         );
         this.converter.addImport(this.getAttributes().className);
         return this.wrapConvert(
-            `${ConvertUtils.unqualify(this.getAttributes().className)}.${
+            `${unqualify(this.getAttributes().className)}.${
                 this.getAttributes().methodName
             }(${this.getFields()})`
         );
