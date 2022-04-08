@@ -1,3 +1,4 @@
+import { DEFAULT_MAP_TYPE } from "../../consts";
 import { ContextUtils } from "../../core/utils/context-utils";
 import ConvertUtils from "../../core/utils/convert-utils";
 import { XMLSchemaElementAttributes } from "../../types";
@@ -11,7 +12,7 @@ export class MapToMap extends SetterElement {
     public getType(): string {
         return (
             ContextUtils.getFullType(this, this.attributes.map) ??
-            "Map<String, Object>"
+            DEFAULT_MAP_TYPE
         );
     }
     public getField(): string | undefined {

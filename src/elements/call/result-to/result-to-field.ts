@@ -1,5 +1,6 @@
 import { DEFAULT_TYPE } from "../../../consts";
 import ConvertUtils from "../../../core/utils/convert-utils";
+import { cast } from "../../../core/utils/type-utils";
 import { isNotUndefined } from "../../../core/utils/validate-utils";
 import {
     FlexibleMapAccessor,
@@ -51,9 +52,10 @@ export class ResultToField extends ResultTo {
     }
 
     private getCast() {
-        const existingType =
-            this.getVariableFromContext(this.getField())?.type ?? DEFAULT_TYPE;
-        return ConvertUtils.cast(existingType, this.getType());
+        return cast(
+            this.getVariableFromContext(this.getField()),
+            this.getType()
+        );
     }
     public ofServiceCall(resultName: string): string[] {
         return this.getInstance<ResultToFieldRawAttributes>(ResultToField, {

@@ -1,3 +1,4 @@
+import { DEFAULT_MAP_TYPE } from "../../consts";
 import { ValidationMap } from "../../core/validate";
 import { FlexibleLocation, XMLSchemaElementAttributes } from "../../types";
 import { SetterElement } from "../assignment/setter";
@@ -26,7 +27,7 @@ export class CallSimpleMethod extends SetterElement {
 
     public getType(): string {
         this.converter.addImport("Map");
-        return "Map<String, Object>";
+        return DEFAULT_MAP_TYPE;
     }
     public getField(): string {
         return `${this.getAttributes().methodName}Result`;

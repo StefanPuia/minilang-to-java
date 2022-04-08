@@ -1,3 +1,4 @@
+import { DEFAULT_MAP_TYPE } from "../../../consts";
 import { XMLSchemaElementAttributes } from "../../../types";
 import { ResultTo } from "./result-to";
 
@@ -18,7 +19,7 @@ export class ResultToMap extends ResultTo {
 
     public getType(): string {
         this.converter.addImport("Map");
-        return "Map<String, Object>";
+        return DEFAULT_MAP_TYPE;
     }
 
     public getField(): string {

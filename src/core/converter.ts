@@ -149,11 +149,11 @@ export class Converter {
         this.staticImports.add(`${qualified}.${field}`);
     }
 
-    public addImport(className: string) {
-        if (ConvertUtils.isPrimitiveType(className)) {
+    public addImport(type?: string) {
+        if (!type || ConvertUtils.isPrimitiveType(type)) {
             return;
         }
-        const qualified = qualify(className) ?? className;
+        const qualified = qualify(type) ?? type;
         if (qualified.startsWith("java.lang.")) {
             return;
         }

@@ -44,18 +44,15 @@ export class CallServiceAsynch extends AbstractCallService {
     public convert(): string[] {
         this.addException("GenericServiceException");
         this.setVariableToContext({ name: "dispatcher" });
-        const {
-            inMapName,
-            includeUserLogin,
+        const { inMapName, includeUserLogin, serviceName } =
+            this.getAttributes();
+        const [contextMap, contextMapName] = this.createContextMap(
             serviceName,
-        } = this.getAttributes();
-        const [addUserLoginToContext, contextMapName] = this.addUserLoginToMap(
-            serviceName,
-            includeUserLogin,
             inMapName
         );
         return [
-            ...addUserLoginToContext,
+            ...contextMap,
+            ...this.addUserLoginToMap(contextMapName, includeUserLogin),
             `dispatcher.runAsync(${this.getParameters(contextMapName).join(
                 ", "
             )})`,

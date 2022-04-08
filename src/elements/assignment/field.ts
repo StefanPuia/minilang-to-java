@@ -1,4 +1,5 @@
 import ConvertUtils from "../../core/utils/convert-utils";
+import { cast } from "../../core/utils/type-utils";
 import { FlexibleMapAccessor } from "../../types";
 import { BaseSetterRawAttributes, SetterElement } from "./setter";
 
@@ -31,7 +32,10 @@ export class Field extends SetterElement {
     }
 
     private getCast() {
-        return ConvertUtils.cast(this.getAttributes().field, this.getType());
+        return cast(
+            this.getVariableFromContext(this.getAttributes().field),
+            this.getType()
+        );
     }
 }
 

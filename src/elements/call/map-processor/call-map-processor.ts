@@ -1,3 +1,4 @@
+import { DEFAULT_MAP_TYPE } from "../../../consts";
 import { ContextUtils } from "../../../core/utils/context-utils";
 import ConvertUtils from "../../../core/utils/convert-utils";
 import { ValidationMap } from "../../../core/validate";
@@ -51,7 +52,7 @@ export class CallMapProcessor extends CallerElement {
         this.converter.addImport("Map");
         return (
             ContextUtils.getFullType(this, this.getAttributes().inMap) ??
-            "Map<String, Object>"
+            DEFAULT_MAP_TYPE
         );
     }
 

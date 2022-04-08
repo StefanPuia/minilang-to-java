@@ -1,3 +1,4 @@
+import { DEFAULT_MAP_TYPE } from "../../consts";
 import ConvertUtils from "../../core/utils/convert-utils";
 import { ValidationMap } from "../../core/validate";
 import { FlexibleMapAccessor, MethodMode } from "../../types";
@@ -25,7 +26,7 @@ export class FieldToResult extends SetterElement {
 
     public getType(): string | undefined {
         this.converter.addImport("Map");
-        return "Map<String, Object>";
+        return DEFAULT_MAP_TYPE;
     }
 
     public getField(): string | undefined {

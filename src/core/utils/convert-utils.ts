@@ -1,14 +1,4 @@
-import { DEFAULT_TYPE } from "../../consts";
-
 export default class ConvertUtils {
-    public static cast(
-        fromType: string = DEFAULT_TYPE,
-        toType: string = DEFAULT_TYPE
-    ): string {
-        // TODO: basic type verification
-        return fromType !== toType ? `(${fromType}) ` : "";
-    }
-
     public static parseFieldGetter(field: string | undefined) {
         if (typeof field === "undefined") {
             return field;

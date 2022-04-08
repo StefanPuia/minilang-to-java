@@ -1,3 +1,4 @@
+import { DEFAULT_MAP_TYPE } from "../../consts";
 import ConvertUtils from "../../core/utils/convert-utils";
 import { ValidationMap } from "../../core/validate";
 import {
@@ -35,7 +36,7 @@ export class SetServiceFields extends SetterElement {
 
     public getType(): string {
         this.converter.addImport("Map");
-        return "Map<String, Object>";
+        return DEFAULT_MAP_TYPE;
     }
     public getField(): string {
         return this.getAttributes().toMap;
@@ -58,7 +59,7 @@ export class SetServiceFields extends SetterElement {
             ...this.wrapConvert(this.converter.parseValue("NewMap")),
             `${targetMap}.putAll(dctx.getModelService("${
                 this.getAttributes().serviceName
-            }").makeValid(${this.getParameters()}));`
+            }").makeValid(${this.getParameters()}));`,
         ];
     }
 

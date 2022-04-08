@@ -1,5 +1,7 @@
+import { DEFAULT_MAP_TYPE } from "../../../consts";
 import ConvertUtils from "../../../core/utils/convert-utils";
 import { parseIntOrElse } from "../../../core/utils/parse-utils";
+import { cast } from "../../../core/utils/type-utils";
 import {
     isNotUndefined,
     isUndefined,
@@ -23,7 +25,7 @@ export class CallService extends AbstractCallService {
 
     public getType(): string | undefined {
         this.converter.addImport("Map");
-        return "Map<String, Object>";
+        return DEFAULT_MAP_TYPE;
     }
 
     public getValidation(): ValidationMap {
@@ -146,13 +148,13 @@ export class CallService extends AbstractCallService {
         this.setVariableToContext({ name: "dispatcher" });
         const { inMapName, includeUserLogin, serviceName } =
             this.getAttributes();
-        const [addUserLoginToContext, contextMapName] = this.addUserLoginToMap(
+        const [contextMap, contextMapName] = this.createContextMap(
             serviceName,
-            includeUserLogin,
             inMapName
         );
         return this.wrapWithTryCatch([
-            ...addUserLoginToContext,
+            ...contextMap,
+            ...this.addUserLoginToMap(contextMapName, includeUserLogin),
             ...this.getServiceCallWithResultsTo(contextMapName),
         ]);
     }
@@ -218,8 +220,13 @@ export class CallService extends AbstractCallService {
             transactionTimeout,
         } = this.getAttributes();
         const parameters: string[] = [`"${serviceName}"`];
-        if (contextMap || inMapName) {
-            parameters.push(contextMap ?? (inMapName as string));
+        const inMap = contextMap || inMapName;
+        if (inMap) {
+            parameters.push(
+                `${cast(this.getVariableFromContext(inMap), DEFAULT_MAP_TYPE)}${
+                    contextMap ?? (inMapName as string)
+                }`
+            );
         } else {
             this.converter.addImport("HashMap");
             parameters.push("new HashMap<>()");

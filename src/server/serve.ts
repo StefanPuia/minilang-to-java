@@ -46,7 +46,6 @@ app.post("/convert", (req, res) => {
         const output = Converter.convert({
             source: req.body.input,
             methodMode: req.body.methodMode,
-            packageName: req.body.packageName,
             className: req.body.className,
             logging: {},
         });
