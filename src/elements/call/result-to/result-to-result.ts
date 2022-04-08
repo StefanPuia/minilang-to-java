@@ -47,20 +47,9 @@ export class ResultToResult extends ResultTo {
     }
 
     public wrapConvert(assign: string): string[] {
-        if (
-            ![MethodMode.SERVICE, MethodMode.EVENT].includes(
-                this.converter.getMethodMode()
-            )
-        ) {
-            this.converter.appendMessage(
-                "ERROR",
-                `"${this.getTagName()}" used in a non-service or non-event environment`,
-                this.position
-            );
-        }
-
         return [...super.wrapConvert(assign)];
     }
+
     public ofServiceCall(resultName: string): string[] {
         return this.getInstance<ResultToResultRawAttributes>(ResultToResult, {
             ...{

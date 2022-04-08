@@ -1,4 +1,4 @@
-import { DEFAULT_TYPE } from "../../consts";
+import { DEFAULT_MAP_TYPE, DEFAULT_TYPE } from "../../consts";
 import { ValidationMap } from "../../core/validate";
 import {
     MethodMode,
@@ -6,6 +6,8 @@ import {
     VariableContext,
     XMLSchemaElementAttributes,
 } from "../../types";
+import { FieldToResult } from "../assignment/field-to-result";
+import { ResultToResult } from "../call/result-to/result-to-result";
 import { ElementTag } from "../element-tag";
 
 export class SimpleMethod extends ElementTag {
@@ -121,8 +123,16 @@ export class SimpleMethod extends ElementTag {
                     DEFAULT_TYPE,
                 ]);
                 return `public Map<String, Object> ${name}(final DispatchContext dctx, final Map<String, Object> context)`;
+
+            case MethodMode.GENERIC:
+                const requiresReturn = this.findChild(
+                    ResultToResult.TAG,
+                    FieldToResult.TAG
+                );
+                return `public ${
+                    requiresReturn ? DEFAULT_MAP_TYPE : "void"
+                } ${name}()`;
         }
-        return `public void ${name}()`;
     }
 
     private addDefaultVariablesToContext() {
@@ -169,6 +179,7 @@ export class SimpleMethod extends ElementTag {
                 return [`return "success";`];
 
             case MethodMode.SERVICE:
+            case MethodMode.GENERIC:
                 if (
                     (this.getVariableFromContext("_returnMap")?.count ?? 0) > 0
                 ) {
@@ -177,8 +188,6 @@ export class SimpleMethod extends ElementTag {
                 this.converter.addImport("ServiceUtil");
                 return ["return ServiceUtil.returnSuccess();"];
         }
-
-        return [];
     }
 
     public getReturnError(message?: string, throwable?: string): string[] {

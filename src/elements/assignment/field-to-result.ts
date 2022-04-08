@@ -44,17 +44,6 @@ export class FieldToResult extends SetterElement {
     }
 
     public wrapConvert(assign: string): string[] {
-        if (
-            ![MethodMode.SERVICE, MethodMode.EVENT].includes(
-                this.converter.getMethodMode()
-            )
-        ) {
-            this.converter.appendMessage(
-                "ERROR",
-                `"${this.getTagName()}" used in a non-service or non-event environment`
-            );
-        }
-
         return [...super.wrapConvert(assign)];
     }
 }

@@ -60,5 +60,5 @@ app.post("/convert", (req, res) => {
 
 app.listen(port, async () => {
     await ElementFactory.loadClasses();
-    console.log(`Listening on http://localhost:${port}`);
+    console.log(`Finished loading. Listening on http://localhost:${port}`);
 });

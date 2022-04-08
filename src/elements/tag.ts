@@ -139,4 +139,11 @@ export abstract class Tag {
     public getTag(): XMLSchemaAnyElement {
         return this.tag;
     }
+
+    protected findChild(...tagsToFind: string[]): Tag | undefined {
+        if (tagsToFind.includes(this.getTagName())) {
+            return this;
+        }
+        return this.parseChildren().find(child => child.findChild(...tagsToFind));
+    }
 }
