@@ -34,6 +34,7 @@ app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
     return next(err);
 });
 
+app.use("/static", express.static("public/static"));
 app.get("/", (_req: Request, res: Response) => {
     res.sendFile(join(__dirname, "../../public/index.html"));
 });

@@ -1,180 +1,42 @@
-<title>OFBiz Minilang to Java</title>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>OFBiz Minilang to Java</title>
+        <link rel="stylesheet" href="/static/style.css" />
+    </head>
+    <body>
+        <div id="container">
+            <div id="input"></div>
+            <div id="output"></div>
+            <div id="controls">
+                Collapse editors:
+                <input
+                    type="range"
+                    min="-1"
+                    max="1"
+                    step="1"
+                    value="0"
+                    id="splitSizes"
+                />
+                <input
+                    type="text"
+                    id="className"
+                    placeholder="Fully qualified class name"
+                    class="padded"
+                />
+                <select id="mode" class="padded">
+                    <option value="SERVICE">Service Methods</option>
+                    <option value="EVENT">Events</option>
+                    <option value="GENERIC">Utility Methods</option>
+                </select>
+                <button id="submit">Convert</button>
+            </div>
+        </div>
 
-<style>
-    body {
-        background-color: #2f3129;
-        margin: 0;
-        padding: 0;
-    }
-
-    #container {
-        height: 100vh;
-        width: 100vw;
-        display: grid;
-        grid-template-areas:
-            "input output"
-            "controls controls";
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr auto;
-    }
-
-    #input {
-        width: 100%;
-        height: 100%;
-        grid-area: input;
-    }
-
-    #output {
-        width: 100%;
-        height: 100%;
-        grid-area: output;
-    }
-
-    #controls {
-        grid-area: controls;
-        color: white;
-        font-family: "Courier New", Courier, monospace;
-        padding: 10px;
-        justify-content: center;
-        align-items: center;
-        display: flex;
-        gap: 10px;
-    }
-
-    #controls input[type="text"] {
-        width: 35ch;
-        padding: 5px;
-    }
-    #controls #submit {
-        padding: 8px 20px;
-    }
-    #controls #splitSizes {
-        width: 4em;
-    }
-</style>
-
-<div id="container">
-    <div id="input"></div>
-    <div id="output"></div>
-    <div id="controls">
-        <input
-            type="range"
-            min="-1"
-            max="1"
-            step="1"
-            value="0"
-            id="splitSizes"
-        />
-        <input type="text" id="className" placeholder="Fully qualified class name" />
-        <label><input type="radio" name="mode" value="SERVICE" />Service</label>
-        <label><input type="radio" name="mode" value="EVENT" />Event</label>
-        <label
-            ><input
-                type="radio"
-                name="mode"
-                value="GENERIC"
-                checked
-            />Util</label
-        >
-        <button id="submit">Convert</button>
-    </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
-<script>
-    window.addEventListener("load", () => {
-        const $input = document.querySelector("#input");
-        const $output = document.querySelector("#output");
-        const $className = document.querySelector("#className");
-
-        const options = {
-            selectionStyle: "text",
-            wrap: true,
-            theme: "ace/theme/monokai",
-            fontSize: "15px",
-        };
-
-        ace.edit("input", {
-            ...options,
-            mode: "ace/mode/xml",
-        });
-
-        ace.edit("output", {
-            ...options,
-            mode: "ace/mode/java",
-        });
-
-        document.querySelector("#submit").addEventListener("click", () => {
-            const $methodMode = document.querySelector(
-                "input[name='mode']:checked"
-            );
-            document.querySelector("#submit").disabled = "disabled";
-            const input = ace.edit("input").getSession().getValue();
-
-            localStorage.setItem("editor.inputText", input);
-            localStorage.setItem("editor.className", $className.value);
-            localStorage.setItem("editor.methodMode", $methodMode.value);
-
-            fetch("/convert", {
-                method: "post",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    input,
-                    className: $className.value,
-                    methodMode: $methodMode.value,
-                }),
-            })
-                .then((res) => {
-                    return res.json();
-                })
-                .then((data) => {
-                    if (data && data.output) {
-                        ace.edit("output").getSession().setValue(data.output);
-                    } else {
-                        ace.edit("output").getSession().setValue(data);
-                    }
-                })
-                .catch((err) => {
-                    console.error(err);
-                    ace.edit("output").getSession().setValue(err.toString());
-                })
-                .finally(() => {
-                    document.querySelector("#submit").disabled = undefined;
-                });
-        });
-
-        ace.edit("input")
-            .getSession()
-            .setValue(localStorage.getItem("editor.inputText") ?? "");
-        $className.value = localStorage.getItem("editor.className") ?? "";
-        const methodMode = document.querySelector(
-            `input[name="mode"][value="${localStorage.getItem(
-                "editor.methodMode"
-            )}"]`
-        );
-        if (methodMode) {
-            methodMode.checked = "checked";
-        }
-
-        const $splitSizes = document.querySelector("#controls #splitSizes");
-        $splitSizes.addEventListener("change", (e) => {
-            const $container = document.querySelector("#container");
-            const sizeMap = {
-                [-1]: "10em 1fr",
-                [0]: "1fr 1fr",
-                [1]: "1fr 10em",
-            };
-            $container.style.gridTemplateColumns = sizeMap[$splitSizes.value];
-            ["input", "output"].forEach((el) => {
-                const session = ace.edit(el).getSession();
-                session.setWrapLimitRange(
-                    Math.max(session.getScreenLength(), 10),
-                    null
-                );
-            });
-        });
-    });
-</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
+        <script type="module" src="/static/script.js" async defer></script>
+    </body>
+</html>

@@ -179,7 +179,6 @@ export class SimpleMethod extends ElementTag {
                 return [`return "success";`];
 
             case MethodMode.SERVICE:
-            case MethodMode.GENERIC:
                 if (
                     (this.getVariableFromContext("_returnMap")?.count ?? 0) > 0
                 ) {
@@ -187,7 +186,15 @@ export class SimpleMethod extends ElementTag {
                 }
                 this.converter.addImport("ServiceUtil");
                 return ["return ServiceUtil.returnSuccess();"];
+
+            case MethodMode.GENERIC:
+                if (
+                    (this.getVariableFromContext("_returnMap")?.count ?? 0) > 0
+                ) {
+                    return [`return _returnMap;`];
+                }
         }
+        return [];
     }
 
     public getReturnError(message?: string, throwable?: string): string[] {
