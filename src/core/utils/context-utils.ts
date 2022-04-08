@@ -1,5 +1,5 @@
-import { ElementTag } from "../elements/element-tag";
-import { VariableContext, ContextVariable } from "../types";
+import { ElementTag } from "../../elements/element-tag";
+import { VariableContext, ContextVariable } from "../../types";
 export class ContextUtils {
     public static setVariableToContext(
         variable: ContextVariable,

@@ -1,4 +1,4 @@
-import { ContextUtils } from "../../core/context-utils";
+import { ContextUtils } from "../../core/utils/context-utils";
 import ConvertUtils from "../../core/utils/convert-utils";
 import { ValidationMap } from "../../core/validate";
 import { FlexibleMapAccessor, XMLSchemaElementAttributes } from "../../types";

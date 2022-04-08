@@ -1,4 +1,4 @@
-import { ContextUtils } from "../core/context-utils";
+import { ContextUtils } from "../core/utils/context-utils";
 import { Converter } from "../core/converter";
 import { ElementFactory } from "../core/element-factory";
 import { Validation, ValidationMap } from "../core/validate";
