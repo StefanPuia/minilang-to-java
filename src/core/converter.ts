@@ -9,7 +9,6 @@ import { ContextVariableFactory } from "../handlers/context/context-variable-fac
 export class Converter {
     private readonly source: string;
     private readonly methodMode: MethodMode;
-    private readonly packageName?: string;
     private readonly className?: string;
     private tabSize: number = 4;
     private imports: Set<string> = new Set();
@@ -21,7 +20,6 @@ export class Converter {
     private constructor(init: ConverterInit) {
         this.source = init.source;
         this.methodMode = init.methodMode;
-        this.packageName = init.packageName;
         this.className = init.className;
         this.loggingConfig = {
             ERROR: true,
@@ -85,15 +83,27 @@ export class Converter {
             .join("\n");
     }
 
-    private getPackageName(): string[] {
-        if (this.packageName) {
-            return [`package ${this.packageName};\n`];
+    private extractClassIdentifiers(): [
+        packageName?: string,
+        className?: string
+    ] {
+        if (this.className) {
+            const matches = this.className.match(
+                /^(?<packageName>.*?)\.?(?<className>\w+)$/
+            )?.groups;
+            return [matches?.packageName, matches?.className];
         }
         return [];
     }
 
+    private getPackageName(): string[] {
+        const [packageName] = this.extractClassIdentifiers();
+        return [`package ${packageName || "com.minilang.to.java"};\n`];
+    }
+
     public getClassName(): string {
-        return this.className || "SomeClassName";
+        const [,className] = this.extractClassIdentifiers();
+        return className || "Foo";
     }
 
     public static convert(init: ConverterInit) {
@@ -150,9 +160,8 @@ export class Converter {
 
     public getContextVariableHandler() {
         if (!this.contextVariableHandler) {
-            this.contextVariableHandler = ContextVariableFactory.getHandler(
-                this
-            );
+            this.contextVariableHandler =
+                ContextVariableFactory.getHandler(this);
         }
         return this.contextVariableHandler;
     }

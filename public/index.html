@@ -65,8 +65,7 @@
             value="0"
             id="splitSizes"
         />
-        <input type="text" id="className" placeholder="Class Name" />
-        <input type="text" id="packageName" placeholder="Package Name" />
+        <input type="text" id="className" placeholder="Fully qualified class name" />
         <label><input type="radio" name="mode" value="SERVICE" />Service</label>
         <label><input type="radio" name="mode" value="EVENT" />Event</label>
         <label
@@ -87,7 +86,6 @@
         const $input = document.querySelector("#input");
         const $output = document.querySelector("#output");
         const $className = document.querySelector("#className");
-        const $packageName = document.querySelector("#packageName");
 
         const options = {
             selectionStyle: "text",
@@ -115,7 +113,6 @@
 
             localStorage.setItem("editor.inputText", input);
             localStorage.setItem("editor.className", $className.value);
-            localStorage.setItem("editor.packageName", $packageName.value);
             localStorage.setItem("editor.methodMode", $methodMode.value);
 
             fetch("/convert", {
@@ -127,7 +124,6 @@
                 body: JSON.stringify({
                     input,
                     className: $className.value,
-                    packageName: $packageName.value,
                     methodMode: $methodMode.value,
                 }),
             })
@@ -154,7 +150,6 @@
             .getSession()
             .setValue(localStorage.getItem("editor.inputText") ?? "");
         $className.value = localStorage.getItem("editor.className") ?? "";
-        $packageName.value = localStorage.getItem("editor.packageName") ?? "";
         const methodMode = document.querySelector(
             `input[name="mode"][value="${localStorage.getItem(
                 "editor.methodMode"
