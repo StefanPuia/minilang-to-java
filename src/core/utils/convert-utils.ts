@@ -65,6 +65,10 @@ export default class ConvertUtils {
         return false;
     }
 
+    public static isPrimitiveType(type: string) {
+        return ["int", "boolean", "long", "double", "char"].includes(type);
+    }
+
     public static stripQuotes(value: string) {
         return (value ?? "").replace(/^"(.+)"$/, "$1");
     }

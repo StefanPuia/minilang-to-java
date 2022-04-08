@@ -49,7 +49,7 @@ export class Root extends ElementTag {
                             type: "element",
                             name: "simple-method",
                             attributes: {
-                                "method-name": "someMethodName",
+                                "method-name": "generatedMethod",
                             },
                             elements: clazz.elements,
                         },

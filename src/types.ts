@@ -88,3 +88,8 @@ export interface ConverterInit {
     className?: string,
     logging: Partial<Record<MessageType, boolean>>
 }
+
+export interface ConvertConfig {
+    authenticateServicesAutomatically: boolean;
+    replicateMinilang: boolean;
+}

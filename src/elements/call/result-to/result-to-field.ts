@@ -1,4 +1,5 @@
 import ConvertUtils from "../../../core/utils/convert-utils";
+import { isNotUndefined } from "../../../core/utils/validate-utils";
 import {
     FlexibleMapAccessor,
     XMLSchemaElementAttributes,
@@ -9,6 +10,10 @@ export class ResultToField extends ResultTo {
     public static readonly TAG = "result-to-field";
     protected attributes = this.attributes as ResultToFieldRawAttributes;
     private fromField?: string = this.attributes["!from-field"];
+
+    protected shouldSetVariableToContext(): boolean {
+        return isNotUndefined(this.fromField);
+    }
 
     private getAttributes(): ResultToFieldAttributes {
         return {
@@ -30,7 +35,7 @@ export class ResultToField extends ResultTo {
 
     public convert(): string[] {
         return this.wrapConvert(
-            `${
+            `${this.getCast()}${
                 (this.fromField &&
                     ConvertUtils.parseFieldGetter(
                         `${this.fromField}.${this.getResultAttribute()}`
@@ -39,11 +44,9 @@ export class ResultToField extends ResultTo {
             }`
         );
     }
+
     public getResultAttribute() {
         return this.getAttributes().resultName;
-    }
-    public wrapConvert(assign: string, semicolon?: boolean): string[] {
-        return super.wrapConvert(`${this.getCast()}${assign}`, semicolon);
     }
 
     private getCast() {

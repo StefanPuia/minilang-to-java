@@ -7,20 +7,24 @@ export abstract class AbstractCallService extends CallerElement {
         includeUserLogin: boolean,
         inMapName?: string
     ): [result: string[], mapName?: string] {
-        if (includeUserLogin) {
-            const result: string[] = [];
+        if (
+            this.converter.config.authenticateServicesAutomatically ||
+            includeUserLogin
+        ) {
             const inMap = inMapName || `${serviceName}Context`;
             this.setVariableToContext({ name: "userLogin" });
-            result.push(
-                ...SetElement.getInstance({
-                    converter: this.converter,
-                    parent: this.parent,
-                    field: `${inMap}.userLogin`,
-                    from: `userLogin`,
-                    type: "GenericValue",
-                }).convert()
-            );
-            return [result, inMap];
+            return [
+                [
+                    ...SetElement.getInstance({
+                        converter: this.converter,
+                        parent: this.parent,
+                        field: `${inMap}.userLogin`,
+                        from: `userLogin`,
+                        type: "GenericValue",
+                    }).convert(),
+                ],
+                inMap,
+            ];
         }
         return [[]];
     }

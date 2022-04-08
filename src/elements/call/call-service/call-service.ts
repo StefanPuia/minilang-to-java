@@ -1,4 +1,9 @@
 import ConvertUtils from "../../../core/utils/convert-utils";
+import { parseIntOrElse } from "../../../core/utils/parse-utils";
+import {
+    isNotUndefined,
+    isUndefined,
+} from "../../../core/utils/validate-utils";
 import { ValidationMap } from "../../../core/validate";
 import {
     FlexibleMapAccessor,
@@ -84,20 +89,23 @@ export class CallService extends AbstractCallService {
         return {
             serviceName,
             inMapName,
-            includeUserLogin: includeUserLogin !== "false",
-            breakOnError: breakOnError !== "false",
+            includeUserLogin: includeUserLogin === "true",
+            breakOnError: breakOnError === "true",
             requireNewTransaction: requireNewTransaction === "true",
             errorCode:
                 errorCode ??
-                (this.getParent(
-                    "simple-method"
-                ) as SimpleMethod).getDefaultErrorCode(),
+                (
+                    this.getParent("simple-method") as SimpleMethod
+                ).getDefaultErrorCode(),
             successCode:
                 successCode ??
-                (this.getParent(
-                    "simple-method"
-                ) as SimpleMethod).getDefaultSuccessCode(),
-            transactionTimeout: parseInt(transactionTimeout ?? "-1"),
+                (
+                    this.getParent("simple-method") as SimpleMethod
+                ).getDefaultSuccessCode(),
+            transactionTimeout: parseIntOrElse(
+                transactionTimeout,
+                this.converter.config.replicateMinilang ? -1 : undefined
+            ),
             errorPrefix:
                 this.getPropertyInfo("error-prefix") ?? "service.error.prefix",
             errorSuffix:
@@ -136,11 +144,8 @@ export class CallService extends AbstractCallService {
     public convert(): string[] {
         this.addException("GenericServiceException");
         this.setVariableToContext({ name: "dispatcher" });
-        const {
-            inMapName,
-            includeUserLogin,
-            serviceName,
-        } = this.getAttributes();
+        const { inMapName, includeUserLogin, serviceName } =
+            this.getAttributes();
         const [addUserLoginToContext, contextMapName] = this.addUserLoginToMap(
             serviceName,
             includeUserLogin,
@@ -155,11 +160,10 @@ export class CallService extends AbstractCallService {
     private wrapWithTryCatch(nested: string[]) {
         const { breakOnError } = this.getAttributes();
         if (breakOnError) {
-            this.converter.addImport("GenericServiceException");
             return [
                 "try {",
                 ...nested.map(this.prependIndentationMapper),
-                "} catch (GenericServiceException e) {",
+                `} catch (${this.getCatchExceptions()} e) {`,
                 ...[
                     ...(this.getParent<SimpleMethod>(
                         "simple-method"
@@ -171,10 +175,34 @@ export class CallService extends AbstractCallService {
         return nested;
     }
 
+    private getCatchExceptions() {
+        return [
+            "GenericServiceException",
+            ...(this.canUseShorthand() ? ["ExecutionServiceException"] : []),
+        ].join(" | ");
+    }
+
+    private canUseShorthand() {
+        return isUndefined(this.getAttributes().transactionTimeout);
+    }
+
+    private getServiceCall(contextMap?: string) {
+        const parameters = this.getParameters(contextMap);
+        if (this.canUseShorthand()) {
+            this.addException("ExecutionServiceException");
+            this.converter.addStaticImport(
+                "ServiceExecutionUtil",
+                "runService"
+            );
+            return `runService(${parameters[0]}, ${parameters[1]}, dispatcher)`;
+        }
+        return `dispatcher.runSync(${this.getParameters(contextMap).join(
+            ", "
+        )})`;
+    }
+
     private getServiceCallWithResultsTo(contextMap?: string): string[] {
-        const serviceCall = `dispatcher.runSync(${this.getParameters(
-            contextMap
-        ).join(", ")})`;
+        const serviceCall = this.getServiceCall(contextMap);
         const resultMappings = this.getResultMappings();
         if (resultMappings.length) {
             return [...this.wrapConvert(serviceCall), ...resultMappings];
@@ -196,7 +224,7 @@ export class CallService extends AbstractCallService {
             this.converter.addImport("HashMap");
             parameters.push("new HashMap<>()");
         }
-        if (transactionTimeout) {
+        if (isNotUndefined(transactionTimeout)) {
             parameters.push(
                 `${transactionTimeout}`,
                 `${requireNewTransaction}`
@@ -206,9 +234,11 @@ export class CallService extends AbstractCallService {
     }
 
     private getResultMappings(): string[] {
-        return (this.parseChildren().filter(
-            (el) => el instanceof ResultTo
-        ) as ResultTo[])
+        return (
+            this.parseChildren().filter(
+                (el) => el instanceof ResultTo
+            ) as ResultTo[]
+        )
             .map((resultTo) => resultTo.ofServiceCall(this.getField()))
             .flat();
     }

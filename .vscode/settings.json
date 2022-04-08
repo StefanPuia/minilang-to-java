@@ -4,6 +4,7 @@
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "cSpell.language": "en-GB",
     "cSpell.words": [
-        "delegator"
+        "delegator",
+        "Minilang"
     ]
 }

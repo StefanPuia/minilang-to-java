@@ -2,6 +2,7 @@
 const importMap: Record<string, string> = {
     "com.stannah.base.entity.condition.EntityConditionBuilder": "EntityConditionBuilder",
     "com.stannah.base.utils.MiscUtils": "MiscUtils",
+    "com.stannah.base.utils.ServiceExecutionUtil": "ServiceExecutionUtil",
     "com.stannah.external.hr.EmployeeUtils": "EmployeeUtils",
     "java.lang.Boolean": "Boolean",
     "java.lang.Double": "Double",
@@ -49,6 +50,7 @@ const importMap: Record<string, string> = {
     "org.ofbiz.entity.util.EntityUtilProperties": "EntityUtilProperties",
     "org.ofbiz.minilang.SimpleMapProcessor": "SimpleMapProcessor",
     "org.ofbiz.service.DispatchContext": "DispatchContext",
+    "org.ofbiz.service.ExecutionServiceException": "ExecutionServiceException",
     "org.ofbiz.service.GenericServiceException": "GenericServiceException",
     "org.ofbiz.service.LocalDispatcher": "LocalDispatcher",
     "org.ofbiz.service.ServiceUtil": "ServiceUtil",

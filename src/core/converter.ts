@@ -3,7 +3,13 @@ import { BaseVariableHandler } from "../handlers/context/base-variables";
 import { ContextVariableFactory } from "../handlers/context/context-variable-factory";
 import { BaseErrorHandler } from "../handlers/error/base-error";
 import { ErrorHandlerFactory } from "../handlers/error/error-handler-factory";
-import { ConverterInit, MessageType, MethodMode, Position } from "../types";
+import {
+    ConvertConfig,
+    ConverterInit,
+    MessageType,
+    MethodMode,
+    Position,
+} from "../types";
 import ConvertUtils from "./utils/convert-utils";
 import { ElementFactory } from "./element-factory";
 import { parseXML } from "./utils/xml-utils";
@@ -15,10 +21,12 @@ export class Converter {
     private readonly className?: string;
     private tabSize: number = 4;
     private imports: Set<string> = new Set();
+    private staticImports: Set<string> = new Set();
     private messages: Message[] = [];
     private errorHandler: BaseErrorHandler | undefined;
     private contextVariableHandler: BaseVariableHandler | undefined;
     private loggingConfig: Record<MessageType, boolean>;
+    public readonly config: ConvertConfig;
 
     private constructor(init: ConverterInit) {
         this.source = init.source;
@@ -31,6 +39,10 @@ export class Converter {
             INFO: true,
             ...init.logging,
         };
+        this.config = {
+            authenticateServicesAutomatically: false,
+            replicateMinilang: false,
+        };
     }
 
     private convert() {
@@ -39,7 +51,10 @@ export class Converter {
         const converted = ElementFactory.parseWithRoot(parsed, this);
         const lines = [
             this.getPackageName(),
-            this.getImports(),
+            NEWLINE,
+            this.getImports(this.imports, (className) => `import ${className};`),
+            NEWLINE,
+            this.getImports(this.staticImports, (className) => `import static ${className};`),
             NEWLINE,
             ...converted,
             NEWLINE,
@@ -49,7 +64,9 @@ export class Converter {
             this.getParseStats(this.source, start, new Date().getTime())
         );
 
-        return [...lines, ...this.getDisplayMessages()].join(NEWLINE);
+        return [...lines, ...this.getDisplayMessages()]
+            .join(NEWLINE)
+            .replace(/\n{3,}/g, NEWLINE.repeat(2));
     }
 
     private getDisplayMessages(): string[] {
@@ -75,11 +92,11 @@ export class Converter {
         return "";
     }
 
-    private getImports() {
-        return Array.from(this.imports)
-            .sort()
-            .map((classPath) => `import ${classPath};`)
-            .join(NEWLINE);
+    private getImports(
+        imports: Set<string>,
+        mapper: (className: string) => string
+    ) {
+        return Array.from(imports).sort().map(mapper).join(NEWLINE);
     }
 
     private extractClassIdentifiers(): [
@@ -97,7 +114,7 @@ export class Converter {
 
     private getPackageName(): string[] {
         const [packageName] = this.extractClassIdentifiers();
-        return [`package ${packageName || "com.minilang.to.java"};${NEWLINE}`];
+        return [`package ${packageName || "com.minilang.to.java"};`];
     }
 
     public getClassName(): string {
@@ -127,26 +144,27 @@ export class Converter {
         });
     }
 
-    public addImport(classPath?: string) {
-        if (classPath) {
-            if (
-                ["int", "boolean", "long", "double", "char"].includes(classPath)
-            ) {
-                return;
+    public addStaticImport(className: string, field: string) {
+        const qualified = qualify(className) ?? className;
+        this.staticImports.add(`${qualified}.${field}`);
+    }
+
+    public addImport(className: string) {
+        if (ConvertUtils.isPrimitiveType(className)) {
+            return;
+        }
+        const qualified = qualify(className) ?? className;
+        if (qualified.startsWith("java.lang.")) {
+            return;
+        }
+        if (!this.imports.has(qualified)) {
+            if (qualified.indexOf(".") === -1) {
+                this.appendMessage(
+                    "WARNING",
+                    `No import mapped for "${qualified}"`
+                );
             }
-            const qualified = qualify(classPath) ?? classPath;
-            if (qualified.startsWith("java.lang.")) {
-                return;
-            }
-            if (!this.imports.has(qualified)) {
-                if (qualified.indexOf(".") === -1) {
-                    this.appendMessage(
-                        "WARNING",
-                        `No import mapped for "${qualified}"`
-                    );
-                }
-                this.imports.add(qualified);
-            }
+            this.imports.add(qualified);
         }
     }
 

@@ -19,11 +19,13 @@ export abstract class SetterElement extends ElementTag {
                 (this.getVariableFromContext(mapName ?? field)?.count ?? 0) > 0;
             const { type, typeParams } = this.getBaseType();
             this.converter.addImport(type);
-            this.setVariableToContext({
-                name: mapName ?? field,
-                type,
-                typeParams,
-            });
+            if (this.shouldSetVariableToContext()) {
+                this.setVariableToContext({
+                    name: mapName ?? field,
+                    type,
+                    typeParams,
+                });
+            }
         }
     }
 
@@ -94,6 +96,9 @@ export abstract class SetterElement extends ElementTag {
 
     public abstract getType(): string | undefined;
     public abstract getField(): string | undefined;
+    protected shouldSetVariableToContext(): boolean {
+        return true;
+    }
 }
 
 export interface BaseSetterRawAttributes extends XMLSchemaElementAttributes {
