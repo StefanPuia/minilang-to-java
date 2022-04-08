@@ -5,6 +5,7 @@ import ConvertUtils from "./convert-utils";
 import { ElementFactory } from "./element-factory";
 import { BaseVariableHandler } from "../handlers/context/base-variables";
 import { ContextVariableFactory } from "../handlers/context/context-variable-factory";
+import { NEWLINE } from "../consts";
 
 export class Converter {
     private readonly source: string;
@@ -37,20 +38,16 @@ export class Converter {
         const lines = [
             this.getPackageName(),
             this.getImports(),
-            this.newLine(),
+            NEWLINE,
             ...converted,
-            this.newLine(),
+            NEWLINE,
         ].filter(Boolean);
         this.appendMessage(
             "INFO",
             this.getParseStats(this.source, start, new Date().getTime())
         );
 
-        return [...lines, ...this.getDisplayMessages()].join("\n");
-    }
-
-    private newLine() {
-        return "\n";
+        return [...lines, ...this.getDisplayMessages()].join(NEWLINE);
     }
 
     private getDisplayMessages(): string[] {
@@ -62,7 +59,7 @@ export class Converter {
     }
 
     private getParseStats(source: string, start: number, end: number): string {
-        return `Finished parsing ${source.split("\n").length} lines in ${(
+        return `Finished parsing ${source.split(NEWLINE).length} lines in ${(
             (end - start) /
             Math.pow(10, 3)
         ).toFixed(3)} seconds.`;
@@ -80,7 +77,7 @@ export class Converter {
         return Array.from(this.imports)
             .sort()
             .map((classPath) => `import ${classPath};`)
-            .join("\n");
+            .join(NEWLINE);
     }
 
     private extractClassIdentifiers(): [
@@ -98,7 +95,7 @@ export class Converter {
 
     private getPackageName(): string[] {
         const [packageName] = this.extractClassIdentifiers();
-        return [`package ${packageName || "com.minilang.to.java"};\n`];
+        return [`package ${packageName || "com.minilang.to.java"};${NEWLINE}`];
     }
 
     public getClassName(): string {

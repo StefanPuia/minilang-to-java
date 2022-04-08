@@ -1,3 +1,4 @@
+import { NEWLINE } from "../../consts";
 import { Converter } from "../../core/converter";
 import {
     StringBoolean,
@@ -25,8 +26,8 @@ export abstract class EntityElement extends SetterElement {
             return [
                 `UtilMisc.toMap(`,
                 ...conditions
-                    .join(",\n")
-                    .split("\n")
+                    .join(`,${NEWLINE}`)
+                    .split(NEWLINE)
                     .map(this.prependIndentationMapper),
                 `)`,
             ];

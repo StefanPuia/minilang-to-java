@@ -1,3 +1,4 @@
+import { NEWLINE } from "../consts";
 import { Tag } from "./tag";
 
 export class Comment extends Tag {
@@ -14,7 +15,7 @@ export class Comment extends Tag {
     }
 
     private stringComment(comment: string): string[] {
-        return comment.indexOf("\n") > -1
+        return comment.indexOf(NEWLINE) > -1
             ? this.multiLine(comment)
             : this.singleLine(comment);
     }
@@ -24,7 +25,7 @@ export class Comment extends Tag {
     }
 
     private multiLine(comment: string): string[] {
-        const lines = comment.split("\n").filter((it) => it.trim());
+        const lines = comment.split(NEWLINE).filter((it) => it.trim());
         const { indentation } = (lines[0] ?? "").match(/^(?<indentation>\s*)/)
             ?.groups ?? { indentation: "" };
         const regex = new RegExp(`^${indentation}`);
