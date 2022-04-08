@@ -1,13 +1,25 @@
-import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
+import express, { NextFunction, Request, Response } from "express";
+import expressWinston from "express-winston";
 import { join } from "path";
+import * as winston from "winston";
 import { Converter } from "../core/converter";
 import { ElementFactory } from "../core/element-factory";
+import prettyBytes from 'pretty-bytes';
 
 dotenv.config();
 
 const port = process.env.PORT ?? 5055;
 const app = express();
+
+app.use(
+    expressWinston.logger({
+        transports: [new winston.transports.Console()],
+        format: winston.format.simple(),
+        expressFormat: true,
+        meta: true,
+    })
+);
 
 app.use(
     express.json({
@@ -27,6 +39,9 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 app.post("/convert", (req, res) => {
+    const payloadSize = (req.body.input as string).length * 8;
+    const consoleLabel = `Convert ${prettyBytes(payloadSize)}`
+    console.time(consoleLabel);
     try {
         const output = Converter.convert({
             source: req.body.input,
@@ -35,16 +50,16 @@ app.post("/convert", (req, res) => {
             className: req.body.className,
             logging: {},
         });
-        res.json({
-            output: output,
-        });
+        res.json({ output });
     } catch (err: any) {
         console.log(err);
         res.json({ output: err.toString() });
+    } finally {
+        console.timeEnd(consoleLabel);
     }
 });
 
 app.listen(port, async () => {
     await ElementFactory.loadClasses();
-    console.log(`Server running on on port ${port}`);
+    console.log(`Listening on http://localhost:${port}`);
 });
