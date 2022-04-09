@@ -1,4 +1,4 @@
-import { NEWLINE } from "../consts";
+import { DEFAULT_MAP_TYPE, NEWLINE } from "../consts";
 import { BaseVariableHandler } from "../handlers/context/base-variables";
 import { ContextVariableFactory } from "../handlers/context/context-variable-factory";
 import { BaseErrorHandler } from "../handlers/error/base-error";
@@ -10,10 +10,10 @@ import {
     MethodMode,
     Position,
 } from "../types";
-import ConvertUtils from "./utils/convert-utils";
 import { ElementFactory } from "./element-factory";
-import { parseXML } from "./utils/xml-utils";
+import ConvertUtils from "./utils/convert-utils";
 import { qualify } from "./utils/import-utils";
+import { parseXML } from "./utils/xml-utils";
 
 export class Converter {
     private readonly source: string;
@@ -52,9 +52,15 @@ export class Converter {
         const lines = [
             this.getPackageName(),
             NEWLINE,
-            this.getImports(this.imports, (className) => `import ${className};`),
+            this.getImports(
+                this.imports,
+                (className) => `import ${className};`
+            ),
             NEWLINE,
-            this.getImports(this.staticImports, (className) => `import static ${className};`),
+            this.getImports(
+                this.staticImports,
+                (className) => `import static ${className};`
+            ),
             NEWLINE,
             ...converted,
             NEWLINE,
@@ -257,6 +263,9 @@ export class Converter {
                 return "String";
             }
             return "boolean";
+        }
+        if (ConvertUtils.mapMatch(field).mapName) {
+            return DEFAULT_MAP_TYPE;
         }
     }
 }

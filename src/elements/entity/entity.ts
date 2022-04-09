@@ -17,22 +17,10 @@ export abstract class EntityElement extends SetterElement {
         this.addException("GenericEntityException");
     }
 
-    protected getFromFieldMap() {
-        const conditions = this.parseChildren()
+    protected getFromFieldMap(): string[] {
+        return this.parseChildren()
             .filter((el) => el instanceof FieldMap)
             .map((el) => (el as FieldMap).convertOnlyValues());
-        if (conditions.length) {
-            this.converter.addImport("UtilMisc");
-            return [
-                `UtilMisc.toMap(`,
-                ...conditions
-                    .join(`,${NEWLINE}`)
-                    .split(NEWLINE)
-                    .map(this.prependIndentationMapper),
-                `)`,
-            ];
-        }
-        return [];
     }
 
     protected getSelectClause(): string[] {

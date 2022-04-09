@@ -33,7 +33,11 @@ export class BaseVariableHandler {
     }
 
     protected getReturnMapSource(): string[] {
-        return [];
+        this.converter.addImport("Map");
+        this.converter.addImport("HashMap");
+        return [
+            `Map<String, Object> _returnMap = new HashMap();`,
+        ];;
     }
 
     protected getDispatchContextSource(): string[] {

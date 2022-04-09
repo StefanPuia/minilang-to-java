@@ -9,5 +9,5 @@ export const cast = (
     // TODO: basic type verification
     if (!fromVariable) return "";
     const fromType = ContextUtils.getFullType(fromVariable);
-    return fromType !== toType ? `(${fromType}) ` : "";
+    return fromType !== toType ? `(${toType}) ` : "";
 };
