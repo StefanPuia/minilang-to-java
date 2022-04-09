@@ -36,7 +36,7 @@ export default class ConvertUtils {
 
     public static mapMatch(field: string) {
         const { mapName, fieldName } =
-            field.match(/^(?<mapName>\w.+?)\.(?<fieldName>\w.+)$/)?.groups ??
+            field.match(/^(?<mapName>\w.+?)\.(?<fieldName>\w.*)$/)?.groups ??
             {};
 
         return { mapName, fieldName };

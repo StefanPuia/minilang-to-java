@@ -1,6 +1,5 @@
-import { DEFAULT_TYPE } from "../../consts";
-import ConvertUtils from "../../core/utils/convert-utils";
 import { unqualify } from "../../core/utils/import-utils";
+import { guessFieldType } from "../../core/utils/type-utils";
 import { ValidationMap } from "../../core/validate";
 import { FlexibleMapAccessor, XMLSchemaElementAttributes } from "../../types";
 import { CallerElement } from "./caller";
@@ -27,12 +26,9 @@ export class CallClassMethod extends CallerElement {
     }
 
     public getType() {
-        const retField = this.getField();
-        return (
-            (retField && this.converter.guessFieldType(retField)) ||
-            DEFAULT_TYPE
-        );
+        return guessFieldType(this.getField());
     }
+
     public getField(): string | undefined {
         return this.getAttributes().retField;
     }

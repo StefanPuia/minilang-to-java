@@ -1,6 +1,6 @@
 import { DEFAULT_TYPE } from "../../../consts";
 import ConvertUtils from "../../../core/utils/convert-utils";
-import { cast } from "../../../core/utils/type-utils";
+import { cast, guessFieldType } from "../../../core/utils/type-utils";
 import { isNotUndefined } from "../../../core/utils/validate-utils";
 import {
     FlexibleMapAccessor,
@@ -25,8 +25,9 @@ export class ResultToField extends ResultTo {
     }
 
     public getType(): string {
-        return this.converter.guessFieldType(this.getField()) ?? DEFAULT_TYPE;
+        return guessFieldType(this.getField());
     }
+
     public getField(): string {
         return this.getAttributes().field ?? this.getResultAttribute();
     }

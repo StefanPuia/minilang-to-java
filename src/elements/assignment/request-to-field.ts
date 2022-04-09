@@ -1,4 +1,5 @@
 import { DEFAULT_TYPE } from "../../consts";
+import { guessFieldType } from "../../core/utils/type-utils";
 import { ValidationMap } from "../../core/validate";
 import {
     FlexibleMapAccessor,
@@ -30,7 +31,7 @@ export class RequestToField extends ElementTag {
     }
 
     public getType(): string {
-        return this.converter.guessFieldType(this.getField()) ?? DEFAULT_TYPE;
+        return guessFieldType(this.getField());
     }
 
     public getField(): string {

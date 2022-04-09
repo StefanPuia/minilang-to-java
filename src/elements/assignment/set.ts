@@ -10,6 +10,7 @@ import {
 import { Tag } from "../tag";
 import { SetterElement } from "./setter";
 import { DEFAULT_TYPE } from "../../consts";
+import { guessFieldType } from "../../core/utils/type-utils";
 
 export class SetElement extends SetterElement {
     public static readonly TAG = "set";
@@ -119,7 +120,7 @@ export class SetElement extends SetterElement {
     public getType() {
         const selfType =
             this.getAttributes().type ??
-            this.converter.guessFieldType(
+            guessFieldType(
                 this.getAttributes().field,
                 this.getAttributes().value
             );

@@ -252,22 +252,6 @@ export class Converter {
         }
         if (value) return this.parseValue(value);
     }
-
-    public guessFieldType(field: string, val?: any) {
-        const value = ConvertUtils.stripQuotes(val);
-        if (field.startsWith("is") || field.startsWith("has")) {
-            if (value) {
-                if (["true", "false"].includes(value) || value.includes("(")) {
-                    return "boolean";
-                }
-                return "String";
-            }
-            return "boolean";
-        }
-        if (ConvertUtils.mapMatch(field).mapName) {
-            return DEFAULT_MAP_TYPE;
-        }
-    }
 }
 
 interface Message {
