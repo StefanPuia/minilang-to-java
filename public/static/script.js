@@ -12,6 +12,7 @@ const checkboxKeyMap = {
     converter_replicateMinilang: "editor.converter.replicateMinilang",
 }
 
+migrateStorage();
 initAceEditors();
 addSubmitConvertListener();
 loadStoredData();
@@ -60,13 +61,13 @@ function addSubmitConvertListener() {
                     className: $className.value,
                     methodMode: $methodMode.value,
                     logging: {
-                        deprecated: getBoolean("editor.logging.deprecated"),
-                        info: getBoolean("editor.logging.info"),
-                        warning: getBoolean("editor.logging.warning"),
+                        deprecated: getBoolean(checkboxKeyMap.logging_deprecated),
+                        info: getBoolean(checkboxKeyMap.logging_info),
+                        warning: getBoolean(checkboxKeyMap.logging_warning),
                     },
                     converter: {
-                        authServices: getBoolean("editor.converter.authServices"),
-                        replicateMinilang: getBoolean("editor.converter.replicateMinilang"),
+                        authServices: getBoolean(checkboxKeyMap.converter_authServices),
+                        replicateMinilang: getBoolean(checkboxKeyMap.converter_replicateMinilang),
                     },
                 }),
             })
@@ -128,4 +129,16 @@ function addOptionsListeners() {
             store(storageKey, e.currentTarget.checked);
         });
     });
+}
+
+function migrateStorage() {
+    const storeVersion = (v) => store("storage.version", v);
+    const version = get("storage.version") || "000";
+
+    if (version < "001") {
+        store(checkboxKeyMap.logging_deprecated, true);
+        store(checkboxKeyMap.logging_info, true);
+        store(checkboxKeyMap.logging_warning, true);
+        storeVersion("001");
+    }
 }
