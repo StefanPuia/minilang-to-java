@@ -4,6 +4,7 @@ import { XMLSchemaAnyElement, XMLSchemaElementAttributes } from "../../types";
 import { ElementTag } from "../element-tag";
 import { Tag } from "../tag";
 import { unqualify } from "../../core/utils/import-utils";
+import { getTypeWithParams } from "../../core/utils/type-utils";
 
 export abstract class SetterElement extends ElementTag {
     protected declared = false;
@@ -85,13 +86,7 @@ export abstract class SetterElement extends ElementTag {
         const selfType =
             (field && this.getVariableFromContext(field)?.type) ||
             this.getType();
-        const { type, params } =
-            (selfType ?? "").match(/^(?<type>\w+)(?:\<(?<params>.+?)\>)?$/)
-                ?.groups ?? {};
-        return {
-            type: type ?? selfType,
-            typeParams: (params && params.replace(/\s/g, "").split(",")) || [],
-        };
+        return getTypeWithParams(selfType);
     }
 
     public abstract getType(): string | undefined;

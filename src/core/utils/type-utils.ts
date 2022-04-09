@@ -33,3 +33,13 @@ export const guessFieldType = (field?: string, val?: any): string => {
     }
     return DEFAULT_TYPE;
 };
+
+export const getTypeWithParams = (fullType?: string) => {
+    const { type, params } =
+        (fullType ?? "").match(/^(?<type>\w+)(?:\<(?<params>.+?)\>)?$/)
+            ?.groups ?? {};
+    return {
+        type: type ?? fullType,
+        typeParams: (params && params.replace(/\s/g, "").split(",")) || [],
+    };
+};

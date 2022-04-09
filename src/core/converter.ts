@@ -1,6 +1,5 @@
-import { DEFAULT_MAP_TYPE, NEWLINE } from "../consts";
+import { NEWLINE } from "../consts";
 import { BaseVariableHandler } from "../handlers/context/base-variables";
-import { ContextVariableFactory } from "../handlers/context/context-variable-factory";
 import { BaseErrorHandler } from "../handlers/error/base-error";
 import { ErrorHandlerFactory } from "../handlers/error/error-handler-factory";
 import {
@@ -178,14 +177,6 @@ export class Converter {
             this.errorHandler = ErrorHandlerFactory.getHandler(this);
         }
         return this.errorHandler;
-    }
-
-    public getContextVariableHandler() {
-        if (!this.contextVariableHandler) {
-            this.contextVariableHandler =
-                ContextVariableFactory.getHandler(this);
-        }
-        return this.contextVariableHandler;
     }
 
     public getMethodMode() {

@@ -1,41 +1,47 @@
 import { BaseVariableHandler } from "./base-variables";
-import { VariableContext } from "../../types";
+import { ContextVariable } from "./variables/context-variable";
+import { Delegator } from "./variables/delegator";
+import { Dispatcher } from "./variables/dispatcher";
+import { Locale } from "./variables/locale";
+import { Parameters } from "./variables/parameters";
+import { ReturnMap } from "./variables/return-map";
+import { TimeZone } from "./variables/time-zone";
+import { UserLogin } from "./variables/user-login";
 
 export class ServiceVariableHandler extends BaseVariableHandler {
-    protected getDelegatorSource(): string[] {
-        return [`Delegator delegator = dctx.getDelegator();`];
-    }
-
-    protected getDispatcherSource(): string[] {
-        return [`LocalDispatcher dispatcher = dctx.getDispatcher();`];
-    }
-
-    protected getParametersSource(): string[] {
-        this.converter.addImport("HashMap");
-        return [`Map<String, Object> parameters = new HashMap<>(context);`];
-    }
-
-    protected getUserLoginSource(): string[] {
+    public getVariables(): ContextVariable[] {
         return [
-            `GenericValue userLogin = (GenericValue) context.get("userLogin");`,
+            new Delegator(this.converter, this.context, "dctx.getDelegator()"),
+            new Dispatcher(
+                this.converter,
+                this.context,
+                "dctx.getDispatcher()"
+            ),
+            new Parameters(
+                this.converter,
+                this.context,
+                "new HashMap<>(context)"
+            ),
+            new UserLogin(
+                this.converter,
+                this.context,
+                `(GenericValue) context.get("userLogin")`
+            ),
+            new Locale(
+                this.converter,
+                this.context,
+                `(Locale) context.get("locale")`
+            ),
+            new TimeZone(
+                this.converter,
+                this.context,
+                `(TimeZone) context.get("timeZone")`
+            ),
+            new ReturnMap(
+                this.converter,
+                this.context,
+                `ServiceUtil.returnSuccess()`
+            ),
         ];
-    }
-
-    protected getLocaleSource(): string[] {
-        return [`Locale locale = (Locale) context.get("locale");`];
-    }
-    protected getTimeZoneSource(): string[] {
-        return [`TimeZone timeZone = (TimeZone) context.get("timeZone");`];
-    }
-
-    protected getReturnMapSource(): string[] {
-        this.converter.addImport("ServiceUtil");
-        return [
-            `Map<String, Object> _returnMap = ServiceUtil.returnSuccess();`,
-        ];
-    }
-
-    protected getDispatchContextSource(): string[] {
-        return [];
     }
 }
