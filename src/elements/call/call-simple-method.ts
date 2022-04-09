@@ -29,8 +29,10 @@ export class CallSimpleMethod extends SetterElement {
         this.converter.addImport("Map");
         return DEFAULT_MAP_TYPE;
     }
-    public getField(): string {
-        return `${this.getAttributes().methodName}Result`;
+    public getField(): string | undefined {
+        if (this.findChild(ResultToField.TAG)) {
+            return `${this.getAttributes().methodName}Result`;
+        }
     }
     public convert(): string[] {
         const results = this.getResults();
@@ -51,10 +53,14 @@ export class CallSimpleMethod extends SetterElement {
     }
 
     private getResults(): string[] {
+        const field = this.getField();
+        if (!field) {
+            return [];
+        }
         return this.parseChildren()
             .filter((el) => el.getTagName() === "result-to-field")
             .map((el) => {
-                (el as ResultToField).setFromField(this.getField());
+                (el as ResultToField).setFromField(field);
                 return el.convert();
             })
             .flat();

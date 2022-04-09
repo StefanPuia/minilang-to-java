@@ -78,15 +78,7 @@ export abstract class EntityElement extends SetterElement {
     protected getWhereClause(): string[] {
         const fieldMap = this.getFromFieldMap();
         if (!fieldMap) return [];
-        return fieldMap.map((line, index, array) => {
-            if (index === 0) {
-                line = `.where(${line}`;
-            }
-            if (index === array.length - 1) {
-                line = `${line})`;
-            }
-            return line;
-        });
+        return [`.where(${fieldMap.join(", ")})`];
     }
 
     protected getEcbName() {
