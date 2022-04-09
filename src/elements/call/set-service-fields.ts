@@ -51,25 +51,38 @@ export class SetServiceFields extends SetterElement {
         const targetMap =
             ConvertUtils.parseFieldGetter(this.getField()) ?? this.getField();
         return [
-            ...SetElement.getErrorMessageListDeclaration(
+            ...this.getErrorMessageListDeclaration(),
+            ...this.wrapConvert(
+                `dctx.getModelService("${
+                    this.getAttributes().serviceName
+                }").makeValid(${this.getParameters()})`
+            ),
+        ];
+    }
+    private getErrorMessageListDeclaration(): string[] {
+        if (this.converter.config.replicateMinilang) {
+            return SetElement.getErrorMessageListDeclaration(
                 this.getErrorMessageListParameter(),
                 this.converter,
                 this.parent
-            ),
-            ...this.wrapConvert(this.converter.parseValue("NewMap")),
-            `${targetMap}.putAll(dctx.getModelService("${
-                this.getAttributes().serviceName
-            }").makeValid(${this.getParameters()}));`,
-        ];
+            );
+        }
+        return [];
     }
 
     private getParameters(): string {
         this.setVariableToContext({ name: "locale" });
         this.setVariableToContext({ name: "timeZone" });
-        return [
+        const fromMap =
             ConvertUtils.parseFieldGetter(this.getAttributes().map) ??
-                this.getAttributes().map,
-            `"${this.getAttributes().mode}"`,
+            this.getAttributes().map;
+        const mode = `"${this.getAttributes().mode}"`;
+        if (!this.converter.config.replicateMinilang) {
+            return [fromMap, mode].join(", ");
+        }
+        return [
+            fromMap,
+            mode,
             "true",
             this.getErrorMessageListParameter(),
             "timeZone",
