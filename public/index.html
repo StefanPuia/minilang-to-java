@@ -5,6 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>OFBiz Minilang to Java</title>
+
         <link rel="stylesheet" href="/static/style.css" />
     </head>
     <body>
@@ -32,7 +33,54 @@
                     <option value="EVENT">Events</option>
                     <option value="GENERIC">Utility Methods</option>
                 </select>
+                <button id="toggle_options">Options</button>
                 <button id="submit">Convert</button>
+            </div>
+        </div>
+
+        <div id="options_wrapper">
+            <div id="options">
+                <div id="logging">
+                    <h3>Logging level:</h3>
+                    <label for="logging_deprecated">
+                        <input type="checkbox" id="logging_deprecated" />
+                        Deprecated
+                    </label>
+                    <label for="logging_info">
+                        <input type="checkbox" id="logging_info" />
+                        Info
+                    </label>
+                    <label for="logging_warning">
+                        <input type="checkbox" id="logging_warning" />
+                        Warning
+                    </label>
+                    <label for="logging_error" title="Error logging cannot be disabled.">
+                        <input
+                            type="checkbox"
+                            id="logging_error"
+                            checked
+                            disabled
+                        />
+                        Error
+                    </label>
+                </div>
+                <div id="converter">
+                    <h3>Converter options:</h3>
+                    <label for="converter_authServices">
+                        <input type="checkbox" id="converter_authServices" />
+                        Authenticate services automatically
+                    </label>
+                    <label for="converter_replicateMinilang">
+                        <input
+                            type="checkbox"
+                            id="converter_replicateMinilang"
+                        />
+                        Replicate the actual minilang behaviour
+                    </label>
+                </div>
+                <div id="options_actions">
+                    <button id="options_actions_save">Close</button>
+                </div>
             </div>
         </div>
 

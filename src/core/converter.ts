@@ -34,14 +34,14 @@ export class Converter {
         this.className = init.className;
         this.loggingConfig = {
             ERROR: true,
-            WARNING: true,
-            DEPRECATE: true,
-            INFO: true,
-            ...init.logging,
+            WARNING: init.logging.warning ?? true,
+            DEPRECATE: init.logging.deprecated ?? true,
+            INFO: init.logging.info ?? true,
         };
         this.config = {
-            authenticateServicesAutomatically: false,
-            replicateMinilang: false,
+            authenticateServicesAutomatically:
+                init.converter.authServices ?? false,
+            replicateMinilang: init.converter.replicateMinilang ?? false,
         };
     }
 
@@ -65,10 +65,7 @@ export class Converter {
             ...converted,
             NEWLINE,
         ].filter(Boolean);
-        this.appendMessage(
-            "INFO",
-            this.getParseStats(this.source, start, new Date().getTime())
-        );
+        this.appendParseStats(start);
 
         return [...lines, ...this.getDisplayMessages()]
             .join(NEWLINE)
@@ -83,11 +80,13 @@ export class Converter {
             );
     }
 
-    private getParseStats(source: string, start: number, end: number): string {
-        return `Finished parsing ${source.split(NEWLINE).length} lines in ${(
-            (end - start) /
-            1000
-        ).toFixed(3)} seconds.`;
+    private appendParseStats(start: number) {
+        const end = new Date().getTime();
+        const timing = (end - start) / 1000;
+        const timingLine = `Finished parsing ${
+            this.source.split(NEWLINE).length
+        } lines in ${timing.toFixed(3)} seconds.`;
+        this.appendMessage(timing < 0.2 ? "INFO" : "WARNING", timingLine);
     }
 
     public getLineCol(position?: Position): string {

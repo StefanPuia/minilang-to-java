@@ -83,10 +83,18 @@ export type JavaClassName = string;
 export type MessageType = "ERROR" | "WARNING" | "INFO" | "DEPRECATE";
 
 export interface ConverterInit {
-    source: string,
-    methodMode: MethodMode,
-    className?: string,
-    logging: Partial<Record<MessageType, boolean>>
+    source: string;
+    methodMode: MethodMode;
+    className?: string;
+    logging: Partial<{
+        deprecated: boolean;
+        info: boolean;
+        warning: boolean;
+    }>;
+    converter: Partial<{
+        authServices: boolean;
+        replicateMinilang: boolean;
+    }>;
 }
 
 export interface ConvertConfig {

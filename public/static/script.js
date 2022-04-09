@@ -1,7 +1,22 @@
+const $ = (...args) => document.querySelector(...args);
+const aceSession = (id) => ace.edit(id).getSession();
+const store = (key, val) => localStorage.setItem(key, val);
+const get = (key) => localStorage.getItem(key) ?? "";
+const getBoolean = (key) => localStorage.getItem(key) === "true";
+
+const checkboxKeyMap = {
+    logging_deprecated: "editor.logging.deprecated",
+    logging_info: "editor.logging.info",
+    logging_warning: "editor.logging.warning",
+    converter_authServices: "editor.converter.authServices",
+    converter_replicateMinilang: "editor.converter.replicateMinilang",
+}
+
 initAceEditors();
 addSubmitConvertListener();
 loadStoredData();
 addEditorCollapseListener();
+addOptionsListeners();
 
 function initAceEditors() {
     const options = {
@@ -23,12 +38,12 @@ function initAceEditors() {
 }
 
 function addSubmitConvertListener() {
-    const $className = document.querySelector("#className");
-    document.querySelector("#submit").addEventListener("click", async () => {
+    const $className = $("#className");
+    $("#submit").addEventListener("click", async () => {
         try {
-            document.querySelector("#submit").disabled = "disabled";
-            const $methodMode = document.querySelector("#mode");
-            const input = ace.edit("input").getSession().getValue();
+            $("#submit").disabled = "disabled";
+            const $methodMode = $("#mode");
+            const input = aceSession("input").getValue();
 
             localStorage.setItem("editor.inputText", input);
             localStorage.setItem("editor.className", $className.value);
@@ -44,33 +59,43 @@ function addSubmitConvertListener() {
                     input,
                     className: $className.value,
                     methodMode: $methodMode.value,
+                    logging: {
+                        deprecated: getBoolean("editor.logging.deprecated"),
+                        info: getBoolean("editor.logging.info"),
+                        warning: getBoolean("editor.logging.warning"),
+                    },
+                    converter: {
+                        authServices: getBoolean("editor.converter.authServices"),
+                        replicateMinilang: getBoolean("editor.converter.replicateMinilang"),
+                    },
                 }),
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    ace.edit("output").getSession().setValue(data?.output ?? data);
+                    aceSession("output").setValue(data?.output ?? data);
                 })
         } catch (err) {
             console.trace(err);
-            ace.edit("output").getSession().setValue(err.toString());
+            aceSession("output").setValue(err.toString());
         } finally {
-            document.querySelector("#submit").disabled = undefined;
+            $("#submit").disabled = undefined;
         }
     });
 }
 
 function loadStoredData() {
-    ace.edit("input")
-        .getSession()
-        .setValue(localStorage.getItem("editor.inputText") ?? "");
-    document.querySelector("#className").value = localStorage.getItem("editor.className") ?? "";
-    document.querySelector("#mode").value = localStorage.getItem("editor.methodMode");
+    aceSession("input").setValue(get("editor.inputText") ?? "");
+    $("#className").value = get("editor.className") ?? "";
+    $("#mode").value = get("editor.methodMode");
+    Object.entries(checkboxKeyMap).forEach(([selector, storageKey]) => {
+        $(`#${selector}`).checked = getBoolean(storageKey);
+    });
 }
 
 function addEditorCollapseListener() {
-    const $splitSizes = document.querySelector("#controls #splitSizes");
+    const $splitSizes = $("#controls #splitSizes");
     $splitSizes.addEventListener("input", (e) => {
-        const $container = document.querySelector("#container");
+        const $container = $("#container");
         const sizeMap = {
             [-1]: "10em 1fr",
             [0]: "1fr 1fr",
@@ -78,11 +103,29 @@ function addEditorCollapseListener() {
         };
         $container.style.gridTemplateColumns = sizeMap[$splitSizes.value];
         ["input", "output"].forEach((el) => {
-            const session = ace.edit(el).getSession();
+            const session = aceSession(el);
             session.setWrapLimitRange(
                 Math.max(session.getScreenLength(), 10),
                 null
             );
+        });
+    });
+}
+
+function addOptionsListeners() {
+    const $options = $("#options_wrapper");
+    const toggleOptions = (e) => {
+        if ($options.style.display !== "grid") {
+            $options.style.display = "grid";
+        } else {
+            $options.style.display = "none";
+        }
+    };
+    $("#toggle_options").addEventListener("click", toggleOptions);
+    $("#options_actions_save").addEventListener("click", toggleOptions);
+    Object.entries(checkboxKeyMap).forEach(([selector, storageKey]) => {
+        $(`#${selector}`).addEventListener("change", (e) => {
+            store(storageKey, e.currentTarget.checked);
         });
     });
 }

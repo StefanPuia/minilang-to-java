@@ -48,7 +48,8 @@ app.post("/convert", (req, res) => {
             source: req.body.input,
             methodMode: req.body.methodMode,
             className: req.body.className,
-            logging: {},
+            logging: req.body.logging,
+            converter: req.body.converter,
         });
         res.json({ output });
     } catch (err: any) {
