@@ -9,7 +9,7 @@ import prettyBytes from 'pretty-bytes';
 
 dotenv.config();
 
-const port = process.env.PORT ?? 5055;
+const port = process.env.PORT ?? 8080;
 const app = express();
 
 app.use(
