@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="PMD Rules"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+    <description/>
+
+    <rule ref="category/java/errorprone.xml">
+        <exclude
+            name="BeanMembersShouldSerialize"/> <!-- Contradicts standard Spring class design. -->
+        <exclude name="DataflowAnomalyAnalysis"/> <!-- Rule is officially deprecated in PMD -->
+        <exclude
+            name="MissingSerialVersionUID"/> <!-- Produces too many false positives in Immutables classes -->
+        <exclude
+            name="CloneThrowsCloneNotSupportedException"/> <!-- Effective Java recommends NOT declaring this exception -->
+    </rule>
+
+    <rule ref="category/java/bestpractices.xml">
+        <exclude
+            name="JUnitTestsShouldIncludeAssert"/> <!-- Does not consider AssertJ's BDDAssertions. -->
+    </rule>
+
+    <rule ref="category/java/codestyle.xml">
+        <exclude name="AtLeastOneConstructor"/> <!-- Contradicts standard Spring class design. -->
+        <exclude name="ShortClassName"/> <!-- Reconfigured below -->
+        <exclude name="LongVariable"/> <!-- Reconfigured below -->
+        <exclude name="TooManyStaticImports"/> <!-- Removed via team agreement -->
+    </rule>
+
+    <rule ref="category/java/codestyle.xml/ShortClassName">
+        <properties>
+            <property name="minimum" value="3"/>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/codestyle.xml/LongVariable">
+        <properties>
+            <property name="minimum" value="50"/>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/design.xml">
+        <exclude name="UseUtilityClass"/> <!-- Requires special configuration, see below -->
+        <exclude name="LawOfDemeter"/> <!-- Produces too many false positives -->
+        <exclude name="LoosePackageCoupling"/> <!-- Can't be used without configuration -->
+        <exclude
+            name="DataClass"/> <!-- Spring's @Configuration Properties will not work with this rule active -->
+    </rule>
+
+    <rule ref="category/java/design.xml/UseUtilityClass">
+        <properties>
+            <property name="ignoredAnnotations"
+                value="org.springframework.boot.autoconfigure.SpringBootApplication|lombok.experimental.UtilityClass"/>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/codestyle.xml/ClassNamingConventions">
+        <properties>
+            <property name="utilityClassPattern" value="[A-Z][a-zA-Z0-9]+(Utils?|Helper|Constants|Factory)" />
+        </properties>
+    </rule>
+
+    <rule ref="category/java/multithreading.xml"/>
+
+    <rule ref="category/java/performance.xml"/>
+
+    <rule ref="category/java/security.xml"/>
+</ruleset>
+
