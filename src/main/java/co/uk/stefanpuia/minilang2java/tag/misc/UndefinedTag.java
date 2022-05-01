@@ -18,16 +18,14 @@ public class UndefinedTag extends Tag {
   }
 
   private List<String> singleLine() {
-    return List.of(
-        format("// Unparsed tag [%s]:%s", this.element.getTagName(), this.position.line()));
+    return List.of(format("// Unparsed tag [%s]:%s", this.getTagName(), this.position.line()));
   }
 
   private List<String> multipleChildren() {
     final var converted = new ArrayList<String>();
-    converted.add(
-        format("// Begin unparsed tag [%s]:%s", this.element.getTagName(), this.position.line()));
+    converted.add(format("// Begin unparsed tag [%s]:%s", this.getTagName(), this.position.line()));
     converted.addAll(convertChildren().stream().map(this::prependIndentation).toList());
-    converted.add(format("// End unparsed tag [%s]", this.element.getTagName()));
+    converted.add(format("// End unparsed tag [%s]", this.getTagName()));
     return converted;
   }
 }

@@ -12,6 +12,8 @@ import java.util.stream.Stream;
 
 public abstract class SimpleMethod extends Tag {
 
+  public static final String SIMPLE_METHOD = "simple-method";
+  public static final String DEFAULT_GENERATED_METHOD_NAME = "generatedMethodName";
   protected final List<MethodContextVariable> methodContextVariables = new ArrayList<>();
 
   public SimpleMethod(final TagInit tagInit) {
@@ -64,8 +66,9 @@ public abstract class SimpleMethod extends Tag {
 
   protected abstract String getParameters();
 
-  private String getMethodName() {
-    return OptionalString.of(element.getAttribute("method-name")).orElse("generatedMethodName");
+  protected String getMethodName() {
+    return OptionalString.of(element.getAttribute("method-name"))
+        .orElse(DEFAULT_GENERATED_METHOD_NAME);
   }
 
   protected abstract String getReturnType();

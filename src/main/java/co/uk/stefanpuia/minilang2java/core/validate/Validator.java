@@ -1,7 +1,7 @@
 package co.uk.stefanpuia.minilang2java.core.validate;
 
-import static co.uk.stefanpuia.minilang2java.core.model.MessageType.ERROR;
-import static co.uk.stefanpuia.minilang2java.core.model.MessageType.WARNING;
+import static co.uk.stefanpuia.minilang2java.core.model.MessageType.VALIDATION_ERROR;
+import static co.uk.stefanpuia.minilang2java.core.model.MessageType.VALIDATION_WARNING;
 
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ValidationRule;
@@ -20,11 +20,11 @@ public abstract class Validator<T extends ValidationRule> {
   }
 
   protected final void addError(final String message) {
-    context.addMessage(ERROR, message, tag.getPosition());
+    context.addMessage(VALIDATION_ERROR, message, tag.getPosition());
   }
 
   protected final void addWarning(final String message) {
-    context.addMessage(WARNING, message, tag.getPosition());
+    context.addMessage(VALIDATION_WARNING, message, tag.getPosition());
   }
 
   @SuppressWarnings("unchecked")

@@ -1,8 +1,8 @@
-package co.uk.stefanpuia.minilang2java.core.xml;
+package co.uk.stefanpuia.minilang2java.core.xml.impl;
 
 import static org.assertj.core.api.BDDAssertions.then;
 
-import co.uk.stefanpuia.minilang2java.core.xml.AbstractElement.EmptyNodeList;
+import co.uk.stefanpuia.minilang2java.core.xml.impl.AbstractElement.EmptyNodeList;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 

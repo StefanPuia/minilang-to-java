@@ -5,4 +5,6 @@ public enum MessageType {
   WARNING,
   INFO,
   DEPRECATE,
+  VALIDATION_ERROR,
+  VALIDATION_WARNING,
 }

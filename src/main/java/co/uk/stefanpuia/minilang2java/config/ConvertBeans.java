@@ -1,8 +1,10 @@
 package co.uk.stefanpuia.minilang2java.config;
 
 import static javax.xml.XMLConstants.FEATURE_SECURE_PROCESSING;
+import static org.springframework.web.context.WebApplicationContext.SCOPE_APPLICATION;
 import static org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST;
 
+import co.uk.stefanpuia.minilang2java.core.TagFactory;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.convert.context.DefaultConversionContext;
 import co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalParserHandler;
@@ -30,9 +32,9 @@ public class ConvertBeans {
 
   @Bean
   @Scope(SCOPE_REQUEST)
-  public PositionalParserHandler buildPositionalParserHandler(final ConversionContext context)
+  public PositionalParserHandler buildPositionalParserHandler()
       throws ParserConfigurationException {
-    return new PositionalParserHandler(context, buildDocument());
+    return new PositionalParserHandler(buildDocument());
   }
 
   @Bean
@@ -43,10 +45,16 @@ public class ConvertBeans {
 
   @Bean
   @Scope(SCOPE_REQUEST)
-  public PositionalXMLReader buildPositionalXMLReader(final ConversionInit config)
+  public PositionalXMLReader buildPositionalXMLReader(final ConversionContext context)
       throws ParserConfigurationException, SAXException {
     return new PositionalXMLReader(
-        buildPositionalParserHandler(buildConversionContext(config)), buildXmlParser());
+        context, buildPositionalParserHandler(), buildXmlParser(), buildTagFactory());
+  }
+
+  @Bean
+  @Scope(SCOPE_APPLICATION)
+  public TagFactory buildTagFactory() {
+    return new TagFactory();
   }
 
   @Bean

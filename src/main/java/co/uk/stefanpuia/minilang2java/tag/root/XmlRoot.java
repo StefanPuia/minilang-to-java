@@ -5,6 +5,8 @@ import static java.lang.String.format;
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
+import co.uk.stefanpuia.minilang2java.tag.root.method.GeneratedMethod;
+import co.uk.stefanpuia.minilang2java.tag.root.method.SimpleMethod;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +17,22 @@ public class XmlRoot extends Tag {
     super(tagInit);
   }
 
+  private void wrapWithSimpleMethod() {
+    if (children.stream().anyMatch(this::tagIsNotSimpleMethod)) {
+      final var method = GeneratedMethod.createTag(conversionContext, this);
+      children.stream().filter(this::tagIsNotSimpleMethod).forEach(method::appendChild);
+      children.removeIf(this::tagIsNotSimpleMethod);
+      appendChild(method);
+    }
+  }
+
+  private boolean tagIsNotSimpleMethod(final Tag tag) {
+    return !SimpleMethod.class.isAssignableFrom(tag.getClass());
+  }
+
   @Override
   public List<String> convert() {
+    wrapWithSimpleMethod();
     final List<String> output = new ArrayList<>();
     final List<String> children =
         this.convertChildren().stream().map(this::prependIndentation).toList();
@@ -57,5 +73,20 @@ public class XmlRoot extends Tag {
   @Override
   protected boolean hasOwnContext() {
     return true;
+  }
+
+  @Override
+  public List<String> convertChildren() {
+    return this.children.stream()
+        .map(Tag::convert)
+        .map(this::appendNewline)
+        .flatMap(List::stream)
+        .toList();
+  }
+
+  private List<String> appendNewline(final List<String> list) {
+    final var lines = new ArrayList<>(list);
+    lines.add("");
+    return lines;
   }
 }

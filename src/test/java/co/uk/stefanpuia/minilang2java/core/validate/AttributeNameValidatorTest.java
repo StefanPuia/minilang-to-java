@@ -1,8 +1,8 @@
 package co.uk.stefanpuia.minilang2java.core.validate;
 
 import static co.uk.stefanpuia.minilang2java.TestObjects.conversionContext;
-import static co.uk.stefanpuia.minilang2java.core.model.MessageType.ERROR;
-import static co.uk.stefanpuia.minilang2java.core.model.MessageType.WARNING;
+import static co.uk.stefanpuia.minilang2java.core.model.MessageType.VALIDATION_ERROR;
+import static co.uk.stefanpuia.minilang2java.core.model.MessageType.VALIDATION_WARNING;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.Mockito.doReturn;
 
@@ -37,7 +37,7 @@ class AttributeNameValidatorTest {
 
     // Then
     then(context.getMessages()).hasSize(1);
-    then(context.getMessages().get(0)).extracting(Message::messageType).isEqualTo(ERROR);
+    then(context.getMessages().get(0)).extracting(Message::messageType).isEqualTo(VALIDATION_ERROR);
     then(context.getMessages().get(0))
         .extracting(Message::message)
         .matches(str -> str.contains("is missing required attribute"), "error message")
@@ -75,7 +75,7 @@ class AttributeNameValidatorTest {
 
     // Then
     then(context.getMessages()).hasSize(1);
-    then(context.getMessages().get(0)).extracting(Message::messageType).isEqualTo(ERROR);
+    then(context.getMessages().get(0)).extracting(Message::messageType).isEqualTo(VALIDATION_ERROR);
     then(context.getMessages().get(0))
         .extracting(Message::message)
         .matches(str -> str.contains("requires at least one of the"), "error message")
@@ -114,7 +114,9 @@ class AttributeNameValidatorTest {
 
     // Then
     then(context.getMessages()).hasSize(1);
-    then(context.getMessages().get(0)).extracting(Message::messageType).isEqualTo(WARNING);
+    then(context.getMessages().get(0))
+        .extracting(Message::messageType)
+        .isEqualTo(VALIDATION_WARNING);
     then(context.getMessages().get(0))
         .extracting(Message::message)
         .matches(str -> str.contains("Extra attribute"), "warn message")
@@ -151,7 +153,7 @@ class AttributeNameValidatorTest {
     then(context.getMessages())
         .hasSize(3)
         .extracting(Message::messageType)
-        .containsExactlyInAnyOrder(ERROR, ERROR, WARNING);
+        .containsExactlyInAnyOrder(VALIDATION_ERROR, VALIDATION_ERROR, VALIDATION_WARNING);
 
     then(context.getMessages())
         .anyMatch(

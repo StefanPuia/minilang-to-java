@@ -1,12 +1,12 @@
 package co.uk.stefanpuia.minilang2java.core.validate;
 
 import static co.uk.stefanpuia.minilang2java.TestObjects.conversionContext;
+import static co.uk.stefanpuia.minilang2java.core.model.MessageType.VALIDATION_ERROR;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.Mockito.doReturn;
 
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.convert.context.Message;
-import co.uk.stefanpuia.minilang2java.core.model.MessageType;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.AttributeValueRule;
 import co.uk.stefanpuia.minilang2java.impl.AttributeElement;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
@@ -38,6 +38,7 @@ class AttributeValueValidatorTest {
   @Test
   void shouldAddErrorWhenAttributeValueNotValid() {
     // Given
+    doReturn("!test-attributes").when(tag).getTagName();
     doReturn(new AttributeElement(Map.of("foo", "bar"))).when(tag).getElement();
     doReturn(List.of(new AttributeValueRule("foo", List.of("some-1", "some-2"))))
         .when(tag)
@@ -49,9 +50,7 @@ class AttributeValueValidatorTest {
 
     // Then
     then(context.getMessages()).hasSize(1);
-    then(context.getMessages().get(0))
-        .extracting(Message::messageType)
-        .isEqualTo(MessageType.ERROR);
+    then(context.getMessages().get(0)).extracting(Message::messageType).isEqualTo(VALIDATION_ERROR);
     then(context.getMessages().get(0))
         .extracting(Message::message)
         .isEqualTo(
@@ -77,6 +76,7 @@ class AttributeValueValidatorTest {
   @Test
   void shouldAddErrorsWhenMultipleAttributeValuesNotValid() {
     // Given
+    doReturn("!test-attributes").when(tag).getTagName();
     doReturn(new AttributeElement(Map.of("attr1", "someText", "attr2", "someOtherText")))
         .when(tag)
         .getElement();
@@ -95,7 +95,7 @@ class AttributeValueValidatorTest {
     then(context.getMessages()).hasSize(2);
     then(context.getMessages())
         .extracting(Message::messageType)
-        .containsExactly(MessageType.ERROR, MessageType.ERROR);
+        .containsExactly(VALIDATION_ERROR, VALIDATION_ERROR);
     then(context.getMessages().get(0))
         .extracting(Message::message)
         .isEqualTo(

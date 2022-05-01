@@ -38,10 +38,7 @@ public class AttributeValueValidator extends Validator<AttributeValueRule> {
                       format(
                           "Value [%s] is not valid for attribute [%s] of tag [%s]. Should be one of"
                               + " [%s]",
-                          value,
-                          rule.name(),
-                          tag.getElement().getTagName(),
-                          String.join(", ", rule.values())));
+                          value, rule.name(), tag.getTagName(), String.join(", ", rule.values())));
                 }
               }
             });

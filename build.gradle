@@ -39,6 +39,7 @@ dependencies {
     testImplementation libs.assertj.core
     testImplementation libs.bundles.junit.jupiter
     testImplementation libs.mockito.jupiter
+    testImplementation libs.spring.boot.starter.test
 }
 
 test {
@@ -118,7 +119,7 @@ jacocoTestCoverageVerification {
                         'co.uk.stefanpuia.minilang2java.config.ConversionServiceAdapter',
                         'co.uk.stefanpuia.minilang2java.config.ConvertBeans',
                         'co.uk.stefanpuia.minilang2java.config.MvcConfig',
-                        'co.uk.stefanpuia.minilang2java.controller.dto.ConvertResponseDto',
+                        'co.uk.stefanpuia.minilang2java.controller.dto.*',
                         'co.uk.stefanpuia.minilang2java.controller.ExceptionController',
                         'co.uk.stefanpuia.minilang2java.controller.mappers.ConvertRequestDtoToConversionConfigImpl',
                         'co.uk.stefanpuia.minilang2java.core.convert.context.DefaultConversionContext',
@@ -126,13 +127,13 @@ jacocoTestCoverageVerification {
                         'co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalParserHandler',
                         'co.uk.stefanpuia.minilang2java.core.handler.method.VariableHandler',
                         'co.uk.stefanpuia.minilang2java.core.model.ConversionInit',
-                        'co.uk.stefanpuia.minilang2java.core.model.exception.TagInstantiationException',
-                        'co.uk.stefanpuia.minilang2java.core.model.exception.ValidatorInstantiationException',
+                        'co.uk.stefanpuia.minilang2java.core.model.exception.*',
                         'co.uk.stefanpuia.minilang2java.core.model.LoggingConfig',
                         'co.uk.stefanpuia.minilang2java.core.TagFactory',
                         'co.uk.stefanpuia.minilang2java.core.validate.ValidationUtil',
                         'co.uk.stefanpuia.minilang2java.core.validate.ValidatorLoader',
-                        'co.uk.stefanpuia.minilang2java.core.xml.AbstractElement',
+                        'co.uk.stefanpuia.minilang2java.core.xml.impl.*',
+                        'co.uk.stefanpuia.minilang2java.tag.root.XmlRoot',
                         'co.uk.stefanpuia.minilang2java.tag.TagLoader']
         }
 
@@ -144,7 +145,8 @@ jacocoTestCoverageVerification {
             includes = ['co.uk.stefanpuia.minilang2java.controller.mappers.ConvertRequestDtoToConversionConfigImpl',
                         'co.uk.stefanpuia.minilang2java.core.convert.context.DefaultConversionContext',
                         'co.uk.stefanpuia.minilang2java.core.convert.context.Message',
-                        'co.uk.stefanpuia.minilang2java.core.model.ConversionInit']
+                        'co.uk.stefanpuia.minilang2java.core.model.ConversionInit',
+                        'co.uk.stefanpuia.minilang2java.tag.root.XmlRoot']
         }
 
         rule {
@@ -168,26 +170,7 @@ jacocoTestCoverageVerification {
             limit {
                 minimum = 0.1
             }
-            includes = ['co.uk.stefanpuia.minilang2java.core.xml.AbstractElement']
-        }
-
-        rule {
-            element = 'CLASS'
-            limit {
-                maximum = 0.0
-            }
-            includes = ['co.uk.stefanpuia.minilang2java.config.ConversionServiceAdapter',
-                        'co.uk.stefanpuia.minilang2java.config.ConvertBeans',
-                        'co.uk.stefanpuia.minilang2java.config.MvcConfig',
-                        'co.uk.stefanpuia.minilang2java.controller.ExceptionController',
-                        'co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalParserHandler',
-                        'co.uk.stefanpuia.minilang2java.core.handler.method.VariableHandler',
-                        'co.uk.stefanpuia.minilang2java.core.model.exception.TagInstantiationException',
-                        'co.uk.stefanpuia.minilang2java.core.model.exception.ValidatorInstantiationException',
-                        'co.uk.stefanpuia.minilang2java.core.TagFactory',
-                        'co.uk.stefanpuia.minilang2java.core.validate.ValidationUtil',
-                        'co.uk.stefanpuia.minilang2java.core.validate.ValidatorLoader',
-                        'co.uk.stefanpuia.minilang2java.tag.TagLoader']
+            includes = ['co.uk.stefanpuia.minilang2java.core.xml.impl.AbstractElement']
         }
     }
 }

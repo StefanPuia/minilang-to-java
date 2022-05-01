@@ -4,6 +4,7 @@ import static co.uk.stefanpuia.minilang2java.TestObjects.tagInit;
 import static net.bytebuddy.utility.RandomString.make;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.model.ContextVariable;
@@ -11,8 +12,10 @@ import co.uk.stefanpuia.minilang2java.core.model.Position;
 import co.uk.stefanpuia.minilang2java.core.model.VariableType;
 import co.uk.stefanpuia.minilang2java.impl.TagTestImpl;
 import co.uk.stefanpuia.minilang2java.impl.TagTestImpl.TagWithContextTestImpl;
+import co.uk.stefanpuia.minilang2java.tag.root.method.SimpleMethod;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -119,5 +122,29 @@ class TagTest {
   void shouldGetElement() {
     final var tag = new TagTestImpl(tagInit(element));
     then(tag.getElement()).isSameAs(element);
+  }
+
+  @Nested
+  class GetParentTest {
+    @Test
+    void shouldReturnEmptyIfNoParent() {
+      final var tag = new TagTestImpl(tagInit());
+      then(tag.getParent(Tag.class)).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    void shouldReturnDirectParent() {
+      final var parent = mock(Tag.class);
+      final var tag = new TagTestImpl(tagInit(parent));
+      then(tag.getParent(Tag.class)).isEqualTo(Optional.of(parent));
+    }
+
+    @Test
+    void shouldReturnParentOfParent() {
+      final var root = mock(SimpleMethod.class);
+      final var parent = new TagTestImpl(tagInit(root));
+      final var tag = new TagTestImpl(tagInit(parent));
+      then(tag.getParent(SimpleMethod.class)).isEqualTo(Optional.of(root));
+    }
   }
 }

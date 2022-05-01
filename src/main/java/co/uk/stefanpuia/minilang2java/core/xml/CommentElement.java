@@ -1,5 +1,7 @@
 package co.uk.stefanpuia.minilang2java.core.xml;
 
+import co.uk.stefanpuia.minilang2java.core.xml.impl.AbstractElement;
+
 public class CommentElement extends AbstractElement {
   private final String comment;
 

@@ -1,6 +1,6 @@
 package co.uk.stefanpuia.minilang2java.impl;
 
-import co.uk.stefanpuia.minilang2java.core.xml.AbstractElement;
+import co.uk.stefanpuia.minilang2java.core.xml.impl.AbstractElement;
 import java.util.Map;
 import org.w3c.dom.NamedNodeMap;
 

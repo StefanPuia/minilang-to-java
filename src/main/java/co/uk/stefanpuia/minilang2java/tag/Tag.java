@@ -45,7 +45,9 @@ public abstract class Tag {
   }
 
   public String prependIndentation(final String line) {
-    return String.format("%s%s", conversionContext.getBaseIndentation(), line);
+    return line.isBlank()
+        ? ""
+        : String.format("%s%s", conversionContext.getBaseIndentation(), line);
   }
 
   public Position getPosition() {
@@ -85,5 +87,21 @@ public abstract class Tag {
 
   protected boolean hasOwnContext() {
     return false;
+  }
+
+  @SuppressWarnings({"unchecked", "PMD.OnlyOneReturn"})
+  protected <T extends Tag> Optional<T> getParent(final Class<T> parentType) {
+    if (parent.isPresent()) {
+      if (parentType.isAssignableFrom(parent.get().getClass())) {
+        return (Optional<T>) parent;
+      } else {
+        return parent.get().getParent(parentType);
+      }
+    }
+    return Optional.empty();
+  }
+
+  public String getTagName() {
+    return element.getTagName();
   }
 }

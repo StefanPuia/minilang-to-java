@@ -1,110 +1,14 @@
-package co.uk.stefanpuia.minilang2java.core.xml;
+package co.uk.stefanpuia.minilang2java.core.xml.impl;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.TypeInfo;
 import org.w3c.dom.UserDataHandler;
 
 @SuppressWarnings("PMD")
-public abstract class AbstractElement implements Element {
-
-  @Override
-  public String getAttribute(final String name) {
-    return "";
-  }
-
-  @Override
-  public void setAttribute(final String name, final String value) throws DOMException {}
-
-  @Override
-  public void removeAttribute(final String name) throws DOMException {}
-
-  @Override
-  public Attr getAttributeNode(final String name) {
-    return null;
-  }
-
-  @Override
-  public Attr setAttributeNode(final Attr newAttr) throws DOMException {
-    return null;
-  }
-
-  @Override
-  public Attr removeAttributeNode(final Attr oldAttr) throws DOMException {
-    return null;
-  }
-
-  @Override
-  public NodeList getElementsByTagName(final String name) {
-    return getEmptyNodeList();
-  }
-
-  private NodeList getEmptyNodeList() {
-    return new EmptyNodeList();
-  }
-
-  @Override
-  public String getAttributeNS(final String namespaceURI, final String localName)
-      throws DOMException {
-    return "";
-  }
-
-  @Override
-  public void setAttributeNS(
-      final String namespaceURI, final String qualifiedName, final String value)
-      throws DOMException {}
-
-  @Override
-  public void removeAttributeNS(final String namespaceURI, final String localName)
-      throws DOMException {}
-
-  @Override
-  public Attr getAttributeNodeNS(final String namespaceURI, final String localName)
-      throws DOMException {
-    return null;
-  }
-
-  @Override
-  public Attr setAttributeNodeNS(final Attr newAttr) throws DOMException {
-    return null;
-  }
-
-  @Override
-  public NodeList getElementsByTagNameNS(final String namespaceURI, final String localName)
-      throws DOMException {
-    return getEmptyNodeList();
-  }
-
-  @Override
-  public boolean hasAttribute(final String name) {
-    return false;
-  }
-
-  @Override
-  public boolean hasAttributeNS(final String namespaceURI, final String localName)
-      throws DOMException {
-    return false;
-  }
-
-  @Override
-  public TypeInfo getSchemaTypeInfo() {
-    return null;
-  }
-
-  @Override
-  public void setIdAttribute(final String name, final boolean isId) throws DOMException {}
-
-  @Override
-  public void setIdAttributeNS(
-      final String namespaceURI, final String localName, final boolean isId) throws DOMException {}
-
-  @Override
-  public void setIdAttributeNode(final Attr idAttr, final boolean isId) throws DOMException {}
+public class NodeImpl implements Node {
 
   @Override
   public String getNodeName() {
@@ -281,17 +185,5 @@ public abstract class AbstractElement implements Element {
   @Override
   public Object getUserData(final String key) {
     return null;
-  }
-
-  protected static class EmptyNodeList implements NodeList {
-    @Override
-    public Node item(final int index) {
-      return null;
-    }
-
-    @Override
-    public int getLength() {
-      return 0;
-    }
   }
 }

@@ -29,7 +29,7 @@ public class Converter {
 
     String output;
     try {
-      final var tags = getReader(config).readXML(config.source());
+      final var tags = getReader(context).readXML(config.source());
       output = String.join("\n", convertElements(tags));
     } catch (MinilangConversionException e) {
       LOGGER.trace("Conversion exception", e);
@@ -45,8 +45,8 @@ public class Converter {
     return (output + "\n\n" + renderMessages(context)).replaceAll("\\n{3,}", "\n\n");
   }
 
-  private PositionalXMLReader getReader(final ConversionInit config) {
-    return beanFactory.getBean(PositionalXMLReader.class, config);
+  private PositionalXMLReader getReader(final ConversionContext context) {
+    return beanFactory.getBean(PositionalXMLReader.class, context);
   }
 
   private ConversionContext getConversionContext(final ConversionInit config) {

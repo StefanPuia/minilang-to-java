@@ -11,35 +11,28 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.util.Pair;
 
 @Slf4j
-@UtilityClass
 @SuppressWarnings("PMD.ClassNamingConventions")
 public final class TagFactory {
 
-  private static final Map<Pair<String, MethodMode>, Constructor<Tag>> TAGS =
+  private static final Map<Pair<String, MethodMode>, Constructor<? extends Tag>> TAGS =
       new ConcurrentHashMap<>();
 
-  public static Tag createTag(final String tagName, final TagInit tagInit) {
-    final var constructor = TAGS.get(Pair.of(tagName, tagInit.conversionContext().getMethodMode()));
-    try {
-      return constructor == null
-          ? getUndefinedTag(tagName, tagInit)
-          : createTagInstanceAndValidate(tagInit, constructor);
-    } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-      throw new TagInstantiationException(e);
-    }
-  }
-
   private static Tag createTagInstanceAndValidate(
-      final TagInit tagInit, final Constructor<Tag> constructor)
+      final TagInit tagInit, final Constructor<? extends Tag> constructor)
       throws InvocationTargetException, InstantiationException, IllegalAccessException {
     final Tag tagInstance = constructor.newInstance(tagInit);
     ValidationUtil.validate(tagInstance, tagInit.conversionContext());
     return tagInstance;
+  }
+
+  public static void register(
+      final String tagName, final MethodMode mode, final Constructor<? extends Tag> constructor) {
+    LOGGER.info("Loading {} for {}", tagName, mode);
+    TAGS.put(Pair.of(tagName, mode), constructor);
   }
 
   private static UndefinedTag getUndefinedTag(final String tagName, final TagInit tagInit) {
@@ -50,9 +43,14 @@ public final class TagFactory {
     return new UndefinedTag(tagInit);
   }
 
-  public static void register(
-      final String tagName, final MethodMode mode, final Constructor<Tag> constructor) {
-    LOGGER.info("Loading {} for {}", tagName, mode);
-    TAGS.put(Pair.of(tagName, mode), constructor);
+  public Tag createTag(final String tagName, final TagInit tagInit) {
+    final var constructor = TAGS.get(Pair.of(tagName, tagInit.conversionContext().getMethodMode()));
+    try {
+      return constructor == null
+          ? getUndefinedTag(tagName, tagInit)
+          : createTagInstanceAndValidate(tagInit, constructor);
+    } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+      throw new TagInstantiationException(e);
+    }
   }
 }

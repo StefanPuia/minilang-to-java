@@ -44,7 +44,7 @@ public class AttributeNameValidator extends Validator<AttributeNameRule> {
                 addError(
                     format(
                         "Tag [%s] requires at least one of the [%s] attributes",
-                        tag.getElement().getTagName(), String.join(", ", requireOneOf))));
+                        tag.getTagName(), String.join(", ", requireOneOf))));
   }
 
   private void warnExtraAttributes() {
@@ -56,7 +56,7 @@ public class AttributeNameValidator extends Validator<AttributeNameRule> {
                 addWarning(
                     format(
                         "Extra attribute [%s] found on tag [%s]",
-                        extraAttribute, tag.getElement().getTagName())));
+                        extraAttribute, tag.getTagName())));
   }
 
   private Set<String> getAllHandled() {
@@ -74,7 +74,7 @@ public class AttributeNameValidator extends Validator<AttributeNameRule> {
                 addError(
                     format(
                         "Tag [%s] is missing required attribute [%s]",
-                        tag.getElement().getTagName(), requiredAttribute)));
+                        tag.getTagName(), requiredAttribute)));
   }
 
   private Set<String> getAllRequired() {
