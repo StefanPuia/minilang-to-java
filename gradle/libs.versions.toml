@@ -21,6 +21,11 @@ commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version.
 commons-logging = { group = "commons-logging", name = "commons-logging", version.ref = "commonsLogging" }
 commons-text = { group = "org.apache.commons", name = "commons-text", version.ref = "commonsText" }
 immutables-value = { group = "org.immutables", name = "value", version.ref = "immutables" }
+jackson-annotations = { group = "com.fasterxml.jackson.core", name = "jackson-annotations" }
+jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind" }
+jackson-datatype-guava = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-guava" }
+jackson-datatype-jdk8 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jdk8" }
+jackson-datatype-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310" }
 junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junitJupiter" }
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junitJupiter" }
 junit-jupiter-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junitJupiter" }
@@ -48,3 +53,4 @@ spring-test = { group = "org.springframework", name = "spring-test" }
 [bundles]
 immutables = ["immutables-value"]
 junit-jupiter = ["junit-jupiter-api", "junit-jupiter-engine", "junit-jupiter-params"]
+jackson = ["jackson-annotations", "jackson-databind", "jackson-datatype-guava", "jackson-datatype-jdk8", "jackson-datatype-jsr310"]

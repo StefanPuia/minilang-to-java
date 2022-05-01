@@ -27,6 +27,7 @@ dependencies {
     annotationProcessor libs.spring.boot.configuration.processor
     developmentOnly libs.spring.boot.devtools
     implementation libs.bundles.immutables
+    implementation libs.bundles.jackson
     implementation libs.commons.lang3
     implementation libs.mapstruct.core
     implementation libs.mapstruct.spring.core

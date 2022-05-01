@@ -54,6 +54,14 @@
                 <input type="checkbox" id="logging_warning"/>
                 Warning
             </label>
+            <label for="logging_validation_warning">
+                <input type="checkbox" id="logging_validation_warning"/>
+                Validation Warning
+            </label>
+            <label for="logging_validation_error">
+                <input type="checkbox" id="logging_validation_error"/>
+                Validation Error
+            </label>
             <label for="logging_error" title="Error logging cannot be disabled.">
                 <input
                     type="checkbox"
@@ -88,6 +96,8 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
+<script type="module" src="/static/consts.js" async defer></script>
+<script type="module" src="/static/storage-migrate.js" async defer></script>
 <script type="module" src="/static/script.js" async defer></script>
 </body>
 </html>

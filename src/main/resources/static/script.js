@@ -1,20 +1,14 @@
-const $ = (...args) => document.querySelector(...args);
-const aceSession = (id) => ace.edit(id).getSession();
-const store = (key, val) => localStorage.setItem(key, val);
-const get = (key) => localStorage.getItem(key) ?? "";
-const getBoolean = (key) => localStorage.getItem(key) === "true";
-const getInt = (key) => parseInt(localStorage.getItem(key)) || 0;
+import {migrateStorage} from "./storage-migrate.js";
+import {
+    $,
+    checkboxKeyMap,
+    get,
+    getBoolean,
+    inputKeyMap,
+    store
+} from "./consts.js";
 
-const checkboxKeyMap = {
-    logging_deprecated: "editor.logging.deprecated",
-    logging_info: "editor.logging.info",
-    logging_warning: "editor.logging.warning",
-    converter_authServices: "editor.converter.authServices",
-    converter_replicateMinilang: "editor.converter.replicateMinilang",
-}
-const inputKeyMap = {
-    converter_tabSize: "editor.converter.tabSize",
-}
+const aceSession = (id) => ace.edit(id).getSession();
 
 migrateStorage();
 initAceEditors();
@@ -60,19 +54,30 @@ function addSubmitConvertListener() {
                     input,
                     className: $className.value,
                     methodMode: $methodMode.value,
-                    logging: {
-                        deprecated: getBoolean(
-                            checkboxKeyMap.logging_deprecated),
-                        info: getBoolean(checkboxKeyMap.logging_info),
-                        warning: getBoolean(checkboxKeyMap.logging_warning),
-                    },
-                    converterOptions: {
-                        authServices: getBoolean(
-                            checkboxKeyMap.converter_authServices),
-                        replicateMinilang: getBoolean(
-                            checkboxKeyMap.converter_replicateMinilang),
-                        tabSize: getInt(inputKeyMap.converter_tabSize),
-                    },
+                    options: {
+                        ...Object.values(checkboxKeyMap).reduce(
+                            (prev, curr) => ({
+                                ...prev,
+                                [curr]: getBoolean(curr)
+                            }),
+                            {}),
+                        ...Object.values(inputKeyMap).reduce(
+                            (prev, curr) => ({...prev, [curr]: get(curr)}),
+                            {}),
+                    }
+                    // logging: {
+                    //     deprecated: getBoolean(
+                    //         checkboxKeyMap.logging_deprecated),
+                    //     info: getBoolean(checkboxKeyMap.logging_info),
+                    //     warning: getBoolean(checkboxKeyMap.logging_warning),
+                    // },
+                    // converterOptions: {
+                    //     authServices: getBoolean(
+                    //         checkboxKeyMap.converter_authServices),
+                    //     replicateMinilang: getBoolean(
+                    //         checkboxKeyMap.converter_replicateMinilang),
+                    //     tabSize: getInt(inputKeyMap.converter_tabSize),
+                    // },
                 }),
             });
 
@@ -143,16 +148,3 @@ function addOptionsListeners() {
     });
 }
 
-function migrateStorage() {
-    const storeVersion = (v) => store("storage.version", v);
-    const version = get("storage.version") || "000";
-
-    if (version < "001") {
-        store("editor.methodMode", "SERVICE");
-        store(checkboxKeyMap.logging_deprecated, true);
-        store(checkboxKeyMap.logging_info, true);
-        store(checkboxKeyMap.logging_warning, true);
-        store(inputKeyMap.converter_tabSize, 2);
-        storeVersion("001");
-    }
-}

@@ -14,6 +14,15 @@ public interface ConvertRequestDtoToConversionConfig
   @Override
   @Mapping(target = "source", source = "input")
   @Mapping(target = "lines", source = "input")
+  @Mapping(target = "logging.deprecated", source = "options.loggingDeprecated")
+  @Mapping(target = "logging.info", source = "options.loggingInfo")
+  @Mapping(target = "logging.warning", source = "options.loggingWarning")
+  @Mapping(target = "logging.validationWarning", source = "options.loggingValidationError")
+  @Mapping(target = "logging.validationError", source = "options.loggingValidationWarning")
+  @Mapping(target = "converterOptions.authServices", source = "options.converterAuthServices")
+  @Mapping(
+      target = "converterOptions.replicateMinilang",
+      source = "options.converterReplicateMinilang")
   ConversionInit convert(ConvertRequestDto source);
 
   default int getInputLinesCount(final String value) {

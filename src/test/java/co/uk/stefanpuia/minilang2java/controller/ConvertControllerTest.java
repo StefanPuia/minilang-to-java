@@ -1,8 +1,7 @@
 package co.uk.stefanpuia.minilang2java.controller;
 
 import static co.uk.stefanpuia.minilang2java.TestObjects.conversionInit;
-import static co.uk.stefanpuia.minilang2java.TestObjects.converterOptions;
-import static co.uk.stefanpuia.minilang2java.TestObjects.loggingConfig;
+import static co.uk.stefanpuia.minilang2java.TestObjects.conversionRequestOptions;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -32,7 +31,7 @@ class ConvertControllerTest {
   void shouldPostConvert() {
     // Given
     final var requestDto =
-        new ConvertRequestDto("", MethodMode.UTIL, "someName", loggingConfig(), converterOptions());
+        new ConvertRequestDto("", MethodMode.UTIL, "someName", conversionRequestOptions());
     final String someOutput = RandomString.make();
     doReturn(someOutput).when(converter).convert(any(ConversionInit.class));
     doReturn(conversionInit()).when(conversionService).convert(requestDto, ConversionInit.class);

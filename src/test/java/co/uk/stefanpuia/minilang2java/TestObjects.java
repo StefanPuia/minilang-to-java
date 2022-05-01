@@ -1,5 +1,7 @@
 package co.uk.stefanpuia.minilang2java;
 
+import co.uk.stefanpuia.minilang2java.controller.dto.ConversionRequestOptions;
+import co.uk.stefanpuia.minilang2java.controller.dto.ImmutableConversionRequestOptions;
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.convert.context.DefaultConversionContext;
@@ -35,7 +37,11 @@ public class TestObjects {
   }
 
   public static LoggingConfig loggingConfig() {
-    return new LoggingConfig(true, true, true);
+    return new LoggingConfig(true, true, true, true, true);
+  }
+
+  public static ConversionRequestOptions conversionRequestOptions() {
+    return ImmutableConversionRequestOptions.builder().build();
   }
 
   public static ConversionContext conversionContext() {

@@ -1,5 +1,9 @@
 package co.uk.stefanpuia.minilang2java.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.guava.GuavaModule;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -20,5 +24,13 @@ public class MvcConfig implements WebMvcConfigurer {
   @Override
   public void addViewControllers(final ViewControllerRegistry registry) {
     registry.addViewController("/").setViewName("index");
+  }
+
+  @Bean
+  public ObjectMapper objectMapper() {
+    return new ObjectMapper()
+        .registerModule(new Jdk8Module())
+        .registerModule(new JavaTimeModule())
+        .registerModule(new GuavaModule());
   }
 }
