@@ -64,20 +64,7 @@ function addSubmitConvertListener() {
                         ...Object.values(inputKeyMap).reduce(
                             (prev, curr) => ({...prev, [curr]: get(curr)}),
                             {}),
-                    }
-                    // logging: {
-                    //     deprecated: getBoolean(
-                    //         checkboxKeyMap.logging_deprecated),
-                    //     info: getBoolean(checkboxKeyMap.logging_info),
-                    //     warning: getBoolean(checkboxKeyMap.logging_warning),
-                    // },
-                    // converterOptions: {
-                    //     authServices: getBoolean(
-                    //         checkboxKeyMap.converter_authServices),
-                    //     replicateMinilang: getBoolean(
-                    //         checkboxKeyMap.converter_replicateMinilang),
-                    //     tabSize: getInt(inputKeyMap.converter_tabSize),
-                    // },
+                    },
                 }),
             });
 
@@ -136,6 +123,13 @@ function addOptionsListeners() {
     };
     $("#toggle_options").addEventListener("click", toggleOptions);
     $("#options_actions_save").addEventListener("click", toggleOptions);
+    $("#options_actions_reset").addEventListener("click", () => {
+        if (window.confirm(
+            "Are you sure you want to reset your settings? This will reload the page.")) {
+            store("storage.version", "000");
+            window.location.reload();
+        }
+    });
     Object.entries(checkboxKeyMap).forEach(([selector, storageKey]) => {
         $(`#${selector}`).addEventListener("change", (e) => {
             store(storageKey, e.currentTarget.checked);

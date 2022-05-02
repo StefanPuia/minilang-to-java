@@ -51,9 +51,11 @@ button {
 #controls #className {
     width: 35ch;
 }
+
 #controls .padded {
     padding: 5px;
 }
+
 #controls #splitSizes {
     width: 4em;
 }
@@ -88,11 +90,21 @@ button {
 #options #logging {
     grid-area: logging;
 }
+
 #options #converter {
     grid-area: converter;
 }
+
 #options #options_actions {
     grid-area: actions;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#options #options_actions > #options_actions_reset {
+    background: #9d1010;
+    color: white;
 }
 
 #options > div {

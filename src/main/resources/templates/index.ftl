@@ -62,15 +62,19 @@
                 <input type="checkbox" id="logging_validation_error"/>
                 Validation Error
             </label>
-            <label for="logging_error" title="Error logging cannot be disabled.">
-                <input
-                    type="checkbox"
-                    id="logging_error"
-                    checked
-                    disabled
-                />
-                Error
+            <label for="logging_validation_deprecated">
+                <input type="checkbox" id="logging_validation_deprecated"/>
+                Validation Deprecated
             </label>
+            <#--<label for="logging_error" title="Error logging cannot be disabled.">-->
+            <#--    <input-->
+            <#--        type="checkbox"-->
+            <#--        id="logging_error"-->
+            <#--        checked-->
+            <#--        disabled-->
+            <#--    />-->
+            <#--    Error-->
+            <#--</label>-->
         </div>
         <div id="converter">
             <h3>Converter options:</h3>
@@ -90,6 +94,7 @@
             </div>
         </div>
         <div id="options_actions">
+            <button id="options_actions_reset">Reset</button>
             <button id="options_actions_save">Close</button>
         </div>
     </div>
