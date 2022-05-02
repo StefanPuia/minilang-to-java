@@ -103,4 +103,8 @@ public abstract class Tag {
   public String getTagName() {
     return element.getTagName();
   }
+
+  public final List<Tag> getChildren() {
+    return children;
+  }
 }

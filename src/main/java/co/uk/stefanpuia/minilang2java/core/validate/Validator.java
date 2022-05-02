@@ -5,6 +5,7 @@ import static co.uk.stefanpuia.minilang2java.core.model.MessageType.VALIDATION_W
 
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.model.MessageType;
+import co.uk.stefanpuia.minilang2java.core.model.Position;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ValidationRule;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import java.util.List;
@@ -29,7 +30,12 @@ public abstract class Validator<T extends ValidationRule> {
   }
 
   protected final void addMessage(final MessageType messageType, final String message) {
-    context.addMessage(messageType, message, tag.getPosition());
+    addMessage(messageType, message, tag.getPosition());
+  }
+
+  protected final void addMessage(
+      final MessageType messageType, final String message, final Position position) {
+    context.addMessage(messageType, message, position);
   }
 
   @SuppressWarnings("unchecked")

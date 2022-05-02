@@ -124,6 +124,14 @@ class TagTest {
     then(tag.getElement()).isSameAs(element);
   }
 
+  @Test
+  void shouldGetChildren() {
+    final var tag = new TagTestImpl(tagInit(element));
+    then(tag.getChildren()).hasSize(0);
+    tag.appendChild(mock(Tag.class));
+    then(tag.getChildren()).hasSize(1);
+  }
+
   @Nested
   class GetParentTest {
     @Test

@@ -9,12 +9,11 @@ import co.uk.stefanpuia.minilang2java.core.validate.rule.AttributeNameRule;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.w3c.dom.Node;
 
 @TagValidator
-public class AttributeNameValidator extends Validator<AttributeNameRule> {
+public class AttributeNameValidator extends PropertyListValidator<AttributeNameRule> {
   private final List<String> attributes;
 
   protected AttributeNameValidator(final Tag tag, final ConversionContext context) {
@@ -31,20 +30,8 @@ public class AttributeNameValidator extends Validator<AttributeNameRule> {
   }
 
   @Override
-  protected void execute() {
-    validateRequiredAllAttributes();
-    validateRequiredAnyAttributes();
-    warnExtraAttributes();
-    warnDeprecatedAttributes();
-    warnUnhandledAttributes();
-  }
-
-  private void warnUnhandledAttributes() {
-    getRules().stream()
-        .map(AttributeNameRule::getUnhandled)
-        .flatMap(List::stream)
-        .collect(Collectors.toSet())
-        .stream()
+  protected void validateUnhandled() {
+    getNamesSet(AttributeNameRule::getUnhandled).stream()
         .filter(attributes::contains)
         .forEach(
             unhandled ->
@@ -54,12 +41,9 @@ public class AttributeNameValidator extends Validator<AttributeNameRule> {
                         "Attribute [%s] is unhandled for tag [%s]", unhandled, tag.getTagName())));
   }
 
-  private void warnDeprecatedAttributes() {
-    getRules().stream()
-        .map(AttributeNameRule::getDeprecated)
-        .flatMap(List::stream)
-        .collect(Collectors.toSet())
-        .stream()
+  @Override
+  protected void validateDeprecated() {
+    getNamesSet(AttributeNameRule::getDeprecated).stream()
         .filter(attributes::contains)
         .forEach(
             deprecated ->
@@ -70,9 +54,9 @@ public class AttributeNameValidator extends Validator<AttributeNameRule> {
                         deprecated, tag.getTagName())));
   }
 
-  private void validateRequiredAnyAttributes() {
+  @Override
+  protected void validateRequiredAny() {
     getAnyRequired().stream()
-        .filter(list -> !list.isEmpty())
         .filter(requireOneOf -> requireOneOf.stream().noneMatch(attributes::contains))
         .forEach(
             requireOneOf ->
@@ -82,8 +66,9 @@ public class AttributeNameValidator extends Validator<AttributeNameRule> {
                         tag.getTagName(), String.join(", ", requireOneOf))));
   }
 
-  private void warnExtraAttributes() {
-    final Set<String> allDefinedAttributes = getAllHandled();
+  @Override
+  protected void validateExtra() {
+    final Set<String> allDefinedAttributes = getNamesSet(AttributeNameRule::getAll);
     attributes.stream()
         .filter(attribute -> !allDefinedAttributes.contains(attribute))
         .forEach(
@@ -94,15 +79,9 @@ public class AttributeNameValidator extends Validator<AttributeNameRule> {
                         extraAttribute, tag.getTagName())));
   }
 
-  private Set<String> getAllHandled() {
-    return getRules().stream()
-        .map(AttributeNameRule::getAllAttributes)
-        .flatMap(Set::stream)
-        .collect(Collectors.toSet());
-  }
-
-  private void validateRequiredAllAttributes() {
-    getAllRequired().stream()
+  @Override
+  protected void validateRequiredAll() {
+    getNamesSet(AttributeNameRule::getRequiredAll).stream()
         .filter(requireAttribute -> !attributes.contains(requireAttribute))
         .forEach(
             requiredAttribute ->
@@ -110,16 +89,5 @@ public class AttributeNameValidator extends Validator<AttributeNameRule> {
                     format(
                         "Tag [%s] is missing required attribute [%s]",
                         tag.getTagName(), requiredAttribute)));
-  }
-
-  private Set<String> getAllRequired() {
-    return getRules().stream()
-        .map(AttributeNameRule::getRequiredAll)
-        .flatMap(List::stream)
-        .collect(Collectors.toSet());
-  }
-
-  private List<List<String>> getAnyRequired() {
-    return getRules().stream().map(AttributeNameRule::getRequiredOneOf).toList();
   }
 }
