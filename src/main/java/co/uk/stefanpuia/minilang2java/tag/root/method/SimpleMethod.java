@@ -1,9 +1,12 @@
 package co.uk.stefanpuia.minilang2java.tag.root.method;
 
+import static co.uk.stefanpuia.minilang2java.core.model.MessageType.VALIDATION_WARNING;
+
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.MethodContextVariable;
 import co.uk.stefanpuia.minilang2java.core.model.OptionalString;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameRule;
+import co.uk.stefanpuia.minilang2java.core.validate.rule.NonEmptyAttributeValueRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ValidationRule;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import java.util.ArrayList;
@@ -39,6 +42,7 @@ public abstract class SimpleMethod extends Tag {
             .addRequiredAll("method-name")
             .addOptional("short-description")
             .build());
+    rules.add(new NonEmptyAttributeValueRule("method-name", VALIDATION_WARNING));
     return rules;
   }
 
