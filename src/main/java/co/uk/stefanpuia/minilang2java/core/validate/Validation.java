@@ -7,19 +7,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
-@UtilityClass
 @Slf4j
-public final class ValidationUtil {
+public final class Validation {
   private static final List<Constructor<?>> VALIDATORS = new ArrayList<>();
-
-  public static void validate(final Tag tag, final ConversionContext conversionContext) {
-    VALIDATORS.stream()
-        .map(constructor -> getNewInstance(tag, conversionContext, constructor))
-        .forEach(Validator::execute);
-  }
 
   private static Validator<?> getNewInstance(
       final Tag tag, final ConversionContext conversionContext, final Constructor<?> constructor) {
@@ -34,5 +26,11 @@ public final class ValidationUtil {
       final Class<?> validationRuleClass, final Constructor<?> constructor) {
     LOGGER.info("Loading {}", validationRuleClass);
     VALIDATORS.add(constructor);
+  }
+
+  public void validate(final Tag tag, final ConversionContext conversionContext) {
+    VALIDATORS.stream()
+        .map(constructor -> getNewInstance(tag, conversionContext, constructor))
+        .forEach(Validator::execute);
   }
 }

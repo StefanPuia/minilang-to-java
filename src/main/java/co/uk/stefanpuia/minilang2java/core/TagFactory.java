@@ -4,7 +4,6 @@ import static co.uk.stefanpuia.minilang2java.core.model.MessageType.ERROR;
 
 import co.uk.stefanpuia.minilang2java.core.model.MethodMode;
 import co.uk.stefanpuia.minilang2java.core.model.exception.TagInstantiationException;
-import co.uk.stefanpuia.minilang2java.core.validate.ValidationUtil;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import co.uk.stefanpuia.minilang2java.tag.misc.UndefinedTag;
 import java.lang.reflect.Constructor;
@@ -20,14 +19,6 @@ public final class TagFactory {
 
   private static final Map<Pair<String, MethodMode>, Constructor<? extends Tag>> TAGS =
       new ConcurrentHashMap<>();
-
-  private static Tag createTagInstanceAndValidate(
-      final TagInit tagInit, final Constructor<? extends Tag> constructor)
-      throws InvocationTargetException, InstantiationException, IllegalAccessException {
-    final Tag tagInstance = constructor.newInstance(tagInit);
-    ValidationUtil.validate(tagInstance, tagInit.conversionContext());
-    return tagInstance;
-  }
 
   public static void register(
       final String tagName, final MethodMode mode, final Constructor<? extends Tag> constructor) {
@@ -48,7 +39,7 @@ public final class TagFactory {
     try {
       return constructor == null
           ? getUndefinedTag(tagName, tagInit)
-          : createTagInstanceAndValidate(tagInit, constructor);
+          : constructor.newInstance(tagInit);
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
       throw new TagInstantiationException(e);
     }

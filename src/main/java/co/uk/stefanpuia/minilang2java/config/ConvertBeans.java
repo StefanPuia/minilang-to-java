@@ -12,6 +12,7 @@ import co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalXMLReader;
 import co.uk.stefanpuia.minilang2java.core.handler.error.ErrorHandler;
 import co.uk.stefanpuia.minilang2java.core.handler.error.ErrorHandlerFactory;
 import co.uk.stefanpuia.minilang2java.core.model.ConversionInit;
+import co.uk.stefanpuia.minilang2java.core.validate.Validation;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -32,34 +33,39 @@ public class ConvertBeans {
 
   @Bean
   @Scope(SCOPE_REQUEST)
-  public PositionalParserHandler buildPositionalParserHandler()
-      throws ParserConfigurationException {
-    return new PositionalParserHandler(buildDocument());
+  public PositionalParserHandler positionalParserHandler() throws ParserConfigurationException {
+    return new PositionalParserHandler(document());
   }
 
   @Bean
   @Scope(SCOPE_REQUEST)
-  public ConversionContext buildConversionContext(final ConversionInit config) {
+  public ConversionContext conversionContext(final ConversionInit config) {
     return new DefaultConversionContext(config, beanFactory);
   }
 
   @Bean
   @Scope(SCOPE_REQUEST)
-  public PositionalXMLReader buildPositionalXMLReader(final ConversionContext context)
+  public PositionalXMLReader positionalXMLReader(final ConversionContext context)
       throws ParserConfigurationException, SAXException {
     return new PositionalXMLReader(
-        context, buildPositionalParserHandler(), buildXmlParser(), buildTagFactory());
+        context, positionalParserHandler(), xmlParser(), tagFactory(), validation());
   }
 
   @Bean
   @Scope(SCOPE_APPLICATION)
-  public TagFactory buildTagFactory() {
+  public TagFactory tagFactory() {
     return new TagFactory();
   }
 
   @Bean
+  @Scope(SCOPE_APPLICATION)
+  public Validation validation() {
+    return new Validation();
+  }
+
+  @Bean
   @Scope(SCOPE_REQUEST)
-  public XMLReader buildXmlParser() throws ParserConfigurationException, SAXException {
+  public XMLReader xmlParser() throws ParserConfigurationException, SAXException {
     final SAXParserFactory factory = SAXParserFactory.newInstance();
     factory.setFeature(FEATURE_SECURE_PROCESSING, true);
     return factory.newSAXParser().getXMLReader();
@@ -67,7 +73,7 @@ public class ConvertBeans {
 
   @Bean
   @Scope(SCOPE_REQUEST)
-  public Document buildDocument() throws ParserConfigurationException {
+  public Document document() throws ParserConfigurationException {
     final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
     final DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
     return docBuilder.newDocument();
@@ -75,7 +81,7 @@ public class ConvertBeans {
 
   @Bean
   @Scope(SCOPE_REQUEST)
-  public ErrorHandler buildErrorHandler(final ConversionContext context) {
+  public ErrorHandler errorHandler(final ConversionContext context) {
     return ErrorHandlerFactory.newInstance(context);
   }
 }

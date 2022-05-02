@@ -6,6 +6,7 @@ import co.uk.stefanpuia.minilang2java.core.TagFactory;
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.model.exception.MinilangConversionException;
+import co.uk.stefanpuia.minilang2java.core.validate.Validation;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -32,8 +33,8 @@ public class PositionalXMLReader {
   private final ConversionContext context;
   private PositionalParserHandler handler;
   private XMLReader reader;
-
   private TagFactory tagFactory;
+  private Validation validation;
 
   public List<Tag> readXML(final String source) throws MinilangConversionException {
     try {
@@ -59,6 +60,7 @@ public class PositionalXMLReader {
         }
       }
 
+      validation.validate(tag, context);
       return tag;
     };
   }

@@ -15,6 +15,7 @@ import co.uk.stefanpuia.minilang2java.core.TagFactory;
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.model.exception.MinilangConversionException;
+import co.uk.stefanpuia.minilang2java.core.validate.Validation;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import java.io.IOException;
 import java.util.List;
@@ -38,6 +39,7 @@ class PositionalXMLReaderTest {
   @Mock private PositionalParserHandler handler;
   @Mock private XMLReader reader;
   @Mock private TagFactory tagFactory;
+  @Mock private Validation validation;
 
   @InjectMocks private PositionalXMLReader positionalXMLReader;
 
@@ -61,7 +63,8 @@ class PositionalXMLReaderTest {
     doReturn(mock(NodeList.class)).when(mockElement).getChildNodes();
     doReturn(mockTag).when(tagFactory).createTag(tagName, new TagInit(context, mockElement, null));
     doReturn(List.of(mockElement)).when(handler).getRootElements();
-    final var positionalXMLReader = new PositionalXMLReader(context, handler, reader, tagFactory);
+    final var positionalXMLReader =
+        new PositionalXMLReader(context, handler, reader, tagFactory, validation);
 
     // When
     final var tags = positionalXMLReader.readXML("");
@@ -84,7 +87,8 @@ class PositionalXMLReaderTest {
     doReturn(childNodesMock).when(mockElement).getChildNodes();
     doReturn(mockTag).when(tagFactory).createTag(tagName, new TagInit(context, mockElement, null));
     doReturn(List.of(mockElement)).when(handler).getRootElements();
-    final var positionalXMLReader = new PositionalXMLReader(context, handler, reader, tagFactory);
+    final var positionalXMLReader =
+        new PositionalXMLReader(context, handler, reader, tagFactory, validation);
 
     // When
     final var tags = positionalXMLReader.readXML("");

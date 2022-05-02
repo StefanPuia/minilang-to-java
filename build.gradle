@@ -131,7 +131,7 @@ jacocoTestCoverageVerification {
                         'co.uk.stefanpuia.minilang2java.core.model.exception.*',
                         'co.uk.stefanpuia.minilang2java.core.model.LoggingConfig',
                         'co.uk.stefanpuia.minilang2java.core.TagFactory',
-                        'co.uk.stefanpuia.minilang2java.core.validate.ValidationUtil',
+                        'co.uk.stefanpuia.minilang2java.core.validate.Validation',
                         'co.uk.stefanpuia.minilang2java.core.validate.ValidatorLoader',
                         'co.uk.stefanpuia.minilang2java.core.xml.impl.*',
                         'co.uk.stefanpuia.minilang2java.tag.root.XmlRoot',

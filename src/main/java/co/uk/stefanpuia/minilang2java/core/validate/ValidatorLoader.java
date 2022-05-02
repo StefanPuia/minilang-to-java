@@ -28,7 +28,7 @@ public class ValidatorLoader {
           scanner.findCandidateComponents("co.uk.stefanpuia.minilang2java.core.validate")) {
         final Class<?> validatorClass = loader.loadClass(bd.getBeanClassName());
         if (Validator.class.isAssignableFrom(validatorClass)) {
-          ValidationUtil.register(
+          Validation.register(
               validatorClass,
               validatorClass.getDeclaredConstructor(Tag.class, ConversionContext.class));
         }
