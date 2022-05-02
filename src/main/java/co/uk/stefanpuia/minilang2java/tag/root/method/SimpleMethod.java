@@ -7,7 +7,7 @@ import co.uk.stefanpuia.minilang2java.core.handler.method.variable.MethodContext
 import co.uk.stefanpuia.minilang2java.core.model.OptionalString;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.NonEmptyAttributeValueRule;
-import co.uk.stefanpuia.minilang2java.core.validate.rule.ValidationRule;
+import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,15 +35,14 @@ public abstract class SimpleMethod extends Tag {
   }
 
   @Override
-  public List<ValidationRule> getRules() {
-    final var rules = new ArrayList<>(super.getRules());
-    rules.add(
-        ImmutableAttributeNameRule.builder()
-            .addRequiredAll("method-name")
-            .addOptional("short-description")
-            .build());
-    rules.add(new NonEmptyAttributeValueRule("method-name", VALIDATION_WARNING));
-    return rules;
+  public RuleList getRules() {
+    return super.getRules()
+        .addRules(
+            ImmutableAttributeNameRule.builder()
+                .addRequiredAll("method-name")
+                .addOptional("short-description")
+                .build(),
+            new NonEmptyAttributeValueRule("method-name", VALIDATION_WARNING));
   }
 
   private String getMethodHeader() {

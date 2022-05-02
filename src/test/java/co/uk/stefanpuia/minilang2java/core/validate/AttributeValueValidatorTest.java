@@ -8,6 +8,7 @@ import static org.mockito.Mockito.doReturn;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.convert.context.Message;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.AttributeValueRule;
+import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import co.uk.stefanpuia.minilang2java.impl.AttributeElement;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import java.util.List;
@@ -25,6 +26,7 @@ class AttributeValueValidatorTest {
   @Test
   void shouldValidateWithNoRules() {
     // Given
+    doReturn(RuleList.empty()).when(tag).getRules();
     doReturn(new AttributeElement(Map.of())).when(tag).getElement();
     final var validator = new AttributeValueValidator(tag, context);
 
@@ -40,7 +42,7 @@ class AttributeValueValidatorTest {
     // Given
     doReturn("!test-attributes").when(tag).getTagName();
     doReturn(new AttributeElement(Map.of("foo", "bar"))).when(tag).getElement();
-    doReturn(List.of(new AttributeValueRule("foo", List.of("some-1", "some-2"))))
+    doReturn(RuleList.of(new AttributeValueRule("foo", List.of("some-1", "some-2"))))
         .when(tag)
         .getRules();
     final var validator = new AttributeValueValidator(tag, context);
@@ -61,7 +63,7 @@ class AttributeValueValidatorTest {
   void shouldNotAddErrorWhenAttributeValueIsValid() {
     // Given
     doReturn(new AttributeElement(Map.of("foo", "some-1"))).when(tag).getElement();
-    doReturn(List.of(new AttributeValueRule("foo", List.of("some-1", "some-2"))))
+    doReturn(RuleList.of(new AttributeValueRule("foo", List.of("some-1", "some-2"))))
         .when(tag)
         .getRules();
     final var validator = new AttributeValueValidator(tag, context);
@@ -81,7 +83,7 @@ class AttributeValueValidatorTest {
         .when(tag)
         .getElement();
     doReturn(
-            List.of(
+            RuleList.of(
                 new AttributeValueRule("attr1", List.of("some-1", "some-2")),
                 new AttributeValueRule("attr2", List.of("other-1", "other-2"))))
         .when(tag)

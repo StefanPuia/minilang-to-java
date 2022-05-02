@@ -35,7 +35,7 @@ public abstract class Validator<T extends ValidationRule> {
   @SuppressWarnings("unchecked")
   protected final List<T> getRules() {
     return (List<T>)
-        tag.getRules().stream()
+        tag.getRules().getRules().stream()
             .filter(rule -> ruleClass.isAssignableFrom(rule.getClass()))
             .toList();
   }

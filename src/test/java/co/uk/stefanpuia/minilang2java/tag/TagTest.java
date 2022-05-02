@@ -115,7 +115,7 @@ class TagTest {
   @Test
   void shouldHaveEmptyRules() {
     final var tag = new TagTestImpl(tagInit(context, element));
-    then(tag.getRules()).isEmpty();
+    then(tag.getRules().getRules()).isEmpty();
   }
 
   @Test

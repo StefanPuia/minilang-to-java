@@ -8,9 +8,9 @@ import static org.mockito.Mockito.doReturn;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.convert.context.Message;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.NonEmptyAttributeValueRule;
+import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import co.uk.stefanpuia.minilang2java.impl.AttributeElement;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
@@ -37,6 +37,7 @@ class NonEmptyAttributeValueValidatorTest {
   @Test
   void shouldValidateWithNoRules() {
     // Given
+    doReturn(RuleList.empty()).when(tag).getRules();
     doReturn(new AttributeElement(Map.of())).when(tag).getElement();
     final var validator = new NonEmptyAttributeValueValidator(tag, context);
 
@@ -53,7 +54,7 @@ class NonEmptyAttributeValueValidatorTest {
     // Given
     doReturn("!test-attributes").when(tag).getTagName();
     doReturn(new AttributeElement(attributes)).when(tag).getElement();
-    doReturn(List.of(new NonEmptyAttributeValueRule("attr1", VALIDATION_WARNING)))
+    doReturn(RuleList.of(new NonEmptyAttributeValueRule("attr1", VALIDATION_WARNING)))
         .when(tag)
         .getRules();
     final var validator = new NonEmptyAttributeValueValidator(tag, context);
@@ -76,7 +77,7 @@ class NonEmptyAttributeValueValidatorTest {
   void shouldNotAddMessageForNonEmptyValue() {
     // Given
     doReturn(new AttributeElement(Map.of("attr1", "some value"))).when(tag).getElement();
-    doReturn(List.of(new NonEmptyAttributeValueRule("attr1", VALIDATION_WARNING)))
+    doReturn(RuleList.of(new NonEmptyAttributeValueRule("attr1", VALIDATION_WARNING)))
         .when(tag)
         .getRules();
     final var validator = new NonEmptyAttributeValueValidator(tag, context);

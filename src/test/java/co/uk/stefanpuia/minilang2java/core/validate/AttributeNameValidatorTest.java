@@ -9,9 +9,9 @@ import static org.mockito.Mockito.doReturn;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.convert.context.Message;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameRule;
+import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import co.uk.stefanpuia.minilang2java.impl.AttributeElement;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
-import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +28,7 @@ class AttributeNameValidatorTest {
   void shouldErrorWhenMissingRequireAllAttributes() {
     // Given
     doReturn(new AttributeElement(Map.of())).when(tag).getElement();
-    doReturn(List.of(ImmutableAttributeNameRule.builder().addRequiredAll("required").build()))
+    doReturn(RuleList.of(ImmutableAttributeNameRule.builder().addRequiredAll("required").build()))
         .when(tag)
         .getRules();
 
@@ -49,7 +49,7 @@ class AttributeNameValidatorTest {
     // Given
     final AttributeElement element = new AttributeElement(Map.of("required", "true"));
     doReturn(element).when(tag).getElement();
-    doReturn(List.of(ImmutableAttributeNameRule.builder().addRequiredAll("required").build()))
+    doReturn(RuleList.of(ImmutableAttributeNameRule.builder().addRequiredAll("required").build()))
         .when(tag)
         .getRules();
 
@@ -65,7 +65,7 @@ class AttributeNameValidatorTest {
     // Given
     doReturn(new AttributeElement(Map.of())).when(tag).getElement();
     doReturn(
-            List.of(
+            RuleList.of(
                 ImmutableAttributeNameRule.builder().addRequiredOneOf("one-of", "two-of").build()))
         .when(tag)
         .getRules();
@@ -87,7 +87,7 @@ class AttributeNameValidatorTest {
     // Given
     doReturn(new AttributeElement(Map.of("one-of", ""))).when(tag).getElement();
     doReturn(
-            List.of(
+            RuleList.of(
                 ImmutableAttributeNameRule.builder().addRequiredOneOf("one-of", "two-of").build()))
         .when(tag)
         .getRules();
@@ -104,7 +104,7 @@ class AttributeNameValidatorTest {
     // Given
     doReturn(new AttributeElement(Map.of("one-of", "", "extra", ""))).when(tag).getElement();
     doReturn(
-            List.of(
+            RuleList.of(
                 ImmutableAttributeNameRule.builder().addRequiredOneOf("one-of", "two-of").build()))
         .when(tag)
         .getRules();
@@ -132,7 +132,7 @@ class AttributeNameValidatorTest {
         .when(tag)
         .getElement();
     doReturn(
-            List.of(
+            RuleList.of(
                 ImmutableAttributeNameRule.builder()
                     .addRequiredOneOf("1-one-of", "1-two-of")
                     .addOptional("1-optional")

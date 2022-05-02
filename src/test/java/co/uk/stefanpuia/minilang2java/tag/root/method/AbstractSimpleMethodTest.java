@@ -24,7 +24,7 @@ public abstract class AbstractSimpleMethodTest {
   @Test
   void shouldHaveRules() {
     final var method = new EventSimpleMethod(tagInit(context, element));
-    then(method.getRules())
+    then(method.getRules().getRules())
         .containsExactly(
             ImmutableAttributeNameRule.builder()
                 .addRequiredAll("method-name")

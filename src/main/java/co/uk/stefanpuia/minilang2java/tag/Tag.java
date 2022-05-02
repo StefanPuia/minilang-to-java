@@ -5,9 +5,8 @@ import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.model.ContextVariable;
 import co.uk.stefanpuia.minilang2java.core.model.Position;
 import co.uk.stefanpuia.minilang2java.core.model.VariableType;
-import co.uk.stefanpuia.minilang2java.core.validate.rule.ValidationRule;
+import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -54,8 +53,8 @@ public abstract class Tag {
     return position;
   }
 
-  public List<ValidationRule> getRules() {
-    return Collections.emptyList();
+  public RuleList getRules() {
+    return RuleList.empty();
   }
 
   public Element getElement() {
