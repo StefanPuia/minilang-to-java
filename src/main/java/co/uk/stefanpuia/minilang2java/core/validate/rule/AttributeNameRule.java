@@ -15,11 +15,17 @@ public abstract class AttributeNameRule implements ValidationRule {
 
   public abstract List<String> getOptional();
 
+  public abstract List<String> getDeprecated();
+
+  public abstract List<String> getUnhandled();
+
   public Set<String> getAllAttributes() {
     final var set = new HashSet<String>();
     set.addAll(getRequiredAll());
     set.addAll(getRequiredOneOf());
     set.addAll(getOptional());
+    set.addAll(getDeprecated());
+    set.addAll(getUnhandled());
     return set;
   }
 }

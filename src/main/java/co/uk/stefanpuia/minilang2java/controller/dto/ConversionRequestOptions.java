@@ -49,6 +49,12 @@ public abstract class ConversionRequestOptions {
   }
 
   @Default
+  @JsonAlias("editor.logging.validation.deprecated")
+  public boolean isLoggingValidationDeprecate() {
+    return true;
+  }
+
+  @Default
   @JsonAlias("editor.converter.authServices")
   public boolean isConverterAuthServices() {
     return true;

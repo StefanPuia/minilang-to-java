@@ -17,6 +17,7 @@ export function migrateStorage() {
         store("editor.methodMode", "SERVICE");
         store(checkboxKeyMap.logging_validation_error, true);
         store(checkboxKeyMap.logging_validation_warning, true);
+        store(checkboxKeyMap.logging_validation_deprecated, true);
         storeVersion("002");
     }
 }

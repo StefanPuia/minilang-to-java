@@ -1,5 +1,7 @@
 package co.uk.stefanpuia.minilang2java.core.validate;
 
+import static co.uk.stefanpuia.minilang2java.core.model.MessageType.VALIDATION_DEPRECATE;
+import static co.uk.stefanpuia.minilang2java.core.model.MessageType.VALIDATION_WARNING;
 import static java.lang.String.format;
 
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
@@ -33,6 +35,39 @@ public class AttributeNameValidator extends Validator<AttributeNameRule> {
     validateRequiredAllAttributes();
     validateRequiredAnyAttributes();
     warnExtraAttributes();
+    warnDeprecatedAttributes();
+    warnUnhandledAttributes();
+  }
+
+  private void warnUnhandledAttributes() {
+    getRules().stream()
+        .map(AttributeNameRule::getUnhandled)
+        .flatMap(List::stream)
+        .collect(Collectors.toSet())
+        .stream()
+        .filter(attributes::contains)
+        .forEach(
+            unhandled ->
+                addMessage(
+                    VALIDATION_WARNING,
+                    String.format(
+                        "Attribute [%s] is unhandled for tag [%s]", unhandled, tag.getTagName())));
+  }
+
+  private void warnDeprecatedAttributes() {
+    getRules().stream()
+        .map(AttributeNameRule::getDeprecated)
+        .flatMap(List::stream)
+        .collect(Collectors.toSet())
+        .stream()
+        .filter(attributes::contains)
+        .forEach(
+            deprecated ->
+                addMessage(
+                    VALIDATION_DEPRECATE,
+                    String.format(
+                        "Attribute [%s] is deprecated for tag [%s]",
+                        deprecated, tag.getTagName())));
   }
 
   private void validateRequiredAnyAttributes() {

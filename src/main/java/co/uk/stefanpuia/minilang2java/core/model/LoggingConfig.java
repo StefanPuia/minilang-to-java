@@ -5,4 +5,5 @@ public record LoggingConfig(
     boolean info,
     boolean warning,
     boolean validationWarning,
-    boolean validationError) {}
+    boolean validationError,
+    boolean validationDeprecate) {}

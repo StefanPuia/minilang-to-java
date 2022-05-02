@@ -1,6 +1,7 @@
 package co.uk.stefanpuia.minilang2java.core.validate;
 
 import static co.uk.stefanpuia.minilang2java.TestObjects.conversionContext;
+import static co.uk.stefanpuia.minilang2java.core.model.MessageType.VALIDATION_DEPRECATE;
 import static co.uk.stefanpuia.minilang2java.core.model.MessageType.VALIDATION_ERROR;
 import static co.uk.stefanpuia.minilang2java.core.model.MessageType.VALIDATION_WARNING;
 import static org.assertj.core.api.BDDAssertions.then;
@@ -121,6 +122,48 @@ class AttributeNameValidatorTest {
         .extracting(Message::message)
         .matches(str -> str.contains("Extra attribute"), "warn message")
         .matches(str -> str.contains("[extra]"), "list attributes");
+  }
+
+  @Test
+  void shouldWarnUnhandledAttributes() {
+    // Given
+    doReturn(new AttributeElement(Map.of("some-attr", "some value"))).when(tag).getElement();
+    doReturn(RuleList.of(ImmutableAttributeNameRule.builder().addUnhandled("some-attr").build()))
+        .when(tag)
+        .getRules();
+
+    // When
+    new AttributeNameValidator(tag, context).execute();
+
+    // Then
+    then(context.getMessages()).hasSize(1);
+    then(context.getMessages().get(0))
+        .extracting(Message::messageType)
+        .isEqualTo(VALIDATION_WARNING);
+    then(context.getMessages().get(0))
+        .extracting(Message::message)
+        .matches(str -> str.contains("Attribute [some-attr] is unhandled for tag"));
+  }
+
+  @Test
+  void shouldWarnDeprecatedAttributes() {
+    // Given
+    doReturn(new AttributeElement(Map.of("some-attr", "some value"))).when(tag).getElement();
+    doReturn(RuleList.of(ImmutableAttributeNameRule.builder().addDeprecated("some-attr").build()))
+        .when(tag)
+        .getRules();
+
+    // When
+    new AttributeNameValidator(tag, context).execute();
+
+    // Then
+    then(context.getMessages()).hasSize(1);
+    then(context.getMessages().get(0))
+        .extracting(Message::messageType)
+        .isEqualTo(VALIDATION_DEPRECATE);
+    then(context.getMessages().get(0))
+        .extracting(Message::message)
+        .matches(str -> str.contains("Attribute [some-attr] is deprecated for tag"));
   }
 
   @Test
