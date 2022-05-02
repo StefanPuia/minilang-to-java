@@ -1,5 +1,6 @@
 package co.uk.stefanpuia.minilang2java.tag.root;
 
+import static co.uk.stefanpuia.minilang2java.core.model.MessageType.WARNING;
 import static java.lang.String.format;
 
 import co.uk.stefanpuia.minilang2java.core.TagInit;
@@ -19,6 +20,9 @@ public class XmlRoot extends Tag {
 
   private void wrapWithSimpleMethod() {
     if (children.stream().anyMatch(this::tagIsNotSimpleMethod)) {
+      conversionContext.addMessage(
+          WARNING,
+          "Elements found outside a [simple-method] tag. A wrapper method will be generated.");
       final var method = GeneratedMethod.createTag(conversionContext, this);
       children.stream().filter(this::tagIsNotSimpleMethod).forEach(method::appendChild);
       children.removeIf(this::tagIsNotSimpleMethod);

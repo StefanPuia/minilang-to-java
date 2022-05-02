@@ -50,7 +50,7 @@ public class AttributeNameValidator extends Validator<AttributeNameRule> {
             unhandled ->
                 addMessage(
                     VALIDATION_WARNING,
-                    String.format(
+                    format(
                         "Attribute [%s] is unhandled for tag [%s]", unhandled, tag.getTagName())));
   }
 
@@ -65,7 +65,7 @@ public class AttributeNameValidator extends Validator<AttributeNameRule> {
             deprecated ->
                 addMessage(
                     VALIDATION_DEPRECATE,
-                    String.format(
+                    format(
                         "Attribute [%s] is deprecated for tag [%s]",
                         deprecated, tag.getTagName())));
   }

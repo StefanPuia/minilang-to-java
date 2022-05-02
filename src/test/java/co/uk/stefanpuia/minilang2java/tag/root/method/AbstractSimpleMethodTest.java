@@ -8,7 +8,7 @@ import static org.assertj.core.api.BDDAssertions.then;
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameRule;
-import co.uk.stefanpuia.minilang2java.core.validate.rule.NonEmptyAttributeValueRule;
+import co.uk.stefanpuia.minilang2java.core.validate.rule.NonEmptyIfPresentAttributeValueRule;
 import co.uk.stefanpuia.minilang2java.impl.AttributeElement;
 import co.uk.stefanpuia.minilang2java.impl.TagTestImpl;
 import java.util.Map;
@@ -30,7 +30,7 @@ public abstract class AbstractSimpleMethodTest {
                 .addRequiredAll("method-name")
                 .addOptional("short-description")
                 .build(),
-            new NonEmptyAttributeValueRule("method-name", VALIDATION_WARNING));
+            new NonEmptyIfPresentAttributeValueRule("method-name", VALIDATION_WARNING));
   }
 
   SimpleMethod accessDelegatorInInnerTag(final Function<TagInit, SimpleMethod> instanceMethod) {
