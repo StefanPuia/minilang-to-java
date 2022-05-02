@@ -79,4 +79,17 @@ public class ChildTagNameValidator extends PropertyListValidator<ChildTagNameRul
                         "Tag [%s] is missing required child element [%s]",
                         tag.getTagName(), requiredTag)));
   }
+
+  @Override
+  protected void execute() {
+    super.execute();
+    validateNoChildElements();
+  }
+
+  private void validateNoChildElements() {
+    if (getRules().stream().anyMatch(ChildTagNameRule::isRequireNoChildrenElements)
+        && !children.isEmpty()) {
+      addWarning(format("Tag [%s] should not have any children", tag.getTagName()));
+    }
+  }
 }

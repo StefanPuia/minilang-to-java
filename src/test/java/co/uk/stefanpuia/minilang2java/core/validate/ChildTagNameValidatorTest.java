@@ -154,4 +154,36 @@ class ChildTagNameValidatorTest {
     validator.execute();
     then(context.getMessages()).hasSize(0);
   }
+
+  @Test
+  void shouldWarnForNoChildElementsWhenPresent() {
+    doReturn("!test-tag").when(tag).getTagName();
+    doReturn(
+            RuleList.of(
+                ImmutableChildTagNameRule.builder().setRequireNoChildrenElements(true).build()))
+        .when(tag)
+        .getRules();
+    doReturn(List.of(mockChild("some-child"))).when(tag).getChildren();
+    final var validator = new ChildTagNameValidator(tag, context);
+    validator.execute();
+    then(context.getMessages()).hasSize(1);
+    then(context.getMessages().get(0))
+        .extracting(Message::messageType)
+        .isEqualTo(VALIDATION_WARNING);
+    then(context.getMessages().get(0))
+        .extracting(Message::message)
+        .isEqualTo("Tag [!test-tag] should not have any children");
+  }
+
+  @Test
+  void shouldNotWarnForNoChildElementsWhenMissing() {
+    doReturn(
+            RuleList.of(
+                ImmutableChildTagNameRule.builder().setRequireNoChildrenElements(true).build()))
+        .when(tag)
+        .getRules();
+    final var validator = new ChildTagNameValidator(tag, context);
+    validator.execute();
+    then(context.getMessages()).hasSize(0);
+  }
 }
