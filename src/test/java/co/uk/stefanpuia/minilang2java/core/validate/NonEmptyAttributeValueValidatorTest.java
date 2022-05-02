@@ -8,6 +8,7 @@ import static org.mockito.Mockito.doReturn;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.convert.context.Message;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.NonEmptyAttributeValueRule;
+import co.uk.stefanpuia.minilang2java.core.validate.rule.NonEmptyIfPresentAttributeValueRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import co.uk.stefanpuia.minilang2java.impl.AttributeElement;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
@@ -87,5 +88,45 @@ class NonEmptyAttributeValueValidatorTest {
 
     // Then
     then(context.getMessages()).hasSize(0);
+  }
+
+  @Test
+  void shouldNotAddMessageWithIfPresentRuleAndNullValue() {
+    // Given
+    doReturn(new AttributeElement(Map.of())).when(tag).getElement();
+    doReturn(RuleList.of(new NonEmptyIfPresentAttributeValueRule("attr1", VALIDATION_WARNING)))
+        .when(tag)
+        .getRules();
+    final var validator = new NonEmptyAttributeValueValidator(tag, context);
+
+    // When
+    validator.execute();
+
+    // Then
+    then(context.getMessages()).hasSize(0);
+  }
+
+  @Test
+  void shouldAddMessageWithIfPresentRuleAndEmptyValue() {
+    // Given
+    doReturn("!test-attributes").when(tag).getTagName();
+    doReturn(new AttributeElement(Map.of("attr1", ""))).when(tag).getElement();
+    doReturn(RuleList.of(new NonEmptyIfPresentAttributeValueRule("attr1", VALIDATION_WARNING)))
+        .when(tag)
+        .getRules();
+    final var validator = new NonEmptyAttributeValueValidator(tag, context);
+
+    // When
+    validator.execute();
+
+    // Then
+    then(context.getMessages())
+        .hasSize(1)
+        .extracting(Message::messageType)
+        .containsExactly(VALIDATION_WARNING);
+    then(context.getMessages())
+        .extracting(Message::message)
+        .allMatch(
+            str -> str.contains("Tag [!test-attributes] is missing a value for attribute [attr1]"));
   }
 }

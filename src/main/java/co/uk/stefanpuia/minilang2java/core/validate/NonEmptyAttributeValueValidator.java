@@ -2,7 +2,8 @@ package co.uk.stefanpuia.minilang2java.core.validate;
 
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.model.OptionalString;
-import co.uk.stefanpuia.minilang2java.core.validate.rule.NonEmptyAttributeValueRule;
+import co.uk.stefanpuia.minilang2java.core.validate.rule.NonEmptyAttributeName;
+import co.uk.stefanpuia.minilang2java.core.validate.rule.NonEmptyIfPresentAttributeValueRule;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -10,11 +11,11 @@ import java.util.stream.IntStream;
 import org.w3c.dom.Node;
 
 @TagValidator
-public class NonEmptyAttributeValueValidator extends Validator<NonEmptyAttributeValueRule> {
+public class NonEmptyAttributeValueValidator extends Validator<NonEmptyAttributeName> {
   private final Map<String, String> attributes;
 
   protected NonEmptyAttributeValueValidator(final Tag tag, final ConversionContext context) {
-    super(tag, context, NonEmptyAttributeValueRule.class);
+    super(tag, context, NonEmptyAttributeName.class);
     this.attributes = getElementAttributes();
   }
 
@@ -27,7 +28,8 @@ public class NonEmptyAttributeValueValidator extends Validator<NonEmptyAttribute
 
   @Override
   protected void execute() {
-    getRules()
+    getRules().stream()
+        .filter(this::shouldValidateField)
         .forEach(
             rule -> {
               final var value = OptionalString.of(attributes.get(rule.name()));
@@ -39,5 +41,10 @@ public class NonEmptyAttributeValueValidator extends Validator<NonEmptyAttribute
                         tag.getTagName(), rule.name()));
               }
             });
+  }
+
+  private boolean shouldValidateField(final NonEmptyAttributeName rule) {
+    return !(rule instanceof NonEmptyIfPresentAttributeValueRule)
+        || attributes.containsKey(rule.name());
   }
 }
