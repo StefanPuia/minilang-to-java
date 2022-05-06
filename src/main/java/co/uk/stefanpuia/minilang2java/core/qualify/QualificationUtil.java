@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.experimental.UtilityClass;
 
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 @UtilityClass
 public final class QualificationUtil {
   public static final Map<String, String> QUALIFICATION_MAP;

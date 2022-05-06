@@ -43,7 +43,7 @@ public abstract class VariableType {
   }
 
   @Derived
-  public String getTypeWithParams() {
+  public String toString() {
     final String baseType = getType().getClassName().orElse("Void");
     return getParameters().isEmpty()
         ? baseType

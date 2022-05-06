@@ -33,7 +33,7 @@ public class ServiceSimpleMethod extends SimpleMethod {
   @Override
   protected String getReturnType() {
     conversionContext.addImport(DEFAULT_MAP_TYPE);
-    return DEFAULT_MAP_TYPE.getTypeWithParams();
+    return DEFAULT_MAP_TYPE.toString();
   }
 
   @Override

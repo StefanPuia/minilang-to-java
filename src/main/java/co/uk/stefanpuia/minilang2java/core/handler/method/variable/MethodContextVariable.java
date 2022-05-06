@@ -40,7 +40,7 @@ public abstract class MethodContextVariable {
   }
 
   protected final String getBaseType() {
-    return getType().getTypeWithParams();
+    return getType().toString();
   }
 
   public final ContextVariable asUnused() {

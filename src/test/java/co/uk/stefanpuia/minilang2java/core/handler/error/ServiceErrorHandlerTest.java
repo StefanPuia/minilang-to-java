@@ -13,6 +13,8 @@ class ServiceErrorHandlerTest {
     final var handler = new ServiceErrorHandler(context);
     final List<String> strings = handler.returnError("\"some message\"");
     then(strings).hasSize(1).containsExactly("return returnError(\"some message\");");
-    then(context.getStaticImports()).hasSize(1).containsExactly("ServiceUtil.returnError");
+    then(context.getStaticImports())
+        .hasSize(1)
+        .containsExactly("org.ofbiz.service.ServiceUtil.returnError");
   }
 }

@@ -107,4 +107,20 @@ class VariableTypeTest {
         .asInstanceOf(list(VariableType.class))
         .isEmpty();
   }
+
+  @Test
+  void shouldWriteSimpleTypeToString() {
+    then(VariableType.from("SomeType").toString()).isEqualTo("SomeType");
+  }
+
+  @Test
+  void shouldNotWriteNoParametersTypeToString() {
+    then(VariableType.from("SomeType<>").toString()).isEqualTo("SomeType");
+  }
+
+  @Test
+  void shouldWriteParametersTypeToString() {
+    then(VariableType.from("SomeType<SomeTypeA, SomeTypeB, SomeTypeC>").toString())
+        .isEqualTo("SomeType<SomeTypeA, SomeTypeB, SomeTypeC>");
+  }
 }
