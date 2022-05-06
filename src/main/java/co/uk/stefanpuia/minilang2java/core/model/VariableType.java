@@ -43,6 +43,7 @@ public abstract class VariableType {
   }
 
   @Derived
+  @Override
   public String toString() {
     final String baseType = getType().getClassName().orElse("Void");
     return getParameters().isEmpty()

@@ -22,8 +22,7 @@ import java.util.stream.Collectors;
 public class EventSimpleMethod extends SimpleMethod {
 
   private final List<MethodContextVariable> parameters =
-      List.of(
-          new EventRequest(conversionContext, this), new EventResponse(conversionContext, this));
+      List.of(new EventRequest(context, this), new EventResponse(context, this));
 
   public EventSimpleMethod(final TagInit tagInit) {
     super(tagInit);
@@ -38,12 +37,12 @@ public class EventSimpleMethod extends SimpleMethod {
 
   @Override
   protected void addMethodVariablesToContext() {
-    methodContextVariables.add(new EventDelegator(conversionContext, this));
-    methodContextVariables.add(new EventDispatcher(conversionContext, this));
-    methodContextVariables.add(new EventParameters(conversionContext, this));
-    methodContextVariables.add(new EventUserLogin(conversionContext, this));
-    methodContextVariables.add(new EventLocale(conversionContext, this));
-    methodContextVariables.add(new EventTimeZone(conversionContext, this));
+    methodContextVariables.add(new EventDelegator(context, this));
+    methodContextVariables.add(new EventDispatcher(context, this));
+    methodContextVariables.add(new EventParameters(context, this));
+    methodContextVariables.add(new EventUserLogin(context, this));
+    methodContextVariables.add(new EventLocale(context, this));
+    methodContextVariables.add(new EventTimeZone(context, this));
     methodContextVariables.stream().map(MethodContextVariable::asUnused).forEach(this::setVariable);
   }
 

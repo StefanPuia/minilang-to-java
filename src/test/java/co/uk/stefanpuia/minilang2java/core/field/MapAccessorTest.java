@@ -20,6 +20,13 @@ class MapAccessorTest {
   @Mock private Tag tag;
 
   @Test
+  void shouldGetField() {
+    then(ImmutableMapAccessor.of(tag, context, "someMap.someProperty"))
+        .extracting(MapAccessor::getField)
+        .isEqualTo("someMap");
+  }
+
+  @Test
   void shouldMakeGetter() {
     then(ImmutableMapAccessor.of(tag, context, "someMap.someProperty"))
         .extracting(MapAccessor::makeGetter)

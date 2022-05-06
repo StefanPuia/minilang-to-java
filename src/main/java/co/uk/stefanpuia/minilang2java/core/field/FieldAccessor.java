@@ -13,7 +13,8 @@ import org.immutables.value.Value.Immutable;
 @ImmutableStyle
 public abstract class FieldAccessor extends FlexibleAccessor {
 
-  private String getField() {
+  @Override
+  public String getField() {
     return requireNonNull(getRawField());
   }
 

@@ -155,4 +155,22 @@ class TagTest {
       then(tag.getParent(SimpleMethod.class)).isEqualTo(Optional.of(root));
     }
   }
+
+  @Nested
+  class GetAttributeTest {
+    @Test
+    void shouldReturnEmptyIfNoValue() {
+      final var element = mock(Element.class);
+      final var tag = new TagTestImpl(tagInit(element));
+      then(tag.getAttribute("someAttr")).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    void shouldReturnAttribute() {
+      final var element = mock(Element.class);
+      doReturn("someValue").when(element).getAttribute("someAttr");
+      final var tag = new TagTestImpl(tagInit(element));
+      then(tag.getAttribute("someAttr")).isEqualTo(Optional.of("someValue"));
+    }
+  }
 }

@@ -20,10 +20,10 @@ public class XmlRoot extends Tag {
 
   private void wrapWithSimpleMethod() {
     if (children.stream().anyMatch(this::tagIsNotSimpleMethod)) {
-      conversionContext.addMessage(
+      context.addMessage(
           WARNING,
           "Elements found outside a [simple-method] tag. A wrapper method will be generated.");
-      final var method = GeneratedMethod.createTag(conversionContext, this);
+      final var method = GeneratedMethod.createTag(context, this);
       children.stream().filter(this::tagIsNotSimpleMethod).forEach(method::appendChild);
       children.removeIf(this::tagIsNotSimpleMethod);
       appendChild(method);
@@ -53,25 +53,22 @@ public class XmlRoot extends Tag {
   }
 
   private List<String> getStaticImports() {
-    return conversionContext.getStaticImports().stream()
+    return context.getStaticImports().stream()
         .sorted()
         .map(line -> format("import static %s;", line))
         .toList();
   }
 
   private List<String> getImports() {
-    return conversionContext.getImports().stream()
-        .sorted()
-        .map(line -> format("import %s;", line))
-        .toList();
+    return context.getImports().stream().sorted().map(line -> format("import %s;", line)).toList();
   }
 
   private String getPackage() {
-    return format("package %s;%n", conversionContext.getPackageName());
+    return format("package %s;%n", context.getPackageName());
   }
 
   private String getClassLine() {
-    return format("public class %s {", conversionContext.getClassName());
+    return format("public class %s {", context.getClassName());
   }
 
   @Override

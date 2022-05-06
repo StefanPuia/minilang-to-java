@@ -33,13 +33,13 @@ public class UtilSimpleMethod extends SimpleMethod {
 
   @Override
   protected void addMethodVariablesToContext() {
-    methodContextVariables.add(new UtilDelegator(conversionContext, this));
-    methodContextVariables.add(new UtilDispatcher(conversionContext, this));
-    methodContextVariables.add(new UtilParameters(conversionContext, this));
-    methodContextVariables.add(new UtilUserLogin(conversionContext, this));
-    methodContextVariables.add(new UtilLocale(conversionContext, this));
-    methodContextVariables.add(new UtilTimeZone(conversionContext, this));
-    methodContextVariables.add(new UtilReturnMap(conversionContext, this));
+    methodContextVariables.add(new UtilDelegator(context, this));
+    methodContextVariables.add(new UtilDispatcher(context, this));
+    methodContextVariables.add(new UtilParameters(context, this));
+    methodContextVariables.add(new UtilUserLogin(context, this));
+    methodContextVariables.add(new UtilLocale(context, this));
+    methodContextVariables.add(new UtilTimeZone(context, this));
+    methodContextVariables.add(new UtilReturnMap(context, this));
     methodContextVariables.stream().map(MethodContextVariable::asUnused).forEach(this::setVariable);
   }
 

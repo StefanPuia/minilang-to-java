@@ -51,4 +51,9 @@ public abstract class MapAccessor extends FlexibleAccessor {
     getContext().addImport(VariableType.from("HashMap"));
     return List.of(format("final %s %s = new HashMap<>();", DEFAULT_MAP_TYPE, getMapName()));
   }
+
+  @Override
+  public String getField() {
+    return getMapName();
+  }
 }

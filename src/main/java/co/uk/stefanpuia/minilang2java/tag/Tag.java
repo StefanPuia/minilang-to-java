@@ -3,6 +3,7 @@ package co.uk.stefanpuia.minilang2java.tag;
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.model.ContextVariable;
+import co.uk.stefanpuia.minilang2java.core.model.OptionalString;
 import co.uk.stefanpuia.minilang2java.core.model.Position;
 import co.uk.stefanpuia.minilang2java.core.model.VariableType;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
@@ -14,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.w3c.dom.Element;
 
 public abstract class Tag {
-  protected final ConversionContext conversionContext;
+  protected final ConversionContext context;
   protected final Element element;
 
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
@@ -27,7 +28,7 @@ public abstract class Tag {
   protected final Map<String, ContextVariable> variableContext = new ConcurrentHashMap<>();
 
   public Tag(final TagInit tagInit) {
-    this.conversionContext = tagInit.conversionContext();
+    this.context = tagInit.conversionContext();
     this.element = tagInit.element();
     this.parent = Optional.ofNullable(tagInit.parent());
     this.position = tagInit.getPosition();
@@ -44,9 +45,7 @@ public abstract class Tag {
   }
 
   public String prependIndentation(final String line) {
-    return line.isBlank()
-        ? ""
-        : String.format("%s%s", conversionContext.getBaseIndentation(), line);
+    return line.isBlank() ? "" : String.format("%s%s", context.getBaseIndentation(), line);
   }
 
   public Position getPosition() {
@@ -106,5 +105,9 @@ public abstract class Tag {
 
   public final List<Tag> getChildren() {
     return children;
+  }
+
+  protected Optional<String> getAttribute(final String name) {
+    return OptionalString.of(element.getAttribute(name));
   }
 }

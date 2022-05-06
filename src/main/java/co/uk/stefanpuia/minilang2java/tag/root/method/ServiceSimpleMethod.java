@@ -21,9 +21,7 @@ import java.util.stream.Collectors;
 @MinilangTag(value = "simple-method", mode = SERVICE)
 public class ServiceSimpleMethod extends SimpleMethod {
   private final List<MethodContextVariable> parameters =
-      List.of(
-          new DispatchContext(conversionContext, this),
-          new ServiceParameters(conversionContext, this));
+      List.of(new DispatchContext(context, this), new ServiceParameters(context, this));
 
   public ServiceSimpleMethod(final TagInit tagInit) {
     super(tagInit);
@@ -32,18 +30,18 @@ public class ServiceSimpleMethod extends SimpleMethod {
 
   @Override
   protected String getReturnType() {
-    conversionContext.addImport(DEFAULT_MAP_TYPE);
+    context.addImport(DEFAULT_MAP_TYPE);
     return DEFAULT_MAP_TYPE.toString();
   }
 
   @Override
   protected void addMethodVariablesToContext() {
-    methodContextVariables.add(new ServiceDelegator(conversionContext, this));
-    methodContextVariables.add(new ServiceDispatcher(conversionContext, this));
-    methodContextVariables.add(new ServiceUserLogin(conversionContext, this));
-    methodContextVariables.add(new ServiceLocale(conversionContext, this));
-    methodContextVariables.add(new ServiceTimeZone(conversionContext, this));
-    methodContextVariables.add(new ServiceReturnMap(conversionContext, this));
+    methodContextVariables.add(new ServiceDelegator(context, this));
+    methodContextVariables.add(new ServiceDispatcher(context, this));
+    methodContextVariables.add(new ServiceUserLogin(context, this));
+    methodContextVariables.add(new ServiceLocale(context, this));
+    methodContextVariables.add(new ServiceTimeZone(context, this));
+    methodContextVariables.add(new ServiceReturnMap(context, this));
     methodContextVariables.stream().map(MethodContextVariable::asUnused).forEach(this::setVariable);
   }
 

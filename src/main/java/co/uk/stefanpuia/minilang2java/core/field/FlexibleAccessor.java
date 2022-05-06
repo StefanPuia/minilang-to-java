@@ -35,5 +35,7 @@ public abstract class FlexibleAccessor {
 
   public abstract List<String> makeGetter();
 
+  public abstract String getField();
+
   public abstract List<String> makeSetter(final String assignment);
 }
