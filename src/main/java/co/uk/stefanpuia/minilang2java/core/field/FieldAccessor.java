@@ -19,8 +19,8 @@ public abstract class FieldAccessor extends FlexibleAccessor {
   }
 
   @Override
-  public List<String> makeGetter() {
-    return List.of(getField());
+  public String makeGetter() {
+    return getField();
   }
 
   @Override

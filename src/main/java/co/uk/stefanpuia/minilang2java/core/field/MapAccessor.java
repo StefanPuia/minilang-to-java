@@ -32,8 +32,8 @@ public abstract class MapAccessor extends FlexibleAccessor {
   }
 
   @Override
-  public List<String> makeGetter() {
-    return List.of(format("%s.get(\"%s\")", getMapName(), getProperty()));
+  public String makeGetter() {
+    return format("%s.get(\"%s\")", getMapName(), getProperty());
   }
 
   @Override
@@ -48,7 +48,7 @@ public abstract class MapAccessor extends FlexibleAccessor {
   }
 
   private List<String> getDeclarationLineAndAddImport() {
-    getContext().addImport(VariableType.from("HashMap"));
+    getParent().getContext().addImport(VariableType.from("HashMap"));
     return List.of(format("final %s %s = new HashMap<>();", DEFAULT_MAP_TYPE, getMapName()));
   }
 

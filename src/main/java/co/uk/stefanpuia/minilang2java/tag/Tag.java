@@ -88,7 +88,7 @@ public abstract class Tag {
   }
 
   @SuppressWarnings({"unchecked", "PMD.OnlyOneReturn"})
-  protected <T extends Tag> Optional<T> getParent(final Class<T> parentType) {
+  public <T extends Tag> Optional<T> getParent(final Class<T> parentType) {
     if (parent.isPresent()) {
       if (parentType.isAssignableFrom(parent.get().getClass())) {
         return (Optional<T>) parent;
@@ -109,5 +109,9 @@ public abstract class Tag {
 
   protected Optional<String> getAttribute(final String name) {
     return OptionalString.of(element.getAttribute(name));
+  }
+
+  public ConversionContext getContext() {
+    return context;
   }
 }

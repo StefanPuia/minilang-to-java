@@ -1,5 +1,6 @@
 package co.uk.stefanpuia.minilang2java.tag;
 
+import static co.uk.stefanpuia.minilang2java.TestObjects.conversionContext;
 import static co.uk.stefanpuia.minilang2java.TestObjects.tagInit;
 import static net.bytebuddy.utility.RandomString.make;
 import static org.assertj.core.api.BDDAssertions.then;
@@ -130,6 +131,13 @@ class TagTest {
     then(tag.getChildren()).hasSize(0);
     tag.appendChild(mock(Tag.class));
     then(tag.getChildren()).hasSize(1);
+  }
+
+  @Test
+  void shouldGetContext() {
+    final var context = conversionContext();
+    final var tag = new TagTestImpl(tagInit(context, null, null));
+    then(tag.getContext()).isSameAs(context);
   }
 
   @Nested
