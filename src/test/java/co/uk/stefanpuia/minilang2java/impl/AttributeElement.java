@@ -2,7 +2,9 @@ package co.uk.stefanpuia.minilang2java.impl;
 
 import co.uk.stefanpuia.minilang2java.core.xml.impl.AbstractElement;
 import java.util.Map;
+import java.util.Optional;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 public class AttributeElement extends AbstractElement {
 
@@ -23,7 +25,10 @@ public class AttributeElement extends AbstractElement {
   }
 
   @Override
+  @SuppressWarnings("ConstantConditions")
   public String getAttribute(final String name) {
-    return getAttributes().getNamedItem(name).getNodeValue();
+    return Optional.ofNullable(getAttributes().getNamedItem(name))
+        .map(Node::getNodeValue)
+        .orElse(null);
   }
 }
