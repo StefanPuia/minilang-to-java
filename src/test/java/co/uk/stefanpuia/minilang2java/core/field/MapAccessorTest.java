@@ -1,6 +1,7 @@
 package co.uk.stefanpuia.minilang2java.core.field;
 
 import static co.uk.stefanpuia.minilang2java.TestObjects.conversionContext;
+import static co.uk.stefanpuia.minilang2java.core.model.VariableType.DEFAULT_MAP_TYPE;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.Mockito.doReturn;
 
@@ -40,6 +41,7 @@ class MapAccessorTest {
 
   @Test
   void shouldMakeSetterWhenDeclared() {
+    doReturn(conversionContext()).when(tag).getContext();
     doReturn(Optional.of(new ContextVariable("someMap", 1, null))).when(tag).getVariable("someMap");
     then(ImmutableMapAccessor.of(tag, "someMap.someProperty"))
         .extracting(mapAccessor -> mapAccessor.makeSetter("someVariable"))
@@ -51,6 +53,17 @@ class MapAccessorTest {
     doReturn(conversionContext()).when(tag).getContext();
     then(ImmutableMapAccessor.of(tag, "someMap.someProperty"))
         .extracting(mapAccessor -> mapAccessor.makeSetter("someVariable"))
+        .isEqualTo(
+            List.of(
+                "final Map<String, Object> someMap = new HashMap<>();",
+                "someMap.put(\"someProperty\", someVariable);"));
+  }
+
+  @Test
+  void shouldMakeSplitDeclarationAndSetterWhenNotDeclared() {
+    doReturn(conversionContext()).when(tag).getContext();
+    then(ImmutableMapAccessor.of(tag, "someMap.someProperty"))
+        .extracting(mapAccessor -> mapAccessor.makeSplitSetter(DEFAULT_MAP_TYPE, "someVariable"))
         .isEqualTo(
             List.of(
                 "final Map<String, Object> someMap = new HashMap<>();",

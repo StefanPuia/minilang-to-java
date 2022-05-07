@@ -8,7 +8,7 @@ import co.uk.stefanpuia.minilang2java.tag.Tag;
 import java.util.Optional;
 import javax.annotation.Nullable;
 
-public record FlexibleStringExpander(Tag parent, @Nullable String value) {
+public record FlexibleStringExpander(Tag tag, @Nullable String value) {
 
   public static String wrapQuotes(final String value) {
     return format("\"%s\"", value);
@@ -31,8 +31,8 @@ public record FlexibleStringExpander(Tag parent, @Nullable String value) {
   }
 
   private String getVariableOrString(final String value) {
-    final var accessor = FlexibleAccessor.from(parent(), value);
-    return parent()
+    final var accessor = FlexibleAccessor.from(tag(), value);
+    return tag()
         .getVariable(accessor.getField())
         .map(str -> accessor.makeGetter())
         .orElse(wrapQuotes(value));

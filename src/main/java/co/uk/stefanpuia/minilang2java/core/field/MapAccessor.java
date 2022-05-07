@@ -38,9 +38,20 @@ public abstract class MapAccessor extends FlexibleAccessor {
 
   @Override
   public List<String> makeSetter(final String assignment) {
+    return makeSetter(DEFAULT_MAP_TYPE, assignment);
+  }
+
+  @Override
+  public List<String> makeSetter(final VariableType type, final String assignment) {
+    getParent().getContext().addImport(type);
     final List<String> lines = new ArrayList<>(makeDeclaration());
     lines.add(format("%s.put(\"%s\", %s);", getMapName(), getProperty(), assignment));
     return lines;
+  }
+
+  @Override
+  public List<String> makeSplitSetter(final VariableType type, final String assignment) {
+    return makeSetter(type, assignment);
   }
 
   private List<String> makeDeclaration() {

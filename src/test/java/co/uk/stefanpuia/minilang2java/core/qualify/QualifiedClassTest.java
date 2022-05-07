@@ -65,4 +65,19 @@ class QualifiedClassTest {
     // Then
     then(qualified).isNotNull().extracting(QualifiedClass::qualify).isEqualTo("java.util.Map");
   }
+
+  @Test
+  void shouldNotRequireImportIfDefault() {
+    then(QualifiedClass.from("java.lang.Object").isRequiresImport("")).isFalse();
+  }
+
+  @Test
+  void shouldNotRequireImportIfSamePackage() {
+    then(QualifiedClass.from("com.test.SomeClass").isRequiresImport("com.test")).isFalse();
+  }
+
+  @Test
+  void shouldRequireImport() {
+    then(QualifiedClass.from("com.test.SomeClass").isRequiresImport("com.other.test")).isTrue();
+  }
 }

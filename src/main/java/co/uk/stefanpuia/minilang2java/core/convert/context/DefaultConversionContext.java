@@ -44,7 +44,9 @@ public class DefaultConversionContext implements ConversionContext {
 
   @Override
   public void addImport(final VariableType type) {
-    imports.add(type.getType());
+    if (type.getType().isRequiresImport(getPackageName())) {
+      imports.add(type.getType());
+    }
   }
 
   @Override

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import javax.validation.constraints.NotNull;
 import org.immutables.value.Value.Derived;
 import org.immutables.value.Value.Immutable;
 
@@ -20,11 +21,11 @@ public abstract class VariableType {
 
   static {
     TYPE_WITH_PARAMS_PATTERN = Pattern.compile("^(?<type>.+?)(?:<(?<params>.*?)>)?$");
-    DEFAULT_TYPE = VariableType.from("Object");
-    DEFAULT_MAP_TYPE = VariableType.from("Map<String, Object>");
+    DEFAULT_TYPE = VariableType.from("java.lang.Object");
+    DEFAULT_MAP_TYPE = VariableType.from("java.util.Map<java.lang.String, java.lang.Object>");
   }
 
-  public static VariableType from(final String type) {
+  public static VariableType from(@NotNull final String type) {
     return ImmutableVariableType.builder().setRawType(type).build();
   }
 

@@ -1,6 +1,7 @@
 package co.uk.stefanpuia.minilang2java.core.field;
 
 import co.uk.stefanpuia.minilang2java.core.model.OptionalString;
+import co.uk.stefanpuia.minilang2java.core.model.VariableType;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -8,14 +9,14 @@ import org.immutables.value.Value.Parameter;
 
 public abstract class FlexibleAccessor {
 
-  public static FlexibleAccessor from(final Tag parent, @Nullable final String nullableField) {
-    return OptionalString.of(nullableField).map(field -> handle(parent, field)).orElseThrow();
+  public static FlexibleAccessor from(final Tag tag, @Nullable final String nullableField) {
+    return OptionalString.of(nullableField).map(field -> handle(tag, field)).orElseThrow();
   }
 
-  private static FlexibleAccessor handle(final Tag parent, final String field) {
+  private static FlexibleAccessor handle(final Tag tag, final String field) {
     return field.indexOf('.') > -1
-        ? ImmutableMapAccessor.of(parent, field)
-        : ImmutableFieldAccessor.of(parent, field);
+        ? ImmutableMapAccessor.of(tag, field)
+        : ImmutableFieldAccessor.of(tag, field);
   }
 
   @Parameter(order = 1)
@@ -30,4 +31,8 @@ public abstract class FlexibleAccessor {
   public abstract String getField();
 
   public abstract List<String> makeSetter(final String assignment);
+
+  public abstract List<String> makeSetter(final VariableType type, final String assignment);
+
+  public abstract List<String> makeSplitSetter(final VariableType type, final String assignment);
 }

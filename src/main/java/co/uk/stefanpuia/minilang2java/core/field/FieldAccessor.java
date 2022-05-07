@@ -6,6 +6,7 @@ import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
 import co.uk.stefanpuia.minilang2java.config.ImmutableStyle;
+import co.uk.stefanpuia.minilang2java.core.model.VariableType;
 import java.util.List;
 import org.immutables.value.Value.Immutable;
 
@@ -25,10 +26,23 @@ public abstract class FieldAccessor extends FlexibleAccessor {
 
   @Override
   public List<String> makeSetter(final String assignment) {
-    return List.of(format("%s%s = %s;", getDeclaration(), getField(), assignment));
+    return makeSetter(DEFAULT_TYPE, assignment);
   }
 
-  private String getDeclaration() {
-    return isDeclared(getParent(), getField()) ? "" : format("final %s ", DEFAULT_TYPE);
+  @Override
+  public List<String> makeSetter(final VariableType type, final String assignment) {
+    getParent().getContext().addImport(type);
+    return List.of(format("%s = %s;", getDeclaration(type), assignment));
+  }
+
+  @Override
+  public List<String> makeSplitSetter(final VariableType type, final String assignment) {
+    return List.of(format("%s;", getDeclaration(type)), format("%s = %s;", getField(), assignment));
+  }
+
+  private String getDeclaration(final VariableType type) {
+    return isDeclared(getParent(), getField())
+        ? getField()
+        : format("final %s %s", type, getField());
   }
 }
