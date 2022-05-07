@@ -16,7 +16,7 @@ class MessageTest {
     final var message = new Message(MessageType.DEPRECATE, messageText, new Position(10));
 
     // When - Then
-    then(message.render()).isNotNull().isEqualTo("DEPRECATE: " + messageText + " (line 10)");
+    then(message.render()).isNotNull().isEqualTo("DEPRECATE: " + messageText + " (line: 10)");
   }
 
   @Test

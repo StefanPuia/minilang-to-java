@@ -79,7 +79,7 @@ public class XmlRoot extends Tag {
   @Override
   public List<String> convertChildren() {
     return this.children.stream()
-        .map(Tag::convert)
+        .map(this::convertTagWithExceptionHandled)
         .map(this::appendNewline)
         .flatMap(List::stream)
         .toList();

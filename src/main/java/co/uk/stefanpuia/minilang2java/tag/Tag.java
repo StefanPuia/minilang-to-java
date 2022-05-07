@@ -1,11 +1,14 @@
 package co.uk.stefanpuia.minilang2java.tag;
 
+import static java.lang.String.format;
+
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.model.ContextVariable;
 import co.uk.stefanpuia.minilang2java.core.model.OptionalString;
 import co.uk.stefanpuia.minilang2java.core.model.Position;
 import co.uk.stefanpuia.minilang2java.core.model.VariableType;
+import co.uk.stefanpuia.minilang2java.core.model.exception.TagConversionException;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +40,22 @@ public abstract class Tag {
   public abstract List<String> convert();
 
   public List<String> convertChildren() {
-    return this.children.stream().map(Tag::convert).flatMap(List::stream).toList();
+    return this.children.stream()
+        .map(this::convertTagWithExceptionHandled)
+        .flatMap(List::stream)
+        .toList();
+  }
+
+  @SuppressWarnings("PMD.OnlyOneReturn")
+  protected List<String> convertTagWithExceptionHandled(final Tag tag) {
+    try {
+      return tag.convert();
+    } catch (TagConversionException e) {
+      return List.of(
+          format(
+              "// Exception converting [%s]: %s (%s)",
+              tag.getTagName(), e.getMessage(), tag.getPosition()));
+    }
   }
 
   public final void appendChild(final Tag tag) {
@@ -45,7 +63,7 @@ public abstract class Tag {
   }
 
   public String prependIndentation(final String line) {
-    return line.isBlank() ? "" : String.format("%s%s", context.getBaseIndentation(), line);
+    return line.isBlank() ? "" : format("%s%s", context.getBaseIndentation(), line);
   }
 
   public Position getPosition() {

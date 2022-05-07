@@ -5,12 +5,14 @@ import static co.uk.stefanpuia.minilang2java.TestObjects.tagInit;
 import static net.bytebuddy.utility.RandomString.make;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.model.ContextVariable;
 import co.uk.stefanpuia.minilang2java.core.model.Position;
 import co.uk.stefanpuia.minilang2java.core.model.VariableType;
+import co.uk.stefanpuia.minilang2java.core.model.exception.TagConversionException;
 import co.uk.stefanpuia.minilang2java.impl.TagTestImpl;
 import co.uk.stefanpuia.minilang2java.impl.TagTestImpl.TagWithContextTestImpl;
 import co.uk.stefanpuia.minilang2java.tag.root.method.SimpleMethod;
@@ -34,6 +36,20 @@ class TagTest {
     final var tag = new TagTestImpl(tagInit(context, element));
     tag.appendChild(new TagTestImpl(tagInit(context, element), List.of(converted)));
     then(tag.convertChildren()).containsExactly(converted);
+  }
+
+  @Test
+  void shouldConvertChildrenAndHandleException() {
+    final var conversionExceptionMessage = make();
+    final var exceptionTag = mock(Tag.class);
+    doThrow(new TagConversionException(conversionExceptionMessage)).when(exceptionTag).convert();
+    doReturn("!test-tag").when(exceptionTag).getTagName();
+    doReturn(new Position(10)).when(exceptionTag).getPosition();
+    final var tag = new TagTestImpl(tagInit(context, element));
+    tag.appendChild(exceptionTag);
+    then(tag.convertChildren())
+        .containsExactly(
+            "// Exception converting [!test-tag]: " + conversionExceptionMessage + " (line: 10)");
   }
 
   @Test

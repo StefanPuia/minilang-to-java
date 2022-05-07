@@ -25,4 +25,10 @@ class PositionTest {
     doReturn(24).when(element).getUserData("lineNumber");
     then(Position.makePosition(element)).isEqualTo(new Position(24));
   }
+
+  @Test
+  void shouldWriteToString() {
+    final var position = new Position(10);
+    then(position.toString()).isEqualTo("line: 10");
+  }
 }
