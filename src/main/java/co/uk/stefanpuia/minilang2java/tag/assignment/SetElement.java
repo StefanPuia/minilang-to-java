@@ -67,9 +67,27 @@ public class SetElement extends Tag {
 
   @Override
   public List<String> convert() {
-    final var lines = getConvert();
+    final var lines = new ArrayList<>(getConvert());
     setVariable(new ContextVariable(attributes.getField().getField(), 1, attributes.getType()));
+    addDefaultLines(lines);
     return lines;
+  }
+
+  private void addDefaultLines(final List<String> lines) {
+    attributes
+        .getDefault()
+        .map(FlexibleStringExpander::toString)
+        .ifPresent(
+            defaultValue -> {
+              getContext().addImport(VariableType.from("UtilValidate"));
+              lines.add(
+                  format("if (UtilValidate.isEmpty(%s)) {", attributes.getField().makeGetter()));
+              lines.addAll(
+                  attributes.getField().makeSetter(defaultValue).stream()
+                      .map(this::prependIndentation)
+                      .toList());
+              lines.add("}");
+            });
   }
 
   private List<String> getConvert() {
@@ -117,16 +135,7 @@ public class SetElement extends Tag {
         .getFrom()
         .map(FlexibleAccessor::makeGetter)
         .orElseGet(
-            () ->
-                attributes
-                    .getValue()
-                    .map(FlexibleStringExpander::toString)
-                    .orElseGet(
-                        () ->
-                            attributes
-                                .getDefault()
-                                .map(FlexibleStringExpander::toString)
-                                .orElse("null")));
+            () -> attributes.getValue().map(FlexibleStringExpander::toString).orElse("null"));
   }
 
   @AllArgsConstructor

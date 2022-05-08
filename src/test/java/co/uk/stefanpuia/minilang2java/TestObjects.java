@@ -65,6 +65,10 @@ public class TestObjects {
     return tagInit(conversionContext(), attributeElement(), null);
   }
 
+  public static TagInit tagInit(final ConversionContext context) {
+    return tagInit(context, attributeElement(), null);
+  }
+
   public static TagInit tagInit(final Element element) {
     return tagInit(conversionContext(), element, null);
   }
