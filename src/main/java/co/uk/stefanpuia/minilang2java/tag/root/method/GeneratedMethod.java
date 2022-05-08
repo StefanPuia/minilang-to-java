@@ -5,6 +5,7 @@ import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import java.util.List;
 import net.bytebuddy.utility.RandomString;
+import org.w3c.dom.Document;
 
 public class GeneratedMethod extends SimpleMethod {
 
@@ -16,8 +17,9 @@ public class GeneratedMethod extends SimpleMethod {
   }
 
   public static GeneratedMethod createTag(
-      final ConversionContext conversionContext, final Tag parent) {
-    return new GeneratedMethod(new TagInit(conversionContext, new SimpleMethodElement(), parent));
+      final ConversionContext conversionContext, final Tag parent, final Document document) {
+    return new GeneratedMethod(
+        new TagInit(conversionContext, new SimpleMethodElement(document), parent));
   }
 
   @Override

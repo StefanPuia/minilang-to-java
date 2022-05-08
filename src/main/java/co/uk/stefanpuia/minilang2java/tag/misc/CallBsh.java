@@ -25,7 +25,7 @@ public class CallBsh extends Tag {
 
   private void addMethodToRoot() {
     final var root = getParent(XmlRoot.class).orElseThrow();
-    final var method = GeneratedMethod.createTag(context, root);
+    final var method = GeneratedMethod.createTag(context, root, getElement().getOwnerDocument());
     this.methodName = method.getMethodName();
     method.appendChild(new JavaCode(context, method, getCode()));
     root.appendChild(method);

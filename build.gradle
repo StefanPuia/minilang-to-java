@@ -43,8 +43,25 @@ dependencies {
     testImplementation libs.spring.boot.starter.test
 }
 
+compileJava {
+    options.compilerArgs.add("--add-exports=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED")
+}
+
+compileTestJava {
+    options.compilerArgs.add("--add-exports=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED")
+}
+
+bootRun {
+    jvmArgs = [
+            "--add-opens=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED",
+    ]
+}
+
 test {
     useJUnitPlatform()
+    jvmArgs = [
+            "--add-opens=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED",
+    ]
 }
 
 tasks.withType(JavaCompile) {
@@ -133,7 +150,6 @@ jacocoTestCoverageVerification {
                         'co.uk.stefanpuia.minilang2java.core.TagFactory',
                         'co.uk.stefanpuia.minilang2java.core.validate.Validation',
                         'co.uk.stefanpuia.minilang2java.core.validate.ValidatorLoader',
-                        'co.uk.stefanpuia.minilang2java.core.xml.impl.*',
                         'co.uk.stefanpuia.minilang2java.tag.root.XmlRoot',
                         'co.uk.stefanpuia.minilang2java.tag.TagLoader']
         }
@@ -164,14 +180,6 @@ jacocoTestCoverageVerification {
                 minimum = 0.5
             }
             includes = ['co.uk.stefanpuia.minilang2java.core.model.LoggingConfig']
-        }
-
-        rule {
-            element = 'CLASS'
-            limit {
-                minimum = 0.1
-            }
-            includes = ['co.uk.stefanpuia.minilang2java.core.xml.impl.AbstractElement']
         }
     }
 }

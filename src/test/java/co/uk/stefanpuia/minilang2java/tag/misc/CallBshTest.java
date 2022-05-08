@@ -10,15 +10,24 @@ import static org.mockito.Mockito.verify;
 
 import co.uk.stefanpuia.minilang2java.tag.root.XmlRoot;
 import co.uk.stefanpuia.minilang2java.tag.root.method.SimpleMethod;
+import com.sun.org.apache.xerces.internal.dom.CoreDocumentImpl;
+import com.sun.org.apache.xerces.internal.dom.ElementImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.w3c.dom.Element;
 
 @ExtendWith(MockitoExtension.class)
 class CallBshTest {
-  @Mock private Element element;
+
+  @Mock private CoreDocumentImpl document;
+  @Mock private ElementImpl element;
+
+  @BeforeEach
+  void setUp() {
+    doReturn(document).when(element).getOwnerDocument();
+  }
 
   @Test
   void shouldAddMethodToRoot() {

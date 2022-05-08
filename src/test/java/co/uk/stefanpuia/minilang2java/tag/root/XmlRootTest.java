@@ -11,6 +11,8 @@ import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.impl.TagTestImpl;
 import co.uk.stefanpuia.minilang2java.tag.root.method.UtilSimpleMethod;
+import com.sun.org.apache.xerces.internal.dom.CoreDocumentImpl;
+import com.sun.org.apache.xerces.internal.dom.ElementImpl;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,12 +21,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.w3c.dom.Element;
 
 @ExtendWith(MockitoExtension.class)
 class XmlRootTest {
   @Spy private ConversionContext context = conversionContext();
-  @Mock private Element element;
+
+  @Mock private CoreDocumentImpl document;
+  @Mock private ElementImpl element;
 
   @BeforeEach
   void setUp() throws NoSuchMethodException {
@@ -87,6 +90,7 @@ class XmlRootTest {
 
   @Test
   void shouldAddSimpleMethodWrapperIfMissing() {
+    doReturn(document).when(element).getOwnerDocument();
     final var xmlRoot = new XmlRoot(tagInit(context, element));
     xmlRoot.appendChild(new TagTestImpl(tagInit(context, xmlRoot), List.of("converted")));
     then(xmlRoot.convert()).anyMatch(str -> str.contains("public void generatedMethod_"));

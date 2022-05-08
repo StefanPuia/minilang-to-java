@@ -23,7 +23,7 @@ public class XmlRoot extends Tag {
       context.addMessage(
           WARNING,
           "Elements found outside a [simple-method] tag. A wrapper method will be generated.");
-      final var method = GeneratedMethod.createTag(context, this);
+      final var method = GeneratedMethod.createTag(context, this, getElement().getOwnerDocument());
       children.stream().filter(this::tagIsNotSimpleMethod).forEach(method::appendChild);
       children.removeIf(this::tagIsNotSimpleMethod);
       appendChild(method);

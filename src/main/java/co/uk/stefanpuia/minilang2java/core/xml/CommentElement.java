@@ -1,12 +1,14 @@
 package co.uk.stefanpuia.minilang2java.core.xml;
 
-import co.uk.stefanpuia.minilang2java.core.xml.impl.AbstractElement;
+import com.sun.org.apache.xerces.internal.dom.CommentImpl;
+import com.sun.org.apache.xerces.internal.dom.CoreDocumentImpl;
+import org.w3c.dom.Document;
 
-public class CommentElement extends AbstractElement {
+public class CommentElement extends CommentImpl {
   private final String comment;
 
-  public CommentElement(final String comment) {
-    super();
+  public CommentElement(final String comment, final Document ownerDocument) {
+    super((CoreDocumentImpl) ownerDocument, comment);
     this.comment = comment;
   }
 
@@ -15,7 +17,6 @@ public class CommentElement extends AbstractElement {
     return comment;
   }
 
-  @Override
   public String getTagName() {
     return "!comment";
   }

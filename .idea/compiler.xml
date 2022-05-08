@@ -32,6 +32,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="minilang-to-java.main" options="--add-exports java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED" />
+      <module name="minilang-to-java.test" options="--add-exports java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED" />
     </option>
   </component>
 </project>

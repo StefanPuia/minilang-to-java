@@ -52,7 +52,7 @@ public class PositionalParserHandler extends DefaultHandler2 {
   @Override
   public void comment(final char[] chars, final int start, final int length) {
     final Element parentElement = elementStack.peek();
-    parentElement.appendChild(new CommentElement(new String(chars, start, length)));
+    parentElement.appendChild(new CommentElement(new String(chars, start, length), document));
   }
 
   @Override
