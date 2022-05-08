@@ -12,7 +12,7 @@ public class ServiceSimpleMethodTest extends AbstractSimpleMethodTest {
     then(method.convert())
         .anyMatch(
             str ->
-                str.equals(
+                str.contains(
                     "public Map<String, Object> someTestMethod("
                         + "final DispatchContext dctx, "
                         + "final Map<String, Object> parameters) {"));
@@ -23,13 +23,13 @@ public class ServiceSimpleMethodTest extends AbstractSimpleMethodTest {
     final var method = new ServiceSimpleMethod(tagInit(context, element));
     method.setVariable("delegator");
     then(method.convert())
-        .anyMatch(str -> str.equals("final Delegator delegator = dctx.getDelegator();"));
+        .anyMatch(str -> str.contains("final Delegator delegator = dctx.getDelegator();"));
   }
 
   @Test
   void shouldAddContextWhenVariablePassedUpwards() {
     final var method = accessDelegatorInInnerTag(ServiceSimpleMethod::new);
     then(method.convert())
-        .anyMatch(str -> str.equals("final Delegator delegator = dctx.getDelegator();"));
+        .anyMatch(str -> str.contains("final Delegator delegator = dctx.getDelegator();"));
   }
 }

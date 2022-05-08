@@ -11,6 +11,7 @@ import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.impl.TagTestImpl;
 import co.uk.stefanpuia.minilang2java.tag.root.method.UtilSimpleMethod;
+import com.sun.org.apache.xerces.internal.dom.AttrImpl;
 import com.sun.org.apache.xerces.internal.dom.CoreDocumentImpl;
 import com.sun.org.apache.xerces.internal.dom.ElementImpl;
 import java.util.List;
@@ -28,6 +29,7 @@ class XmlRootTest {
 
   @Mock private CoreDocumentImpl document;
   @Mock private ElementImpl element;
+  @Mock private AttrImpl methodNameAttr;
 
   @BeforeEach
   void setUp() throws NoSuchMethodException {
@@ -90,9 +92,14 @@ class XmlRootTest {
 
   @Test
   void shouldAddSimpleMethodWrapperIfMissing() {
+    doReturn(methodNameAttr).when(document).createAttribute("method-name");
+    doReturn("method-name").when(methodNameAttr).getNodeName();
+    final String generatedMethodName = "generatedMethod_" + make();
+    doReturn(generatedMethodName).when(methodNameAttr).getValue();
     doReturn(document).when(element).getOwnerDocument();
     final var xmlRoot = new XmlRoot(tagInit(context, element));
     xmlRoot.appendChild(new TagTestImpl(tagInit(context, xmlRoot), List.of("converted")));
-    then(xmlRoot.convert()).anyMatch(str -> str.contains("public void generatedMethod_"));
+    then(xmlRoot.convert())
+        .anyMatch(str -> str.contains("public void " + generatedMethodName + "() {"));
   }
 }

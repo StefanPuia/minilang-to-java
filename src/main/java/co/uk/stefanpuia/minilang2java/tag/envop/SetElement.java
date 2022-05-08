@@ -1,4 +1,4 @@
-package co.uk.stefanpuia.minilang2java.tag.assignment;
+package co.uk.stefanpuia.minilang2java.tag.envop;
 
 import static co.uk.stefanpuia.minilang2java.core.model.MessageType.VALIDATION_ERROR;
 import static co.uk.stefanpuia.minilang2java.core.model.VariableType.DEFAULT_TYPE;
@@ -10,8 +10,8 @@ import co.uk.stefanpuia.minilang2java.core.model.ContextVariable;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
 import co.uk.stefanpuia.minilang2java.core.model.VariableType;
 import co.uk.stefanpuia.minilang2java.core.model.exception.TagConversionException;
+import co.uk.stefanpuia.minilang2java.core.validate.rule.ChildTagNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameRule;
-import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableChildTagNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.NonEmptyAttributeValueRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.NonEmptyIfPresentAttributeValueRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
@@ -62,7 +62,7 @@ public class SetElement extends Tag {
             new NonEmptyIfPresentAttributeValueRule(FROM_FIELD, VALIDATION_ERROR),
             new NonEmptyIfPresentAttributeValueRule(FROM, VALIDATION_ERROR),
             new NonEmptyAttributeValueRule(FIELD, VALIDATION_ERROR),
-            ImmutableChildTagNameRule.builder().setRequireNoChildrenElements(true).build());
+            ChildTagNameRule.noChildElements());
   }
 
   @Override

@@ -1,4 +1,4 @@
-package co.uk.stefanpuia.minilang2java.tag.assignment;
+package co.uk.stefanpuia.minilang2java.tag.envop;
 
 import static co.uk.stefanpuia.minilang2java.TestObjects.conversionContext;
 import static co.uk.stefanpuia.minilang2java.TestObjects.tagInit;

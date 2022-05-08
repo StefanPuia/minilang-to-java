@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.Nullable;
 import org.w3c.dom.Element;
 
 public abstract class Tag {
@@ -22,7 +23,7 @@ public abstract class Tag {
   protected final Element element;
 
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-  protected final Optional<Tag> parent;
+  protected Optional<Tag> parent;
 
   protected final List<Tag> children = new ArrayList<>();
 
@@ -131,5 +132,9 @@ public abstract class Tag {
 
   public ConversionContext getContext() {
     return context;
+  }
+
+  public void setParent(@Nullable final Tag parent) {
+    this.parent = Optional.ofNullable(parent);
   }
 }

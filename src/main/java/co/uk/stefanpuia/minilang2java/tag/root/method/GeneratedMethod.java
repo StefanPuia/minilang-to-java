@@ -2,45 +2,35 @@ package co.uk.stefanpuia.minilang2java.tag.root.method;
 
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
+import co.uk.stefanpuia.minilang2java.core.model.exception.TagInstantiationException;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
-import java.util.List;
 import net.bytebuddy.utility.RandomString;
 import org.w3c.dom.Document;
 
-public class GeneratedMethod extends SimpleMethod {
+public class GeneratedMethod {
 
   private final String methodName;
 
-  public GeneratedMethod(final TagInit tagInit) {
-    super(tagInit);
+  public GeneratedMethod() {
     methodName = "generatedMethod_" + RandomString.make();
   }
 
-  public static GeneratedMethod createTag(
+  public static SimpleMethod createTag(
       final ConversionContext conversionContext, final Tag parent, final Document document) {
-    return new GeneratedMethod(
-        new TagInit(conversionContext, new SimpleMethodElement(document), parent));
+    final var generatedMethod = new GeneratedMethod();
+    final var tagInit =
+        new TagInit(
+            conversionContext,
+            new SimpleMethodElement(document, generatedMethod.getMethodName()),
+            parent);
+    return switch (conversionContext.getMethodMode()) {
+      case UTIL -> new UtilSimpleMethod(tagInit);
+      case EVENT -> new EventSimpleMethod(tagInit);
+      case SERVICE -> new ServiceSimpleMethod(tagInit);
+      default -> throw new TagInstantiationException("Wrong method mode");
+    };
   }
 
-  @Override
-  protected String getParameters() {
-    return "";
-  }
-
-  @Override
-  protected String getReturnType() {
-    return "void";
-  }
-
-  @Override
-  protected void addMethodVariablesToContext() {}
-
-  @Override
-  protected List<String> getDefaultAssignments() {
-    return List.of();
-  }
-
-  @Override
   public String getMethodName() {
     return methodName;
   }

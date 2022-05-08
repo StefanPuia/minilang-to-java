@@ -27,9 +27,11 @@ public abstract class SimpleMethod extends Tag {
   @Override
   public List<String> convert() {
     final List<String> output = new ArrayList<>();
+    final List<String> children =
+        this.convertChildren().stream().map(this::prependIndentation).toList();
     output.add(getMethodHeader());
-    output.addAll(getDefaultAssignments());
-    output.addAll(this.convertChildren().stream().map(this::prependIndentation).toList());
+    output.addAll(getDefaultAssignments().stream().map(this::prependIndentation).toList());
+    output.addAll(children);
     output.add("}");
     return output;
   }
@@ -69,7 +71,7 @@ public abstract class SimpleMethod extends Tag {
 
   protected abstract String getParameters();
 
-  protected String getMethodName() {
+  public String getMethodName() {
     return OptionalString.of(element.getAttribute("method-name"))
         .orElse(DEFAULT_GENERATED_METHOD_NAME);
   }

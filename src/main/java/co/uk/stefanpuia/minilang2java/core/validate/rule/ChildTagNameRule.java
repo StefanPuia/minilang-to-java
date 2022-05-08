@@ -8,6 +8,10 @@ import org.immutables.value.Value.Immutable;
 @ImmutableStyle
 @SuppressWarnings("PMD.AbstractClassWithoutAnyMethod")
 public abstract class ChildTagNameRule implements PropertiesListRule {
+  public static ChildTagNameRule noChildElements() {
+    return ImmutableChildTagNameRule.builder().setRequireNoChildrenElements(true).build();
+  }
+
   @Default
   public boolean isRequireNoChildrenElements() {
     return false;

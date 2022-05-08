@@ -1,8 +1,9 @@
-package co.uk.stefanpuia.minilang2java.tag.misc;
+package co.uk.stefanpuia.minilang2java.tag.callop;
 
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
+import co.uk.stefanpuia.minilang2java.tag.misc.JavaCode;
 import co.uk.stefanpuia.minilang2java.tag.root.XmlRoot;
 import co.uk.stefanpuia.minilang2java.tag.root.method.GeneratedMethod;
 import java.util.Arrays;

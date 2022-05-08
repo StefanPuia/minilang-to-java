@@ -10,6 +10,7 @@ import static org.mockito.Mockito.mock;
 
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.convert.context.Message;
+import co.uk.stefanpuia.minilang2java.core.validate.rule.ChildTagNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableChildTagNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
@@ -158,11 +159,7 @@ class ChildTagNameValidatorTest {
   @Test
   void shouldWarnForNoChildElementsWhenPresent() {
     doReturn("!test-tag").when(tag).getTagName();
-    doReturn(
-            RuleList.of(
-                ImmutableChildTagNameRule.builder().setRequireNoChildrenElements(true).build()))
-        .when(tag)
-        .getRules();
+    doReturn(RuleList.of(ChildTagNameRule.noChildElements())).when(tag).getRules();
     doReturn(List.of(mockChild("some-child"))).when(tag).getChildren();
     final var validator = new ChildTagNameValidator(tag, context);
     validator.execute();
@@ -177,11 +174,7 @@ class ChildTagNameValidatorTest {
 
   @Test
   void shouldNotWarnForNoChildElementsWhenMissing() {
-    doReturn(
-            RuleList.of(
-                ImmutableChildTagNameRule.builder().setRequireNoChildrenElements(true).build()))
-        .when(tag)
-        .getRules();
+    doReturn(RuleList.of(ChildTagNameRule.noChildElements())).when(tag).getRules();
     final var validator = new ChildTagNameValidator(tag, context);
     validator.execute();
     then(context.getMessages()).hasSize(0);

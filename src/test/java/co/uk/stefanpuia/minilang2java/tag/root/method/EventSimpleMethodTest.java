@@ -15,7 +15,7 @@ class EventSimpleMethodTest extends AbstractSimpleMethodTest {
     then(method.convert())
         .anyMatch(
             str ->
-                str.equals(
+                str.contains(
                     "public String someTestMethod("
                         + "final HttpServletRequest request, "
                         + "final HttpServletResponse response) {"));
@@ -28,7 +28,7 @@ class EventSimpleMethodTest extends AbstractSimpleMethodTest {
     then(method.convert())
         .anyMatch(
             str ->
-                str.equals(
+                str.contains(
                     "final Delegator delegator = (Delegator) "
                         + "request.getAttribute(\"delegator\");"));
   }
@@ -39,7 +39,7 @@ class EventSimpleMethodTest extends AbstractSimpleMethodTest {
     then(method.convert())
         .anyMatch(
             str ->
-                str.equals(
+                str.contains(
                     "final Delegator delegator = (Delegator) "
                         + "request.getAttribute(\"delegator\");"));
   }

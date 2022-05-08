@@ -4,11 +4,9 @@ import static org.assertj.core.api.BDDAssertions.then;
 
 import com.sun.org.apache.xerces.internal.dom.CoreDocumentImpl;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.w3c.dom.NamedNodeMap;
 
 @ExtendWith(MockitoExtension.class)
 class SimpleMethodElementTest {
@@ -17,7 +15,7 @@ class SimpleMethodElementTest {
 
   @BeforeEach
   void setUp() {
-    element = new SimpleMethodElement(document);
+    element = new SimpleMethodElement(document, "someTestMethod");
   }
 
   @Test
@@ -33,13 +31,5 @@ class SimpleMethodElementTest {
   @Test
   void shouldHaveAttributes() {
     then(element.getAttributes()).isNotNull();
-  }
-
-  @Nested
-  class AttributeNodesTest {
-    @Test
-    void shouldHaveNoLength() {
-      then(element.getAttributes()).extracting(NamedNodeMap::getLength).isEqualTo(0);
-    }
   }
 }
