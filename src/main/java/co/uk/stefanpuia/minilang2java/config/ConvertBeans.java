@@ -5,7 +5,6 @@ import static javax.xml.XMLConstants.FEATURE_SECURE_PROCESSING;
 import co.uk.stefanpuia.minilang2java.core.TagFactory;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalParserHandler;
-import co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalXmlReader;
 import co.uk.stefanpuia.minilang2java.core.handler.error.ErrorHandler;
 import co.uk.stefanpuia.minilang2java.core.handler.error.ErrorHandlerFactory;
 import co.uk.stefanpuia.minilang2java.core.validate.Validation;
@@ -29,14 +28,6 @@ public class ConvertBeans {
   @RequestScope
   public PositionalParserHandler positionalParserHandler() throws ParserConfigurationException {
     return new PositionalParserHandler(document());
-  }
-
-  @Bean
-  @RequestScope
-  public PositionalXmlReader positionalXMLReader(final ConversionContext context)
-      throws ParserConfigurationException, SAXException {
-    return new PositionalXmlReader(
-        context, positionalParserHandler(), xmlReader(), tagFactory(), validation());
   }
 
   @Bean
