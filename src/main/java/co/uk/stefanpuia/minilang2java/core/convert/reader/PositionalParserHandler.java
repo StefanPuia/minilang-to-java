@@ -1,6 +1,6 @@
 package co.uk.stefanpuia.minilang2java.core.convert.reader;
 
-import static co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalXMLReader.LINE_NUMBER_KEY_NAME;
+import static co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalXmlReader.LINE_NUMBER_KEY_NAME;
 
 import co.uk.stefanpuia.minilang2java.core.model.OptionalString;
 import co.uk.stefanpuia.minilang2java.core.xml.CommentElement;
@@ -75,7 +75,6 @@ public class PositionalParserHandler extends DefaultHandler2 {
   private void addTextIfNeeded() {
     if (textBuffer.length() > 0) {
       final String textContent = textBuffer.toString();
-      // .replaceAll("^\\s*?\\n+", "\n").replaceAll("\\n+\\s*$", "");
       if (OptionalString.isNotEmpty(textContent)) {
         final Node textNode = document.createTextNode(textContent);
         elementStack.peek().appendChild(textNode);

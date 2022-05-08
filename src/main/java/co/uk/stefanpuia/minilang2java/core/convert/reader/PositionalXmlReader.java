@@ -25,18 +25,18 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-@AllArgsConstructor
 @SuppressWarnings("PMD")
-public class PositionalXMLReader {
+@AllArgsConstructor
+public class PositionalXmlReader {
 
   public static final String LINE_NUMBER_KEY_NAME = "lineNumber";
   private final ConversionContext context;
-  private PositionalParserHandler handler;
-  private XMLReader reader;
-  private TagFactory tagFactory;
-  private Validation validation;
+  private final PositionalParserHandler handler;
+  private final XMLReader reader;
+  private final TagFactory tagFactory;
+  private final Validation validation;
 
-  public List<Tag> readXML(final String source) throws MinilangConversionException {
+  public List<Tag> readTags(final String source) throws MinilangConversionException {
     try {
       reader.setProperty("http://xml.org/sax/properties/lexical-handler", handler);
       reader.setContentHandler(handler);

@@ -12,6 +12,10 @@ body {
     font-family: "Roboto", sans-serif;
 }
 
+a, a:hover, a:visited {
+    color: white;
+}
+
 #container {
     height: 100vh;
     width: 100vw;
@@ -62,7 +66,7 @@ button {
 
 #options_wrapper {
     display: none;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
@@ -114,4 +118,8 @@ button {
 
 #options #converter #converter_tabSize {
     width: 5ch;
+}
+
+.hidden {
+    display: none;
 }

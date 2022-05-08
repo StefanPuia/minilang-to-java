@@ -52,16 +52,12 @@ compileTestJava {
 }
 
 bootRun {
-    jvmArgs = [
-            "--add-opens=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED",
-    ]
+    jvmArgs = ["--add-opens=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED",]
 }
 
 test {
     useJUnitPlatform()
-    jvmArgs = [
-            "--add-opens=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED",
-    ]
+    jvmArgs = ["--add-opens=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED",]
 }
 
 tasks.withType(JavaCompile) {
@@ -140,13 +136,16 @@ jacocoTestCoverageVerification {
                         'co.uk.stefanpuia.minilang2java.controller.dto.*',
                         'co.uk.stefanpuia.minilang2java.controller.ExceptionController',
                         'co.uk.stefanpuia.minilang2java.controller.mappers.ConvertRequestDtoToConversionConfigImpl',
+                        'co.uk.stefanpuia.minilang2java.controller.MvcController',
                         'co.uk.stefanpuia.minilang2java.core.convert.context.DefaultConversionContext',
                         'co.uk.stefanpuia.minilang2java.core.convert.context.Message',
                         'co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalParserHandler',
+                        'co.uk.stefanpuia.minilang2java.core.convert.reader.SimpleMethodsXmlReader',
                         'co.uk.stefanpuia.minilang2java.core.handler.method.VariableHandler',
                         'co.uk.stefanpuia.minilang2java.core.model.ConversionInit',
                         'co.uk.stefanpuia.minilang2java.core.model.exception.*',
                         'co.uk.stefanpuia.minilang2java.core.model.LoggingConfig',
+                        'co.uk.stefanpuia.minilang2java.core.model.SimpleMethodsElement',
                         'co.uk.stefanpuia.minilang2java.core.TagFactory',
                         'co.uk.stefanpuia.minilang2java.core.validate.Validation',
                         'co.uk.stefanpuia.minilang2java.core.validate.ValidatorLoader',

@@ -34,14 +34,14 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 @ExtendWith(MockitoExtension.class)
-class PositionalXMLReaderTest {
+class PositionalXmlReaderTest {
   private final ConversionContext context = conversionContext();
   @Mock private PositionalParserHandler handler;
   @Mock private XMLReader reader;
   @Mock private TagFactory tagFactory;
   @Mock private Validation validation;
 
-  @InjectMocks private PositionalXMLReader positionalXMLReader;
+  @InjectMocks private PositionalXmlReader positionalXMLReader;
 
   @Test
   void shouldWrapException() throws IOException, SAXException {
@@ -50,7 +50,7 @@ class PositionalXMLReaderTest {
     doThrow(exception).when(reader).parse(any(InputSource.class));
 
     // When - Then
-    thenThrownBy(() -> positionalXMLReader.readXML("")).getCause().isEqualTo(exception);
+    thenThrownBy(() -> positionalXMLReader.readTags("")).getCause().isEqualTo(exception);
   }
 
   @Test
@@ -64,10 +64,10 @@ class PositionalXMLReaderTest {
     doReturn(mockTag).when(tagFactory).createTag(tagName, new TagInit(context, mockElement, null));
     doReturn(List.of(mockElement)).when(handler).getRootElements();
     final var positionalXMLReader =
-        new PositionalXMLReader(context, handler, reader, tagFactory, validation);
+        new PositionalXmlReader(context, handler, reader, tagFactory, validation);
 
     // When
-    final var tags = positionalXMLReader.readXML("");
+    final var tags = positionalXMLReader.readTags("");
 
     // Then
     then(tags).containsExactly(mockTag);
@@ -88,10 +88,10 @@ class PositionalXMLReaderTest {
     doReturn(mockTag).when(tagFactory).createTag(tagName, new TagInit(context, mockElement, null));
     doReturn(List.of(mockElement)).when(handler).getRootElements();
     final var positionalXMLReader =
-        new PositionalXMLReader(context, handler, reader, tagFactory, validation);
+        new PositionalXmlReader(context, handler, reader, tagFactory, validation);
 
     // When
-    final var tags = positionalXMLReader.readXML("");
+    final var tags = positionalXMLReader.readTags("");
 
     // Then
     then(tags).containsExactly(mockTag);
@@ -104,7 +104,7 @@ class PositionalXMLReaderTest {
     final var inputSourceCaptor = ArgumentCaptor.forClass(InputSource.class);
 
     // When
-    positionalXMLReader.readXML(source);
+    positionalXMLReader.readTags(source);
 
     // Then
     verify(reader).parse(inputSourceCaptor.capture());
@@ -122,7 +122,7 @@ class PositionalXMLReaderTest {
     final var inputSourceCaptor = ArgumentCaptor.forClass(InputSource.class);
 
     // When
-    positionalXMLReader.readXML(source);
+    positionalXMLReader.readTags(source);
 
     // Then
     verify(reader).parse(inputSourceCaptor.capture());

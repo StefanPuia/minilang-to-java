@@ -35,6 +35,7 @@
             <option value="UTIL">Utility Methods</option>
         </select>
         <button id="submit">Convert</button>
+        <a href="/tags">Tags</a>
     </div>
 </div>
 

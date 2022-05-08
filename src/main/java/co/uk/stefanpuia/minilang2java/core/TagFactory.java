@@ -8,8 +8,10 @@ import co.uk.stefanpuia.minilang2java.tag.Tag;
 import co.uk.stefanpuia.minilang2java.tag.misc.UndefinedTag;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.util.Pair;
 
@@ -43,5 +45,9 @@ public final class TagFactory {
     } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
       throw new TagInstantiationException(e);
     }
+  }
+
+  public Collection<String> getHandledTags() {
+    return TAGS.keySet().stream().map(Pair::getFirst).collect(Collectors.toSet());
   }
 }

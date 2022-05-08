@@ -3,8 +3,9 @@ package co.uk.stefanpuia.minilang2java.core.convert;
 import static co.uk.stefanpuia.minilang2java.core.model.MessageType.INFO;
 
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
+import co.uk.stefanpuia.minilang2java.core.convert.context.DefaultConversionContext;
 import co.uk.stefanpuia.minilang2java.core.convert.context.Message;
-import co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalXMLReader;
+import co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalXmlReader;
 import co.uk.stefanpuia.minilang2java.core.model.ConversionInit;
 import co.uk.stefanpuia.minilang2java.core.model.exception.MinilangConversionException;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
@@ -29,7 +30,7 @@ public class Converter {
 
     String output;
     try {
-      final var tags = getReader(context).readXML(config.source());
+      final var tags = getReader(context).readTags(config.source());
       output = String.join("\n", convertElements(tags));
     } catch (MinilangConversionException e) {
       LOGGER.trace("Conversion exception", e);
@@ -45,12 +46,12 @@ public class Converter {
     return (output + "\n\n" + renderMessages(context)).replaceAll("\\n{3,}", "\n\n");
   }
 
-  private PositionalXMLReader getReader(final ConversionContext context) {
-    return beanFactory.getBean(PositionalXMLReader.class, context);
+  private PositionalXmlReader getReader(final ConversionContext context) {
+    return beanFactory.getBean(PositionalXmlReader.class, context);
   }
 
   private ConversionContext getConversionContext(final ConversionInit config) {
-    return beanFactory.getBean(ConversionContext.class, config);
+    return new DefaultConversionContext(config, beanFactory);
   }
 
   private String renderMessages(final ConversionContext context) {

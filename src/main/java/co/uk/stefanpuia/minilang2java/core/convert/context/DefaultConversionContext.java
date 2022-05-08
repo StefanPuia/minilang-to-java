@@ -61,7 +61,7 @@ public class DefaultConversionContext implements ConversionContext {
 
   @Override
   public ErrorHandler getErrorHandler() {
-    return beanFactory.getBean(ErrorHandler.class, this);
+    return beanFactory.getBean(ErrorHandler.class, (ConversionContext) this);
   }
 
   @Override
