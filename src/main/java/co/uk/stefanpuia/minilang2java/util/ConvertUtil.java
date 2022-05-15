@@ -1,4 +1,4 @@
-package co.uk.stefanpuia.minilang2java.core.convert;
+package co.uk.stefanpuia.minilang2java.util;
 
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import java.util.List;

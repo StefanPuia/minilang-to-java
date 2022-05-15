@@ -1,7 +1,7 @@
 package co.uk.stefanpuia.minilang2java.tag.ifop;
 
-import static co.uk.stefanpuia.minilang2java.core.convert.StreamUtil.filterOutTypes;
-import static co.uk.stefanpuia.minilang2java.core.convert.StreamUtil.filterTypes;
+import static co.uk.stefanpuia.minilang2java.util.StreamUtil.filterOutTypes;
+import static co.uk.stefanpuia.minilang2java.util.StreamUtil.filterTypes;
 import static java.lang.String.format;
 
 import co.uk.stefanpuia.minilang2java.core.TagInit;

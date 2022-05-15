@@ -1,9 +1,10 @@
-package co.uk.stefanpuia.minilang2java.core.convert;
+package co.uk.stefanpuia.minilang2java.util;
 
 import static java.util.function.Predicate.not;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.experimental.UtilityClass;
 
@@ -20,5 +21,10 @@ public class StreamUtil {
     final List<Class<?>> typeList = Arrays.asList(types);
     return stream.filter(
         not(obj -> typeList.stream().anyMatch(type -> type.isAssignableFrom(obj.getClass()))));
+  }
+
+  @SafeVarargs
+  public static <T> Optional<T> firstPresent(final Optional<T>... optionals) {
+    return Stream.of(optionals).filter(Optional::isPresent).flatMap(Optional::stream).findFirst();
   }
 }

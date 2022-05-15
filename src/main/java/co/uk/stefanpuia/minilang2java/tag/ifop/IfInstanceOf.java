@@ -3,13 +3,13 @@ package co.uk.stefanpuia.minilang2java.tag.ifop;
 import static java.lang.String.format;
 
 import co.uk.stefanpuia.minilang2java.core.TagInit;
-import co.uk.stefanpuia.minilang2java.core.convert.ConvertUtil;
 import co.uk.stefanpuia.minilang2java.core.field.FlexibleAccessor;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
 import co.uk.stefanpuia.minilang2java.core.model.VariableType;
 import co.uk.stefanpuia.minilang2java.core.model.exception.TagInstantiationException;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
+import co.uk.stefanpuia.minilang2java.util.ConvertUtil;
 import java.util.List;
 import lombok.AllArgsConstructor;
 

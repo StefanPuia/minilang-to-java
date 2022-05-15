@@ -3,10 +3,10 @@ package co.uk.stefanpuia.minilang2java.tag.ifop;
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
 
-@MinilangTag("condition")
-public class Condition extends ConditionGroup {
+@MinilangTag("and")
+public class And extends ConditionGroup {
 
-  public Condition(final TagInit tagInit) {
+  public And(final TagInit tagInit) {
     super(tagInit);
   }
 

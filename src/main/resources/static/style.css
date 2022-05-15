@@ -73,6 +73,7 @@ button {
     height: 100vh;
     place-items: center;
     background-color: #2f312996;
+    z-index: 10;
 }
 
 #options {
@@ -87,7 +88,7 @@ button {
     background-color: var(--palette-bg);
     gap: 1em;
     padding: 2em;
-    z-index: 10;
+    z-index: 15;
     border: solid 2px black;
 }
 
