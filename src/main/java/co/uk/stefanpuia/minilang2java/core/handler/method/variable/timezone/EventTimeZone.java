@@ -13,7 +13,6 @@ public class EventTimeZone extends TimeZone implements RequestAttribute, Variabl
 
   @Override
   protected String getConverted() {
-    return getAssignment(
-        getBaseType(), getName(), getRequestAttribute(getBaseType(), VAR_REQUEST_ATTR_TIME_ZONE));
+    return getAssignment(getBaseType(), getName(), getTimeZoneRequest());
   }
 }

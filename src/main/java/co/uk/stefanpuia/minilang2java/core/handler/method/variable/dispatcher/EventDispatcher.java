@@ -13,6 +13,6 @@ public class EventDispatcher extends Dispatcher implements VariableAssignment, R
 
   @Override
   protected String getConverted() {
-    return getAssignment(getBaseType(), getName(), getDispatcherRequest(getBaseType()));
+    return getAssignment(getBaseType(), getName(), getDispatcherRequest());
   }
 }

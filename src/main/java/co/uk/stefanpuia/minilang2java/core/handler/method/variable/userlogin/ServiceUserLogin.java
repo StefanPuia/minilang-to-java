@@ -1,7 +1,5 @@
 package co.uk.stefanpuia.minilang2java.core.handler.method.variable.userlogin;
 
-import static co.uk.stefanpuia.minilang2java.core.handler.method.variable.parameters.Parameters.VAR_PARAMETERS_USER_LOGIN;
-
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.ParametersMapVariable;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.VariableAssignment;
@@ -16,7 +14,6 @@ public class ServiceUserLogin extends UserLogin
 
   @Override
   protected String getConverted() {
-    return getAssignment(
-        getBaseType(), getName(), getContextVariable(getBaseType(), VAR_PARAMETERS_USER_LOGIN));
+    return getAssignment(getBaseType(), getName(), getContextUserLogin());
   }
 }

@@ -7,6 +7,7 @@ import co.uk.stefanpuia.minilang2java.tag.root.method.SimpleMethod;
 
 public abstract class Locale extends MethodContextVariable {
   public static final String VAR_LOCALE = "locale";
+  public static final VariableType TYPE_LOCALE = VariableType.from("Locale");
 
   public Locale(final ConversionContext context, final SimpleMethod method) {
     super(context, method);
@@ -19,6 +20,6 @@ public abstract class Locale extends MethodContextVariable {
 
   @Override
   public VariableType getType() {
-    return VariableType.from("Locale");
+    return TYPE_LOCALE;
   }
 }

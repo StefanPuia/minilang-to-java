@@ -13,6 +13,6 @@ public class ServiceSecurity extends Security implements VariableAssignment, Par
 
   @Override
   protected String getConverted() {
-    return getAssignment(getBaseType(), getName(), getContextVariable(getBaseType(), "security"));
+    return getAssignment(getBaseType(), getName(), getContextSecurity());
   }
 }

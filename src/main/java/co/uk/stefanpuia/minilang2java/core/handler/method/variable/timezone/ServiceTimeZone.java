@@ -1,7 +1,5 @@
 package co.uk.stefanpuia.minilang2java.core.handler.method.variable.timezone;
 
-import static co.uk.stefanpuia.minilang2java.core.handler.method.variable.parameters.Parameters.VAR_PARAMETERS_TIME_ZONE;
-
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.ParametersMapVariable;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.VariableAssignment;
@@ -15,7 +13,6 @@ public class ServiceTimeZone extends TimeZone implements ParametersMapVariable, 
 
   @Override
   protected String getConverted() {
-    return getAssignment(
-        getBaseType(), getName(), getContextVariable(getBaseType(), VAR_PARAMETERS_TIME_ZONE));
+    return getAssignment(getBaseType(), getName(), getContextTimeZone());
   }
 }

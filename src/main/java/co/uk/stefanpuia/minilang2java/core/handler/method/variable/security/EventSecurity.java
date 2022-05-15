@@ -13,6 +13,6 @@ public class EventSecurity extends Security implements VariableAssignment, Reque
 
   @Override
   protected String getConverted() {
-    return getAssignment(getBaseType(), getName(), getSecurityRequest(getBaseType()));
+    return getAssignment(getBaseType(), getName(), getSecurityRequest());
   }
 }

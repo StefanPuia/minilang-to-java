@@ -7,6 +7,7 @@ import co.uk.stefanpuia.minilang2java.tag.root.method.SimpleMethod;
 
 public abstract class Delegator extends MethodContextVariable {
   public static final String VAR_DELEGATOR = "delegator";
+  public static final VariableType TYPE_DELEGATOR = VariableType.from("Delegator");
 
   protected Delegator(final ConversionContext context, final SimpleMethod method) {
     super(context, method);
@@ -19,6 +20,6 @@ public abstract class Delegator extends MethodContextVariable {
 
   @Override
   public VariableType getType() {
-    return VariableType.from("Delegator");
+    return TYPE_DELEGATOR;
   }
 }

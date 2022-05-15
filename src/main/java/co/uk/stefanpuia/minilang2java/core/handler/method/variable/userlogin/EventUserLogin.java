@@ -14,7 +14,6 @@ public class EventUserLogin extends UserLogin
 
   @Override
   protected String getConverted() {
-    return getAssignment(
-        getBaseType(), getName(), getSessionAttribute(getBaseType(), VAR_SESSION_USER_LOGIN));
+    return getAssignment(getBaseType(), getName(), getUserLoginSession());
   }
 }

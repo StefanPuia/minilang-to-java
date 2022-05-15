@@ -7,6 +7,7 @@ import co.uk.stefanpuia.minilang2java.tag.root.method.SimpleMethod;
 
 public abstract class Dispatcher extends MethodContextVariable {
   public static final String VAR_DISPATCHER = "dispatcher";
+  public static final VariableType TYPE_DISPATCHER = VariableType.from("LocalDispatcher");
 
   public Dispatcher(final ConversionContext context, final SimpleMethod method) {
     super(context, method);
@@ -19,6 +20,6 @@ public abstract class Dispatcher extends MethodContextVariable {
 
   @Override
   public VariableType getType() {
-    return VariableType.from("LocalDispatcher");
+    return TYPE_DISPATCHER;
   }
 }

@@ -8,6 +8,7 @@ import co.uk.stefanpuia.minilang2java.tag.root.method.SimpleMethod;
 public abstract class Security extends MethodContextVariable {
 
   public static final String VAR_SECURITY = "security";
+  public static final VariableType TYPE_SECURITY = VariableType.from("Security");
 
   public Security(final ConversionContext context, final SimpleMethod method) {
     super(context, method);
@@ -20,6 +21,6 @@ public abstract class Security extends MethodContextVariable {
 
   @Override
   public VariableType getType() {
-    return VariableType.from("Security");
+    return TYPE_SECURITY;
   }
 }

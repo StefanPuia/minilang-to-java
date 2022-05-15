@@ -13,6 +13,6 @@ public class EventDelegator extends Delegator implements VariableAssignment, Req
 
   @Override
   protected String getConverted() {
-    return getAssignment(getBaseType(), getName(), getDelegatorRequest(getBaseType()));
+    return getAssignment(getBaseType(), getName(), getDelegatorRequest());
   }
 }

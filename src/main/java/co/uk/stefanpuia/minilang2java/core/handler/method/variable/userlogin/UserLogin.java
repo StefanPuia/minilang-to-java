@@ -8,6 +8,7 @@ import co.uk.stefanpuia.minilang2java.tag.root.method.SimpleMethod;
 public abstract class UserLogin extends MethodContextVariable {
 
   public static final String VAR_USER_LOGIN = "userLogin";
+  public static final VariableType TYPE_USER_LOGIN = VariableType.from("GenericValue");
 
   public UserLogin(final ConversionContext context, final SimpleMethod method) {
     super(context, method);
@@ -20,6 +21,6 @@ public abstract class UserLogin extends MethodContextVariable {
 
   @Override
   public VariableType getType() {
-    return VariableType.from("GenericValue");
+    return TYPE_USER_LOGIN;
   }
 }

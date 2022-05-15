@@ -8,6 +8,7 @@ import co.uk.stefanpuia.minilang2java.tag.root.method.SimpleMethod;
 public abstract class TimeZone extends MethodContextVariable {
 
   public static final String VAR_TIME_ZONE = "timeZone";
+  public static final VariableType TYPE_TIME_ZONE = VariableType.from("TimeZone");
 
   public TimeZone(final ConversionContext context, final SimpleMethod method) {
     super(context, method);
@@ -20,6 +21,6 @@ public abstract class TimeZone extends MethodContextVariable {
 
   @Override
   public VariableType getType() {
-    return VariableType.from("TimeZone");
+    return TYPE_TIME_ZONE;
   }
 }

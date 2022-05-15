@@ -13,6 +13,6 @@ public class EventLocale extends Locale implements RequestAttribute, VariableAss
 
   @Override
   protected String getConverted() {
-    return getAssignment(getBaseType(), getName(), getLocaleRequest(getBaseType()));
+    return getAssignment(getBaseType(), getName(), getLocaleRequest());
   }
 }

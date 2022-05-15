@@ -9,6 +9,7 @@ public abstract class Parameters extends MethodContextVariable {
   public static final String VAR_PARAMETERS_LOCALE = "locale";
   public static final String VAR_PARAMETERS_TIME_ZONE = "timeZone";
   public static final String VAR_PARAMETERS_USER_LOGIN = "userLogin";
+  public static final String VAR_PARAMETERS_SECURITY = "security";
 
   public static final String VAR_PARAMETERS = "parameters";
 
