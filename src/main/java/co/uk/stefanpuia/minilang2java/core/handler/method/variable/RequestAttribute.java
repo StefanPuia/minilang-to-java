@@ -8,6 +8,7 @@ public interface RequestAttribute {
   String VAR_REQUEST_ATTR_DISPATCHER = "dispatcher";
   String VAR_REQUEST_ATTR_LOCALE = "locale";
   String VAR_REQUEST_ATTR_TIME_ZONE = "timeZone";
+  String VAR_REQUEST_SECURITY = "security";
   String VAR_REQUEST_ERROR_MESSAGE = "_ERROR_MESSAGE_";
 
   default String getRequestAttribute(final String type, final String requestAttribute) {
@@ -24,5 +25,9 @@ public interface RequestAttribute {
 
   default String getLocaleRequest(final String type) {
     return getRequestAttribute(type, VAR_REQUEST_ATTR_LOCALE);
+  }
+
+  default String getSecurityRequest(final String type) {
+    return getRequestAttribute(type, VAR_REQUEST_SECURITY);
   }
 }

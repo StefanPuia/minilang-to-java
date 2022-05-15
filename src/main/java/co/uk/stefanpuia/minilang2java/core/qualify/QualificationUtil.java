@@ -45,12 +45,11 @@ public final class QualificationUtil {
     QUALIFICATION_MAP.put("Object", "java.lang");
     QUALIFICATION_MAP.put("ObjectType", "org.ofbiz.base.util");
     QUALIFICATION_MAP.put("Optional", "java.util");
-    QUALIFICATION_MAP.put("Pattern", "org.apache.oro.text.regex");
+    QUALIFICATION_MAP.put("Pattern", "java.util.regex");
     QUALIFICATION_MAP.put("PatternFactory", "org.ofbiz.base.util");
-    QUALIFICATION_MAP.put("PatternMatcher", "org.apache.oro.text.regex");
-    QUALIFICATION_MAP.put("Perl5Matcher", "org.apache.oro.text.regex");
     QUALIFICATION_MAP.put("RoundingMode", "java.math");
     QUALIFICATION_MAP.put("ScriptUtil", "org.ofbiz.base.util");
+    QUALIFICATION_MAP.put("Security", "org.ofbiz.security");
     QUALIFICATION_MAP.put("ServiceUtil", "org.ofbiz.service");
     QUALIFICATION_MAP.put("SimpleMapProcessor", "org.ofbiz.minilang");
     QUALIFICATION_MAP.put("String", "java.lang");

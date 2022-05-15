@@ -9,6 +9,7 @@ import co.uk.stefanpuia.minilang2java.core.handler.method.variable.dispatcher.Ut
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.locale.UtilLocale;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.parameters.UtilParameters;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.returnmap.UtilReturnMap;
+import co.uk.stefanpuia.minilang2java.core.handler.method.variable.security.UtilSecurity;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.timezone.UtilTimeZone;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.userlogin.UtilUserLogin;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
@@ -40,6 +41,7 @@ public class UtilSimpleMethod extends SimpleMethod {
     methodContextVariables.add(new UtilLocale(context, this));
     methodContextVariables.add(new UtilTimeZone(context, this));
     methodContextVariables.add(new UtilReturnMap(context, this));
+    methodContextVariables.add(new UtilSecurity(context, this));
     methodContextVariables.stream().map(MethodContextVariable::asUnused).forEach(this::setVariable);
   }
 

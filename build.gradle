@@ -154,6 +154,7 @@ jacocoTestCoverageVerification {
                         'co.uk.stefanpuia.minilang2java.tag.TagLoader',
                         // TODO
                         'co.uk.stefanpuia.minilang2java.tag.ifop.*',
+                        'co.uk.stefanpuia.minilang2java.core.handler.method.variable.*',
                         'co.uk.stefanpuia.minilang2java.util.*',]
         }
 

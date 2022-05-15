@@ -5,6 +5,7 @@ import static java.lang.String.format;
 import co.uk.stefanpuia.minilang2java.core.field.FlexibleAccessor;
 import co.uk.stefanpuia.minilang2java.core.model.OptionalString;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
+import java.math.BigDecimal;
 import java.util.Optional;
 import javax.annotation.Nullable;
 
@@ -35,6 +36,16 @@ public record FlexibleStringExpander(Tag tag, @Nullable String value) {
     return tag()
         .getVariable(accessor.getField())
         .map(str -> accessor.makeGetter())
-        .orElse(wrapQuotes(value));
+        .orElse(parseValue(value));
+  }
+
+  @SuppressWarnings("PMD.OnlyOneReturn")
+  private String parseValue(final String value) {
+    try {
+      new BigDecimal(value);
+      return value;
+    } catch (NumberFormatException e) {
+      return wrapQuotes(value);
+    }
   }
 }

@@ -26,6 +26,16 @@ class FlexibleStringExpanderTest {
   }
 
   @Test
+  void shouldConvertNumbers() {
+    then(new FlexibleStringExpander(tag, "123").toString()).isEqualTo("123");
+  }
+
+  @Test
+  void shouldConvertFloatingNumbers() {
+    then(new FlexibleStringExpander(tag, "123.23").toString()).isEqualTo("123.23");
+  }
+
+  @Test
   void shouldConvertVariable() {
     doReturn(Optional.of(new ContextVariable("someVar", 1, null))).when(tag).getVariable("someVar");
     then(new FlexibleStringExpander(tag, "someVar").toString()).isEqualTo("someVar");

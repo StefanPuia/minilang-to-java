@@ -10,17 +10,18 @@ import co.uk.stefanpuia.minilang2java.core.model.exception.TagInstantiationExcep
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableChildTagNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
+import co.uk.stefanpuia.minilang2java.core.value.FlexibleStringExpander;
 import co.uk.stefanpuia.minilang2java.tag.ifop.operator.Operator;
 import co.uk.stefanpuia.minilang2java.util.ConvertUtil;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
-@MinilangTag("if-compare-field")
-public class IfCompareField extends ConditionalTag implements IfOp {
+@MinilangTag("if-compare")
+public class IfCompare extends ConditionalTag implements IfOp {
 
   private final Attributes attributes;
 
-  public IfCompareField(final TagInit tagInit) {
+  public IfCompare(final TagInit tagInit) {
     super(tagInit);
     this.attributes = new Attributes(this);
   }
@@ -31,7 +32,7 @@ public class IfCompareField extends ConditionalTag implements IfOp {
         .addRules(
             ImmutableAttributeNameRule.builder()
                 .addRequiredOneOf(List.of("field", "field-name"))
-                .addRequiredOneOf(List.of("to-field", "to-field-name"))
+                .addRequiredAll("value")
                 .addOptional("type", "operator")
                 .addUnhandled("format", "type")
                 .build(),
@@ -47,12 +48,12 @@ public class IfCompareField extends ConditionalTag implements IfOp {
   public String convertCondition() {
     return attributes
         .getOperator()
-        .compare(context, attributes.getField().makeGetter(), attributes.getToField().makeGetter());
+        .compare(context, attributes.getField().makeGetter(), attributes.getValue().toString());
   }
 
   @AllArgsConstructor
   private class Attributes {
-    private final IfCompareField self;
+    private final IfCompare self;
 
     public FlexibleAccessor getField() {
       return firstPresent(getAttribute("field"), getAttribute("field-name"))
@@ -60,10 +61,10 @@ public class IfCompareField extends ConditionalTag implements IfOp {
           .orElseThrow(() -> new TagInstantiationException("[field] attribute missing"));
     }
 
-    public FlexibleAccessor getToField() {
-      return firstPresent(getAttribute("to-field"), getAttribute("to-field-name"))
-          .map(field -> FlexibleAccessor.from(self, field))
-          .orElseThrow(() -> new TagInstantiationException("[to-field] attribute missing"));
+    public FlexibleStringExpander getValue() {
+      return getAttribute("value")
+          .map(value -> new FlexibleStringExpander(self, value))
+          .orElseThrow(() -> new TagInstantiationException("[value] attribute missing"));
     }
 
     public Operator getOperator() {

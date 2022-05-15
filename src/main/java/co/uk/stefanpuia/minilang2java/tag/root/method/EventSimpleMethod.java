@@ -10,6 +10,7 @@ import co.uk.stefanpuia.minilang2java.core.handler.method.variable.locale.EventL
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.parameters.EventParameters;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.request.EventRequest;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.request.EventResponse;
+import co.uk.stefanpuia.minilang2java.core.handler.method.variable.security.EventSecurity;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.timezone.EventTimeZone;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.userlogin.EventUserLogin;
 import co.uk.stefanpuia.minilang2java.core.model.ContextVariable;
@@ -43,6 +44,7 @@ public class EventSimpleMethod extends SimpleMethod {
     methodContextVariables.add(new EventUserLogin(context, this));
     methodContextVariables.add(new EventLocale(context, this));
     methodContextVariables.add(new EventTimeZone(context, this));
+    methodContextVariables.add(new EventSecurity(context, this));
     methodContextVariables.stream().map(MethodContextVariable::asUnused).forEach(this::setVariable);
   }
 

@@ -10,6 +10,7 @@ import co.uk.stefanpuia.minilang2java.core.handler.method.variable.dispatcher.Se
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.locale.ServiceLocale;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.parameters.ServiceParameters;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.returnmap.ServiceReturnMap;
+import co.uk.stefanpuia.minilang2java.core.handler.method.variable.security.ServiceSecurity;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.service.DispatchContext;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.timezone.ServiceTimeZone;
 import co.uk.stefanpuia.minilang2java.core.handler.method.variable.userlogin.ServiceUserLogin;
@@ -42,6 +43,7 @@ public class ServiceSimpleMethod extends SimpleMethod {
     methodContextVariables.add(new ServiceLocale(context, this));
     methodContextVariables.add(new ServiceTimeZone(context, this));
     methodContextVariables.add(new ServiceReturnMap(context, this));
+    methodContextVariables.add(new ServiceSecurity(context, this));
     methodContextVariables.stream().map(MethodContextVariable::asUnused).forEach(this::setVariable);
   }
 

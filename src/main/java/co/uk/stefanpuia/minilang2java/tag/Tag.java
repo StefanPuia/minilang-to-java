@@ -8,7 +8,6 @@ import co.uk.stefanpuia.minilang2java.core.model.ContextVariable;
 import co.uk.stefanpuia.minilang2java.core.model.OptionalString;
 import co.uk.stefanpuia.minilang2java.core.model.Position;
 import co.uk.stefanpuia.minilang2java.core.model.VariableType;
-import co.uk.stefanpuia.minilang2java.core.model.exception.TagConversionException;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +46,11 @@ public abstract class Tag {
         .toList();
   }
 
-  @SuppressWarnings("PMD.OnlyOneReturn")
+  @SuppressWarnings({"PMD.OnlyOneReturn", "PMD.AvoidCatchingGenericException"})
   protected List<String> convertTagWithExceptionHandled(final Tag tag) {
     try {
       return tag.convert();
-    } catch (TagConversionException e) {
+    } catch (Exception e) {
       return List.of(
           format(
               "// Exception converting [%s]: %s (%s)",
