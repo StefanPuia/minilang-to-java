@@ -2,7 +2,9 @@ package co.uk.stefanpuia.minilang2java.tag.ifop.operator;
 
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import javax.annotation.Nullable;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class OperatorFactory {
   public static String compare(
       final ConversionContext context,
@@ -12,6 +14,7 @@ public class OperatorFactory {
     return newInstance(context, operator, left, right).makeComparison();
   }
 
+  @SuppressWarnings("PMD.CyclomaticComplexity")
   private static Comparison newInstance(
       final ConversionContext context,
       final Operator operator,

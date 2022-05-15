@@ -43,21 +43,22 @@ dependencies {
     testImplementation libs.spring.boot.starter.test
 }
 
+final String EXPORT_INTERNAL_DOM = "java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED"
 compileJava {
-    options.compilerArgs.add("--add-exports=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED")
+    options.compilerArgs.add("--add-exports=${EXPORT_INTERNAL_DOM}")
 }
 
 compileTestJava {
-    options.compilerArgs.add("--add-exports=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED")
+    options.compilerArgs.add("--add-exports=${EXPORT_INTERNAL_DOM}")
 }
 
 bootRun {
-    jvmArgs = ["--add-opens=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED",]
+    jvmArgs = ["--add-opens=${EXPORT_INTERNAL_DOM}",]
 }
 
 test {
     useJUnitPlatform()
-    jvmArgs = ["--add-opens=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED",]
+    jvmArgs = ["--add-opens=${EXPORT_INTERNAL_DOM}",]
 }
 
 tasks.withType(JavaCompile) {
@@ -150,7 +151,10 @@ jacocoTestCoverageVerification {
                         'co.uk.stefanpuia.minilang2java.core.validate.Validation',
                         'co.uk.stefanpuia.minilang2java.core.validate.ValidatorLoader',
                         'co.uk.stefanpuia.minilang2java.tag.root.XmlRoot',
-                        'co.uk.stefanpuia.minilang2java.tag.TagLoader']
+                        'co.uk.stefanpuia.minilang2java.tag.TagLoader',
+                        // TODO
+                        'co.uk.stefanpuia.minilang2java.tag.ifop.*',
+                        'co.uk.stefanpuia.minilang2java.util.*',]
         }
 
         rule {

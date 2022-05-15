@@ -9,6 +9,7 @@ import co.uk.stefanpuia.minilang2java.tag.Tag;
 import java.util.List;
 import java.util.stream.Stream;
 
+@SuppressWarnings("PMD.ShortClassName")
 @MinilangTag("if")
 public class If extends ConditionalTag implements IfOp {
 
