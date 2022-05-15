@@ -4,11 +4,19 @@ import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import javax.annotation.Nullable;
 
 public class OperatorFactory {
-  public static String compare(final ConversionContext context, final Operator operator, final String left, @Nullable final String right) {
+  public static String compare(
+      final ConversionContext context,
+      final Operator operator,
+      final String left,
+      @Nullable final String right) {
     return newInstance(context, operator, left, right).makeComparison();
   }
 
-  private static Comparison newInstance(final ConversionContext context, final Operator operator, final String left, @Nullable final String right) {
+  private static Comparison newInstance(
+      final ConversionContext context,
+      final Operator operator,
+      final String left,
+      @Nullable final String right) {
     return switch (operator) {
       case EQUALS -> new EqualsComparison(context, left, right);
       case NOT_EQUALS -> new NotEqualsComparison(context, left, right);
