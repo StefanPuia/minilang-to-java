@@ -1,19 +1,16 @@
 package co.uk.stefanpuia.minilang2java.tag.ifop;
 
-import static co.uk.stefanpuia.minilang2java.util.StreamUtil.firstPresent;
-
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.field.FlexibleAccessor;
-import co.uk.stefanpuia.minilang2java.core.model.MessageType;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
-import co.uk.stefanpuia.minilang2java.core.model.exception.TagInstantiationException;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableChildTagNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
+import co.uk.stefanpuia.minilang2java.tag.Tag;
+import co.uk.stefanpuia.minilang2java.tag.TagAttributes;
 import co.uk.stefanpuia.minilang2java.tag.ifop.operator.Operator;
 import co.uk.stefanpuia.minilang2java.util.ConvertUtil;
 import java.util.List;
-import lombok.AllArgsConstructor;
 
 @MinilangTag("if-compare-field")
 public class IfCompareField extends ConditionalTag implements IfOp {
@@ -50,38 +47,23 @@ public class IfCompareField extends ConditionalTag implements IfOp {
         .compare(context, attributes.getField().makeGetter(), attributes.getToField().makeGetter());
   }
 
-  @AllArgsConstructor
-  private class Attributes {
-    private final IfCompareField self;
+  private static class Attributes extends TagAttributes {
+
+    protected Attributes(final Tag self) {
+      super(self);
+    }
 
     public FlexibleAccessor getField() {
-      return firstPresent(getAttribute("field"), getAttribute("field-name"))
-          .map(field -> FlexibleAccessor.from(self, field))
-          .orElseThrow(() -> new TagInstantiationException("[field] attribute missing"));
+      return flexibleAccessor("field", "field-name");
     }
 
     public FlexibleAccessor getToField() {
-      return firstPresent(getAttribute("to-field"), getAttribute("to-field-name"))
-          .map(field -> FlexibleAccessor.from(self, field))
-          .orElseThrow(() -> new TagInstantiationException("[to-field] attribute missing"));
+      return flexibleAccessor("to-field", "to-field-name");
     }
 
+    @Override
     public Operator getOperator() {
-      return getAttribute("operator")
-          .flatMap(Operator::find)
-          .orElseGet(
-              () -> {
-                getAttribute("operator")
-                    .ifPresent(
-                        operator ->
-                            context.addMessage(
-                                MessageType.WARNING,
-                                String.format(
-                                    "[%s] is not a valid operator. Defaulting to [equals]",
-                                    operator),
-                                getPosition()));
-                return Operator.EQUALS;
-              });
+      return super.getOperator();
     }
   }
 }

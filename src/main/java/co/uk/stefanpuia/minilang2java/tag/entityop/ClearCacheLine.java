@@ -5,17 +5,16 @@ import static java.lang.String.format;
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.field.FlexibleAccessor;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
-import co.uk.stefanpuia.minilang2java.core.model.exception.TagConversionException;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ChildTagNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import co.uk.stefanpuia.minilang2java.core.value.FlexibleStringExpander;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
+import co.uk.stefanpuia.minilang2java.tag.TagAttributes;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.AllArgsConstructor;
 
 @MinilangTag("clear-cache-line")
 public class ClearCacheLine extends Tag {
@@ -54,18 +53,18 @@ public class ClearCacheLine extends Tag {
         .collect(Collectors.joining(", "));
   }
 
-  @AllArgsConstructor
-  private class Attributes {
-    private final ClearCacheLine self;
+  private static class Attributes extends TagAttributes {
+
+    protected Attributes(final Tag self) {
+      super(self);
+    }
 
     public FlexibleStringExpander getEntityName() {
-      return getAttribute("entity-name")
-          .map(entity -> new FlexibleStringExpander(self, entity))
-          .orElseThrow(() -> new TagConversionException("[entity-name] is empty"));
+      return stringExpander("entity-name");
     }
 
     public Optional<FlexibleAccessor> getMap() {
-      return getAttribute("map").map(map -> FlexibleAccessor.from(self, map));
+      return optionalFlexibleAccessor("map");
     }
   }
 }

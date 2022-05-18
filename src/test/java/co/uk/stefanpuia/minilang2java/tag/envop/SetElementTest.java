@@ -6,7 +6,7 @@ import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
-import co.uk.stefanpuia.minilang2java.core.model.exception.TagConversionException;
+import co.uk.stefanpuia.minilang2java.core.model.exception.TagInstantiationException;
 import co.uk.stefanpuia.minilang2java.impl.AttributeElement;
 import co.uk.stefanpuia.minilang2java.impl.TagTestImpl.TagWithContextTestImpl;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
@@ -22,8 +22,8 @@ class SetElementTest {
     final var set =
         new SetElement(tagInit(context, new AttributeElement(Map.of()), parentWithContext));
     thenThrownBy(set::convert)
-        .isInstanceOf(TagConversionException.class)
-        .hasMessage("Field is empty");
+        .isInstanceOf(TagInstantiationException.class)
+        .hasMessage("[field] attribute is empty");
   }
 
   @Test

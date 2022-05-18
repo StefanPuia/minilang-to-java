@@ -4,7 +4,7 @@ import static co.uk.stefanpuia.minilang2java.TestObjects.tagInit;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 
-import co.uk.stefanpuia.minilang2java.core.model.exception.TagConversionException;
+import co.uk.stefanpuia.minilang2java.core.model.exception.TagInstantiationException;
 import co.uk.stefanpuia.minilang2java.impl.AttributeElement;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -21,8 +21,8 @@ class ClearCacheLineTest {
     final var clearCacheLine =
         new ClearCacheLine(tagInit(new AttributeElement(Map.of("entity-name", ""))));
     thenThrownBy(clearCacheLine::convert)
-        .isInstanceOf(TagConversionException.class)
-        .hasMessage("[entity-name] is empty");
+        .isInstanceOf(TagInstantiationException.class)
+        .hasMessage("[entity-name] attribute is empty");
   }
 
   @Test

@@ -6,12 +6,12 @@ import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.field.FlexibleAccessor;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
 import co.uk.stefanpuia.minilang2java.core.model.VariableType;
-import co.uk.stefanpuia.minilang2java.core.model.exception.TagInstantiationException;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
+import co.uk.stefanpuia.minilang2java.tag.Tag;
+import co.uk.stefanpuia.minilang2java.tag.TagAttributes;
 import co.uk.stefanpuia.minilang2java.util.ConvertUtil;
 import java.util.List;
-import lombok.AllArgsConstructor;
 
 @MinilangTag("if-validate-method")
 public class IfValidateMethod extends ConditionalTag implements IfOp {
@@ -44,24 +44,22 @@ public class IfValidateMethod extends ConditionalTag implements IfOp {
                 .build());
   }
 
-  @AllArgsConstructor
-  private class Attributes {
-    private final IfValidateMethod self;
+  private static class Attributes extends TagAttributes {
+
+    protected Attributes(final Tag self) {
+      super(self);
+    }
 
     public FlexibleAccessor getField() {
-      return getAttribute("field")
-          .map(field -> FlexibleAccessor.from(self, field))
-          .orElseThrow(() -> new TagInstantiationException("[field] attribute is empty"));
+      return flexibleAccessor("field");
     }
 
     public String getClassName() {
-      return getAttribute("class")
-          .orElseThrow(() -> new TagInstantiationException("[class] attribute missing"));
+      return string("class");
     }
 
     public String getMethodName() {
-      return getAttribute("method")
-          .orElseThrow(() -> new TagInstantiationException("[method] attribute missing"));
+      return string("method");
     }
   }
 }

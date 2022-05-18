@@ -6,14 +6,14 @@ import static java.lang.String.format;
 
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
-import co.uk.stefanpuia.minilang2java.core.model.exception.TagInstantiationException;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import co.uk.stefanpuia.minilang2java.core.value.FlexibleStringExpander;
+import co.uk.stefanpuia.minilang2java.tag.Tag;
+import co.uk.stefanpuia.minilang2java.tag.TagAttributes;
 import co.uk.stefanpuia.minilang2java.util.ConvertUtil;
 import java.util.List;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
 
 @MinilangTag("if-has-permission")
 public class IfHasPermission extends ConditionalTag implements IfOp {
@@ -56,18 +56,18 @@ public class IfHasPermission extends ConditionalTag implements IfOp {
                 .build());
   }
 
-  @AllArgsConstructor
-  private class Attributes {
-    private final IfHasPermission self;
+  private static class Attributes extends TagAttributes {
+
+    protected Attributes(final Tag self) {
+      super(self);
+    }
 
     public FlexibleStringExpander getPermission() {
-      return getAttribute("permission")
-          .map(field -> new FlexibleStringExpander(self, field))
-          .orElseThrow(() -> new TagInstantiationException("[permission] attribute is empty"));
+      return stringExpander("permission");
     }
 
     public Optional<FlexibleStringExpander> getAction() {
-      return getAttribute("action").map(field -> new FlexibleStringExpander(self, field));
+      return optionalStringExpander("action");
     }
   }
 }

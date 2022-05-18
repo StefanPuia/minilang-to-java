@@ -2,6 +2,7 @@ package co.uk.stefanpuia.minilang2java.tag.envop;
 
 import static co.uk.stefanpuia.minilang2java.core.model.MessageType.VALIDATION_ERROR;
 import static co.uk.stefanpuia.minilang2java.core.model.VariableType.DEFAULT_TYPE;
+import static co.uk.stefanpuia.minilang2java.util.StreamUtil.firstPresent;
 import static java.lang.String.format;
 
 import co.uk.stefanpuia.minilang2java.core.TagInit;
@@ -9,21 +10,19 @@ import co.uk.stefanpuia.minilang2java.core.field.FlexibleAccessor;
 import co.uk.stefanpuia.minilang2java.core.model.ContextVariable;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
 import co.uk.stefanpuia.minilang2java.core.model.VariableType;
-import co.uk.stefanpuia.minilang2java.core.model.exception.TagConversionException;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ChildTagNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.NonEmptyAttributeValueRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.NonEmptyIfPresentAttributeValueRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import co.uk.stefanpuia.minilang2java.core.value.FlexibleStringExpander;
-import co.uk.stefanpuia.minilang2java.core.value.StringBoolean;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
+import co.uk.stefanpuia.minilang2java.tag.TagAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.AllArgsConstructor;
 
 @MinilangTag("set")
 public class SetElement extends Tag {
@@ -138,47 +137,41 @@ public class SetElement extends Tag {
             () -> attributes.getValue().map(FlexibleStringExpander::toString).orElse("null"));
   }
 
-  @AllArgsConstructor
-  private class Attributes {
-    private final Tag self;
+  private static class Attributes extends TagAttributes {
+
+    protected Attributes(final Tag self) {
+      super(self);
+    }
 
     public FlexibleAccessor getField() {
-      return FlexibleAccessor.from(
-          self,
-          getAttribute(FIELD).orElseThrow(() -> new TagConversionException("Field is empty")));
+      return flexibleAccessor(FIELD);
     }
 
     public Optional<FlexibleAccessor> getFrom() {
-      return Stream.of(getAttribute(FROM), getAttribute(FROM_FIELD))
-          .filter(Optional::isPresent)
-          .map(Optional::get)
-          .findFirst()
-          .map(from -> FlexibleAccessor.from(self, from));
+      return optionalFlexibleAccessor(FROM, FROM_FIELD);
     }
 
     public Optional<FlexibleStringExpander> getValue() {
-      return getAttribute("value").map(value -> new FlexibleStringExpander(self, value));
+      return optionalStringExpander("value");
     }
 
     public Optional<FlexibleStringExpander> getDefault() {
-      return Stream.of(getAttribute("default"), getAttribute("default-value"))
-          .filter(Optional::isPresent)
-          .map(Optional::get)
-          .findFirst()
-          .map(value -> new FlexibleStringExpander(self, value));
+      return optionalStringExpander("default", "default-value");
     }
 
     public boolean isSetIfNull() {
-      return StringBoolean.parse(getAttribute("set-if-null"));
+      return bool("set-if-null");
     }
 
     public boolean isSetIfEmpty() {
-      return StringBoolean.parse(getAttribute("set-if-empty"));
+      return bool("set-if-empty");
     }
 
     public VariableType getType() {
-      // TODO: get type of from?
-      return getAttribute("type").map(VariableType::from).orElse(DEFAULT_TYPE);
+      return firstPresent(
+              optionalVariableType("type"),
+              self.getVariable(getField().getField()).map(ContextVariable::type))
+          .orElse(DEFAULT_TYPE);
     }
   }
 }

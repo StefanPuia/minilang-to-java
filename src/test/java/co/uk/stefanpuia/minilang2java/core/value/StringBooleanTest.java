@@ -2,9 +2,7 @@ package co.uk.stefanpuia.minilang2java.core.value;
 
 import static org.assertj.core.api.BDDAssertions.then;
 
-import java.util.Optional;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -30,10 +28,5 @@ class StringBooleanTest {
   @MethodSource("stringBooleanSource")
   void shouldParseEmptyString(final String value, final boolean expected) {
     then(StringBoolean.parse(value)).isEqualTo(expected);
-  }
-
-  @Test
-  void shouldParseOptional() {
-    then(StringBoolean.parse(Optional.of("true"))).isTrue();
   }
 }
