@@ -1,23 +1,31 @@
 package co.uk.stefanpuia.minilang2java.util;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ListUtil {
-  public static <T> List<T> wrap(final List<T> before, final List<T> list, final List<T> after) {
-    final List<T> newList = new ArrayList<>(before);
-    newList.addAll(list);
-    newList.addAll(after);
-    return newList;
-  }
 
-  public static <T> List<T> wrapBefore(final List<T> before, final List<T> list) {
-    return wrap(before, list, List.of());
-  }
-
-  public static <T> List<T> wrapAfter(final List<T> list, final List<T> after) {
-    return wrap(List.of(), list, after);
+  @SuppressWarnings("unchecked")
+  public static List<String> combine(final Object... parts) {
+    return Arrays.stream(parts)
+        .map(
+            part -> {
+              if (part instanceof Collection<?>) {
+                return part;
+              }
+              if (part instanceof String) {
+                return List.of(part);
+              }
+              if (part instanceof Optional<?>) {
+                return ((Optional<?>) part).map(List::of).orElse(List.of());
+              }
+              return List.of(part.toString());
+            })
+        .flatMap(list -> ((List<String>) list).stream())
+        .toList();
   }
 }

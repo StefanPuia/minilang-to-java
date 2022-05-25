@@ -8,7 +8,9 @@ import co.uk.stefanpuia.minilang2java.core.model.ContextVariable;
 import co.uk.stefanpuia.minilang2java.core.model.OptionalString;
 import co.uk.stefanpuia.minilang2java.core.model.Position;
 import co.uk.stefanpuia.minilang2java.core.model.VariableType;
+import co.uk.stefanpuia.minilang2java.core.model.exception.TagConversionException;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
+import co.uk.stefanpuia.minilang2java.util.StreamUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,15 +22,12 @@ import org.w3c.dom.Element;
 public abstract class Tag {
   protected final ConversionContext context;
   protected final Element element;
+  protected final List<Tag> children = new ArrayList<>();
+  protected final Position position;
+  protected final Map<String, ContextVariable> variableContext = new ConcurrentHashMap<>();
 
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
   protected Optional<Tag> parent;
-
-  protected final List<Tag> children = new ArrayList<>();
-
-  protected final Position position;
-
-  protected final Map<String, ContextVariable> variableContext = new ConcurrentHashMap<>();
 
   public Tag(final TagInit tagInit) {
     this.context = tagInit.conversionContext();
@@ -115,6 +114,23 @@ public abstract class Tag {
       }
     }
     return Optional.empty();
+  }
+
+  public <T extends Tag> Optional<T> getOptionalFirstChild(final Class<T> childType) {
+    return StreamUtil.filterTypes(getChildren().stream(), childType).findFirst();
+  }
+
+  public <T extends Tag> T getFirstChild(final Class<T> childType) {
+    return StreamUtil.filterTypes(getChildren().stream(), childType)
+        .findFirst()
+        .orElseThrow(
+            () ->
+                new TagConversionException(
+                    format("No [%s] child found for tag [%s]", childType, getTagName())));
+  }
+
+  public <T extends Tag> List<T> getChildren(final Class<T> childType) {
+    return StreamUtil.filterTypes(getChildren().stream(), childType).toList();
   }
 
   public String getTagName() {

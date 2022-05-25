@@ -1,7 +1,6 @@
 package co.uk.stefanpuia.minilang2java.tag.ifop;
 
 import static co.uk.stefanpuia.minilang2java.util.StreamUtil.filterOutTypes;
-import static co.uk.stefanpuia.minilang2java.util.StreamUtil.filterTypes;
 import static java.lang.String.format;
 
 import co.uk.stefanpuia.minilang2java.core.TagInit;
@@ -51,19 +50,19 @@ public abstract class ConditionalTag extends Tag {
   protected abstract String convertCondition();
 
   protected Optional<Condition> getConditionChild() {
-    return filterTypes(children.stream(), Condition.class).findFirst();
+    return getOptionalFirstChild(Condition.class);
   }
 
   protected Optional<Then> getThenChild() {
-    return filterTypes(children.stream(), Then.class).findFirst();
+    return getOptionalFirstChild(Then.class);
   }
 
   protected List<ElseIf> getElseIfChildren() {
-    return filterTypes(children.stream(), ElseIf.class).toList();
+    return getChildren(ElseIf.class);
   }
 
   protected Optional<Else> getElseChild() {
-    return filterTypes(children.stream(), Else.class).findFirst();
+    return getOptionalFirstChild(Else.class);
   }
 
   protected List<Tag> getNonConditionalOpsChildren() {

@@ -9,9 +9,13 @@ public class ConvertUtil {
   public static List<String> convertTagsPrepend(final Tag self, final List<Tag> tags) {
     return tags.stream()
         .map(Tag::convert)
+        .map(lines -> indent(self, lines))
         .flatMap(List::stream)
-        .map(self::prependIndentation)
         .toList();
+  }
+
+  public static List<String> indent(final Tag self, final List<String> lines) {
+    return lines.stream().map(self::prependIndentation).toList();
   }
 
   public static List<String> convertTags(final List<Tag> tags) {
