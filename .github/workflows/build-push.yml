@@ -22,11 +22,11 @@ jobs:
       run: docker build -f ./Dockerfile -t "${{ env.dockerImage }}:build-${{ github.run_id }}" -t "${{ env.dockerImage }}:latest" .
     
     - name: Docker Login
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/main'
       env:
         DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
       run: echo $DOCKER_PASSWORD | docker login -u _json_key --password-stdin https://europe-west1-docker.pkg.dev
       
     - name: Docker Push
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/main'
       run: docker image push --all-tags "${{ env.dockerImage }}"
