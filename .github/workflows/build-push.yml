@@ -14,7 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      dockerImage: eu.gcr.io/personalweb-279207/minilang-to-java
+      dockerImage: europe-west1-docker.pkg.dev/personalweb-279207/stefanpuia/minilang-to-java
     steps:
     - uses: actions/checkout@v3
     
@@ -25,7 +25,7 @@ jobs:
       if: github.ref == 'refs/heads/master'
       env:
         DOCKER_PASSWORD: "${{ secrets.DOCKER_PASSWORD }}"
-      run: echo $DOCKER_PASSWORD | docker login -u _json_key --password-stdin https://eu.gcr.io
+      run: echo $DOCKER_PASSWORD | docker login -u _json_key --password-stdin https://europe-west1-docker.pkg.dev
       
     - name: Docker Push
       if: github.ref == 'refs/heads/master'
