@@ -153,9 +153,14 @@ jacocoTestCoverageVerification {
                         'co.uk.stefanpuia.minilang2java.tag.root.XmlRoot',
                         'co.uk.stefanpuia.minilang2java.tag.TagLoader',
                         // TODO
-                        'co.uk.stefanpuia.minilang2java.tag.TagAttributes',
+                        'co.uk.stefanpuia.minilang2java.core.validate.ParentTagNameValidator',
+                        'co.uk.stefanpuia.minilang2java.core.validate.rule.ParentTagNameRule',
+                        'co.uk.stefanpuia.minilang2java.tag.callop.returnop.*',
+                        'co.uk.stefanpuia.minilang2java.tag.envop.Break',
+                        'co.uk.stefanpuia.minilang2java.tag.envop.Continue',
                         'co.uk.stefanpuia.minilang2java.tag.envop.now.*',
                         'co.uk.stefanpuia.minilang2java.tag.ifop.*',
+                        'co.uk.stefanpuia.minilang2java.tag.TagAttributes',
                         'co.uk.stefanpuia.minilang2java.util.*',]
         }
 

@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.AbstractClassWithoutAbstractMethod"})
 public abstract class TagAttributes {
   protected final Tag self;
 

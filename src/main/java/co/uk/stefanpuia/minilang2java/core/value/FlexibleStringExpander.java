@@ -15,6 +15,10 @@ public record FlexibleStringExpander(Tag tag, @Nullable String value) {
     return format("\"%s\"", value);
   }
 
+  private String getValue() {
+    return value;
+  }
+
   @Override
   public String toString() {
     return OptionalString.of(value())
