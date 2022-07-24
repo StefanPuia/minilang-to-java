@@ -1,0 +1,3 @@
+<simple-method method-name="conversionTest">
+    <clear-cache-line delegator-name="hr-incidents" entity-name="Party"/>
+</simple-method>

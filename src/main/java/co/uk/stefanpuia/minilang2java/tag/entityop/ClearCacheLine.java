@@ -1,6 +1,6 @@
 package co.uk.stefanpuia.minilang2java.tag.entityop;
 
-import static java.lang.String.format;
+import static co.uk.stefanpuia.minilang2java.util.ListUtil.combine;
 
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.field.FlexibleAccessor;
@@ -10,14 +10,14 @@ import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameR
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import co.uk.stefanpuia.minilang2java.core.value.FlexibleStringExpander;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
-import co.uk.stefanpuia.minilang2java.tag.TagAttributes;
+import co.uk.stefanpuia.minilang2java.tag.entityop.ClearCacheLine.Attributes;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @MinilangTag("clear-cache-line")
-public class ClearCacheLine extends Tag {
+public class ClearCacheLine extends EntityOperation<Attributes> {
 
   private final Attributes attributes;
 
@@ -27,21 +27,25 @@ public class ClearCacheLine extends Tag {
   }
 
   @Override
+  protected Attributes getAttributes() {
+    return attributes;
+  }
+
+  @Override
   public RuleList getRules() {
     return super.getRules()
         .addRules(
             ImmutableAttributeNameRule.builder()
                 .addRequiredAll("entity-name")
                 .addOptional("map")
-                .addUnhandled("delegator-name")
                 .build(),
             ChildTagNameRule.noChildElements());
   }
 
   @Override
   public List<String> convert() {
-    setVariable("delegator");
-    return List.of(format("delegator.clearCacheLine(%s);", getArguments()));
+    return combine(
+        super.convert(), "%s.clearCacheLine(%s);".formatted(getDelegatorName(), getArguments()));
   }
 
   private String getArguments() {
@@ -53,7 +57,7 @@ public class ClearCacheLine extends Tag {
         .collect(Collectors.joining(", "));
   }
 
-  private static class Attributes extends TagAttributes {
+  protected static class Attributes extends EntityOpAttributes {
 
     protected Attributes(final Tag self) {
       super(self);

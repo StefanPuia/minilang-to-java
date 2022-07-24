@@ -17,6 +17,7 @@ public final class QualificationUtil {
     QUALIFICATION_MAP.put("Date", "java.sql");
     QUALIFICATION_MAP.put("Debug", "org.ofbiz.base.util");
     QUALIFICATION_MAP.put("Delegator", "org.ofbiz.entity");
+    QUALIFICATION_MAP.put("DelegatorFactory", "org.ofbiz.entity");
     QUALIFICATION_MAP.put("DispatchContext", "org.ofbiz.service");
     QUALIFICATION_MAP.put("Double", "java.lang");
     QUALIFICATION_MAP.put("EntityQuery", "org.ofbiz.entity.util");
