@@ -105,7 +105,7 @@
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.8.1/ace.js"></script>
 <script type="module" src="/static/consts.js" async defer></script>
 <script type="module" src="/static/storage-migrate.js" async defer></script>
 <script type="module" src="/static/script.js" async defer></script>
