@@ -1,11 +1,15 @@
 package co.uk.stefanpuia.minilang2java.core.model;
 
+import static java.util.function.Predicate.not;
+
 import co.uk.stefanpuia.minilang2java.config.ImmutableStyle;
+import co.uk.stefanpuia.minilang2java.core.model.exception.VariableParseException;
 import co.uk.stefanpuia.minilang2java.core.qualify.QualifiedClass;
-import java.util.Arrays;
+import java.io.IOException;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.validation.constraints.NotNull;
 import org.immutables.value.Value.Derived;
@@ -17,30 +21,47 @@ public abstract class VariableType {
 
   public static final VariableType DEFAULT_MAP_TYPE;
   public static final VariableType DEFAULT_TYPE;
-  private static final Pattern TYPE_WITH_PARAMS_PATTERN;
+  public static final char CHAR_LESS_THAN = '<';
+  public static final char CHAR_COMMA = ',';
+  public static final char CHAR_POINT = '.';
 
   static {
-    TYPE_WITH_PARAMS_PATTERN = Pattern.compile("^(?<type>.+?)(?:<(?<params>.*?)>)?$");
     DEFAULT_TYPE = VariableType.from("java.lang.Object");
     DEFAULT_MAP_TYPE = VariableType.from("java.util.Map<java.lang.String, java.lang.Object>");
   }
 
   public static VariableType from(@NotNull final String type) {
-    return ImmutableVariableType.builder().setRawType(type).build();
+    final var tokenizer = new StreamTokenizer(new StringReader(type));
+    tokenizer.wordChars(CHAR_POINT, CHAR_POINT);
+    try {
+      tokenizer.nextToken();
+      return parse(tokenizer);
+    } catch (IOException e) {
+      throw new VariableParseException(e);
+    }
   }
 
-  protected abstract String getRawType();
-
-  @Derived
-  public QualifiedClass getType() {
-    final Matcher paramsMatcher = getParamsMatcher();
-    return QualifiedClass.from(paramsMatcher.find() ? paramsMatcher.group("type") : getRawType());
+  private static VariableType parse(final StreamTokenizer tokenizer) throws IOException {
+    final String baseName = tokenizer.sval;
+    tokenizer.nextToken();
+    final List<VariableType> params = new ArrayList<>();
+    if (tokenizer.ttype == CHAR_LESS_THAN) {
+      do {
+        tokenizer.nextToken();
+        params.add(parse(tokenizer));
+      } while (tokenizer.ttype == CHAR_COMMA);
+      tokenizer.nextToken();
+    }
+    return ImmutableVariableType.builder()
+        .setType(QualifiedClass.from(OptionalString.of(baseName).orElse("")))
+        .setParameters(
+            params.stream().filter(not(VariableType::isEmpty)).collect(Collectors.toList()))
+        .build();
   }
 
   @Derived
-  public List<VariableType> getParameters() {
-    final Matcher paramsMatcher = getParamsMatcher();
-    return paramsMatcher.find() ? getMatchedParams(paramsMatcher) : List.of();
+  public boolean isEmpty() {
+    return getType().isEmpty();
   }
 
   @Derived
@@ -52,22 +73,10 @@ public abstract class VariableType {
         : String.format(
             "%s<%s>",
             baseType,
-            getParameters().stream()
-                .map(VariableType::getType)
-                .map(QualifiedClass::getClassName)
-                .map(optional -> optional.orElse("Void"))
-                .collect(Collectors.joining(", ")));
+            getParameters().stream().map(VariableType::toString).collect(Collectors.joining(", ")));
   }
 
-  private List<VariableType> getMatchedParams(final Matcher paramsMatcher) {
-    return Arrays.stream(OptionalString.of(paramsMatcher.group("params")).orElse("").split(","))
-        .map(String::trim)
-        .filter(OptionalString::isNotEmpty)
-        .map(VariableType::from)
-        .toList();
-  }
+  public abstract QualifiedClass getType();
 
-  private Matcher getParamsMatcher() {
-    return TYPE_WITH_PARAMS_PATTERN.matcher(getRawType());
-  }
+  public abstract List<VariableType> getParameters();
 }

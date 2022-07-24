@@ -51,6 +51,26 @@ class VariableTypeTest {
   }
 
   @Test
+  void shouldExtractForNestedParameterisedType() {
+    // When
+    final var type =
+        VariableType.from("SomeParentType<SomeType<String, Object>, SomeOtherType<Foo, Bar>>");
+
+    // Then
+    then(type).isNotNull();
+    then(type).extracting(VariableType::getType).isEqualTo(QualifiedClass.from("SomeParentType"));
+    then(type)
+        .extracting(VariableType::getParameters)
+        .asInstanceOf(list(VariableType.class))
+        .hasSize(2)
+        .containsExactly(
+            VariableType.from("SomeType<String, Object>"),
+            VariableType.from("SomeOtherType<Foo, Bar>"));
+    then(type.toString())
+        .isEqualTo("SomeParentType<SomeType<String, Object>, SomeOtherType<Foo, Bar>>");
+  }
+
+  @Test
   void shouldExtractForQualifiedSimpleType() {
     // When
     final var type = VariableType.from("com.test.SomeType");

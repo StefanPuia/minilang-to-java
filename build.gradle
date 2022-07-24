@@ -148,6 +148,7 @@ jacocoTestCoverageVerification {
                         'co.uk.stefanpuia.minilang2java.core.model.LoggingConfig',
                         'co.uk.stefanpuia.minilang2java.core.model.MessageType.*',
                         'co.uk.stefanpuia.minilang2java.core.model.SimpleMethodsElement',
+                        'co.uk.stefanpuia.minilang2java.core.model.VariableType',
                         'co.uk.stefanpuia.minilang2java.core.TagFactory',
                         'co.uk.stefanpuia.minilang2java.core.validate.Validation',
                         'co.uk.stefanpuia.minilang2java.core.validate.ValidatorLoader',
@@ -174,6 +175,7 @@ jacocoTestCoverageVerification {
                         'co.uk.stefanpuia.minilang2java.core.convert.context.DefaultConversionContext',
                         'co.uk.stefanpuia.minilang2java.core.convert.context.Message',
                         'co.uk.stefanpuia.minilang2java.core.model.ConversionInit',
+                        'co.uk.stefanpuia.minilang2java.core.model.VariableType',
                         'co.uk.stefanpuia.minilang2java.tag.root.XmlRoot']
         }
 

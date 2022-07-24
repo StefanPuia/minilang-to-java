@@ -64,4 +64,9 @@ public abstract class QualifiedClass {
     return getPackageName().map(name -> !DEFAULT_PACKAGES.contains(name)).orElse(true)
         && getPackageName().map(name -> !currentPackage.equals(name)).orElse(true);
   }
+
+  @Derived
+  public boolean isEmpty() {
+    return getClassName().isEmpty();
+  }
 }
