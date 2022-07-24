@@ -21,11 +21,13 @@ public abstract class VariableType {
 
   public static final VariableType DEFAULT_MAP_TYPE;
   public static final VariableType DEFAULT_TYPE;
+  public static final VariableType STRING_TYPE;
   public static final char CHAR_LESS_THAN = '<';
   public static final char CHAR_COMMA = ',';
   public static final char CHAR_POINT = '.';
 
   static {
+    STRING_TYPE = VariableType.from("java.lang.String");
     DEFAULT_TYPE = VariableType.from("java.lang.Object");
     DEFAULT_MAP_TYPE = VariableType.from("java.util.Map<java.lang.String, java.lang.Object>");
   }

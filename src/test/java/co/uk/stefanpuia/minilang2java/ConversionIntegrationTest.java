@@ -1,11 +1,10 @@
-package co.uk.stefanpuia.minilang2java.controller;
+package co.uk.stefanpuia.minilang2java;
 
 import static java.util.function.Predicate.not;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.InstanceOfAssertFactories.type;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-import co.uk.stefanpuia.minilang2java.Application;
 import co.uk.stefanpuia.minilang2java.controller.dto.ConvertRequestDto;
 import co.uk.stefanpuia.minilang2java.controller.dto.ConvertResponseDto;
 import co.uk.stefanpuia.minilang2java.controller.dto.ImmutableConversionRequestOptions;
@@ -65,7 +64,7 @@ public class ConversionIntegrationTest {
         .getResources("classpath:convert/xml/**/**.xml");
   }
 
-  @ParameterizedTest(name = "{0} conversion output")
+  @ParameterizedTest(name = "convert {0}")
   @MethodSource("supplyFiles")
   void shouldHaveCorrectOutput(final String fileName, final Resource xml, final Resource java)
       throws IOException, URISyntaxException {

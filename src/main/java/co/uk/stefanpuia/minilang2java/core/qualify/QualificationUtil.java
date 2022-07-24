@@ -22,6 +22,7 @@ public final class QualificationUtil {
     QUALIFICATION_MAP.put("EntityQuery", "org.ofbiz.entity.util");
     QUALIFICATION_MAP.put("EntityUtil", "org.ofbiz.entity.util");
     QUALIFICATION_MAP.put("EntityUtilProperties", "org.ofbiz.entity.util");
+    QUALIFICATION_MAP.put("Entry", "java.util.Map");
     QUALIFICATION_MAP.put("ExecutionServiceException", "org.ofbiz.service");
     QUALIFICATION_MAP.put("GenericEntityException", "org.ofbiz.entity");
     QUALIFICATION_MAP.put("GenericServiceException", "org.ofbiz.service");

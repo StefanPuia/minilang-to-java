@@ -1,0 +1,6 @@
+<simple-method method-name="conversionTest">
+    <iterate-map key="theKey" map="theMap" value="theValue">
+        <set field="field" from="theValue.value"/>
+    </iterate-map>
+    <set field="theMap" from="foo" type="Map&lt;String, Object&gt;"/>
+</simple-method>
