@@ -4,6 +4,7 @@ import static co.uk.stefanpuia.minilang2java.TestObjects.conversionContext;
 import static co.uk.stefanpuia.minilang2java.TestObjects.tagInit;
 import static net.bytebuddy.utility.RandomString.make;
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -147,6 +148,22 @@ class TagTest {
     then(tag.getChildren()).hasSize(0);
     tag.appendChild(mock(Tag.class));
     then(tag.getChildren()).hasSize(1);
+  }
+
+  @Test
+  void shouldGetChildrenByType() {
+    final var tag = new TagTestImpl(tagInit(element));
+    tag.appendChild(mock(Tag.class));
+    then(tag.getChildren(Tag.class)).hasSize(1);
+  }
+
+  @Test
+  void shouldThrowWhenNoChildWithTypeAvailable() {
+    doReturn("TestTag").when(element).getTagName();
+    final var tag = new TagTestImpl(tagInit(element));
+    thenThrownBy(() -> tag.getFirstChild(Tag.class))
+        .isInstanceOf(TagConversionException.class)
+        .hasMessage("No [Tag] child found for tag [TestTag]");
   }
 
   @Test

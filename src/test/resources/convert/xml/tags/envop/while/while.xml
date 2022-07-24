@@ -1,0 +1,10 @@
+<simple-method method-name="conversionTest">
+    <while>
+        <condition>
+            <if-empty field="variable"/>
+        </condition>
+        <then>
+            <set field="foo" value="123"/>
+        </then>
+    </while>
+</simple-method>

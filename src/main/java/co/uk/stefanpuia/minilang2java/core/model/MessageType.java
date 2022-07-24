@@ -1,7 +1,12 @@
 package co.uk.stefanpuia.minilang2java.core.model;
 
 public enum MessageType {
-  ERROR,
+  ERROR {
+    @Override
+    public boolean isEnabled(final LoggingConfig loggingConfig) {
+      return true;
+    }
+  },
   WARNING {
     @Override
     public boolean isEnabled(final LoggingConfig loggingConfig) {
@@ -46,7 +51,5 @@ public enum MessageType {
   },
   ;
 
-  public boolean isEnabled(final LoggingConfig loggingConfig) {
-    return true;
-  }
+  public abstract boolean isEnabled(final LoggingConfig loggingConfig);
 }

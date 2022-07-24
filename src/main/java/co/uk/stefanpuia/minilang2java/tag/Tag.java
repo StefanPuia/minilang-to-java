@@ -121,12 +121,13 @@ public abstract class Tag {
   }
 
   public <T extends Tag> T getFirstChild(final Class<T> childType) {
-    return StreamUtil.filterTypes(getChildren().stream(), childType)
-        .findFirst()
+    return getOptionalFirstChild(childType)
         .orElseThrow(
             () ->
                 new TagConversionException(
-                    format("No [%s] child found for tag [%s]", childType, getTagName())));
+                    format(
+                        "No [%s] child found for tag [%s]",
+                        childType.getSimpleName(), getTagName())));
   }
 
   public <T extends Tag> List<T> getChildren(final Class<T> childType) {
