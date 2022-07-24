@@ -1,0 +1,6 @@
+<simple-method method-name="conversionTest">
+    <iterate entry="theField" list="theList">
+        <set field="field" from="theField.value"/>
+    </iterate>
+    <set field="theList" from="someList" type="List&lt;Map&lt;String, Object&gt;&gt;"/>
+</simple-method>

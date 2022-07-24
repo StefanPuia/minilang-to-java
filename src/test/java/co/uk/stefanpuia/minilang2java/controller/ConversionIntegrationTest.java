@@ -104,7 +104,7 @@ public class ConversionIntegrationTest {
   }
 
   private String normalizeContent(final Stream<String> lines) {
-    return lines.filter(not(String::isBlank)).collect(Collectors.joining("\n"));
+    return lines.filter(not(String::isBlank)).map(String::strip).collect(Collectors.joining("\n"));
   }
 
   private MethodMode getMode(final String fileName) {
