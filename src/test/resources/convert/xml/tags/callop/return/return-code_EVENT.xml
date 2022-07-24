@@ -1,0 +1,3 @@
+<simple-method method-name="conversionTest">
+    <return response-code="error"/>
+</simple-method>

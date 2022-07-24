@@ -14,6 +14,9 @@ export function migrateStorage() {
         store(checkboxKeyMap.logging_validation_warning, true);
         store(checkboxKeyMap.logging_validation_deprecated, true);
     });
+    changeLog("003", () => {
+        store(checkboxKeyMap.logging_timing, true);
+    });
 }
 
 const changeLog = (version, changeSet) => {

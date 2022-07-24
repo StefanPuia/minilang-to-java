@@ -37,7 +37,7 @@ public class TestObjects {
   }
 
   public static LoggingConfig loggingConfig() {
-    return new LoggingConfig(true, true, true, true, true, true);
+    return new LoggingConfig(true, true, true, true, true, true, true);
   }
 
   public static ConversionRequestOptions conversionRequestOptions() {

@@ -16,6 +16,7 @@ public interface ConvertRequestDtoToConversionConfig
   @Mapping(target = "lines", source = "input")
   @Mapping(target = "logging.deprecated", source = "options.loggingDeprecated")
   @Mapping(target = "logging.info", source = "options.loggingInfo")
+  @Mapping(target = "logging.timing", source = "options.loggingTiming")
   @Mapping(target = "logging.warning", source = "options.loggingWarning")
   @Mapping(target = "logging.validationWarning", source = "options.loggingValidationWarning")
   @Mapping(target = "logging.validationError", source = "options.loggingValidationError")

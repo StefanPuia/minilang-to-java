@@ -51,6 +51,10 @@
                 <input type="checkbox" id="logging_info"/>
                 Info
             </label>
+            <label for="logging_timing">
+                <input type="checkbox" id="logging_timing"/>
+                Timing
+            </label>
             <label for="logging_warning">
                 <input type="checkbox" id="logging_warning"/>
                 Warning

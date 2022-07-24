@@ -31,6 +31,12 @@ public abstract class ConversionRequestOptions {
   }
 
   @Default
+  @JsonAlias("editor.logging.timing")
+  public boolean isLoggingTiming() {
+    return true;
+  }
+
+  @Default
   @JsonAlias("editor.logging.warning")
   public boolean isLoggingWarning() {
     return true;

@@ -1,6 +1,6 @@
 package co.uk.stefanpuia.minilang2java.core.convert;
 
-import static co.uk.stefanpuia.minilang2java.core.model.MessageType.INFO;
+import static co.uk.stefanpuia.minilang2java.core.model.MessageType.TIMING;
 
 import co.uk.stefanpuia.minilang2java.core.TagFactory;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
@@ -49,11 +49,11 @@ public class Converter {
 
     stopWatch.stop();
     context.addMessage(
-        INFO,
+        TIMING,
         String.format(
             "Finished parsing %s lines in %.3f seconds",
             config.lines(), stopWatch.getTotalTimeMillis() / 1000.0));
-    return (output + "\n\n" + renderMessages(context)).replaceAll("\\n{3,}", "\n\n");
+    return (output + "\n\n" + renderMessages(context, config)).replaceAll("\\n{3,}", "\n\n");
   }
 
   // FIXME
@@ -66,8 +66,9 @@ public class Converter {
     return new DefaultConversionContext(config, beanFactory);
   }
 
-  private String renderMessages(final ConversionContext context) {
+  private String renderMessages(final ConversionContext context, final ConversionInit config) {
     return context.getMessages().stream()
+        .filter(message -> message.messageType().isEnabled(config.logging()))
         .map(Message::render)
         .map(line -> "// " + line)
         .collect(Collectors.joining("\n"));

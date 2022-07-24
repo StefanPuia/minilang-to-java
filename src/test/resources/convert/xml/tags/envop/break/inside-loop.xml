@@ -1,0 +1,5 @@
+<simple-method method-name="conversionTest">
+    <loop count="1">
+        <break/>
+    </loop>
+</simple-method>

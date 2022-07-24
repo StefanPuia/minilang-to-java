@@ -1,6 +1,7 @@
 export const checkboxKeyMap = {
     logging_deprecated: "editor.logging.deprecated",
     logging_info: "editor.logging.info",
+    logging_timing: "editor.logging.timing",
     logging_warning: "editor.logging.warning",
     logging_validation_error: "editor.logging.validation.error",
     logging_validation_warning: "editor.logging.validation.warning",

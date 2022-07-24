@@ -28,7 +28,10 @@ public abstract class Return extends Tag {
   }
 
   protected String getResponseCode() {
-    return attributes.getResponseCode().map(FlexibleStringExpander::toString).orElse("success");
+    return attributes
+        .getResponseCode()
+        .map(FlexibleStringExpander::toString)
+        .orElse(new FlexibleStringExpander(this, "success").toString());
   }
 
   protected static class Attributes extends TagAttributes {

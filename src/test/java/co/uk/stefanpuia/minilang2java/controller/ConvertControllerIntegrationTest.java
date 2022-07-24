@@ -8,6 +8,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import co.uk.stefanpuia.minilang2java.Application;
 import co.uk.stefanpuia.minilang2java.controller.dto.ConvertRequestDto;
 import co.uk.stefanpuia.minilang2java.controller.dto.ConvertResponseDto;
+import co.uk.stefanpuia.minilang2java.controller.dto.ImmutableConversionRequestOptions;
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,9 @@ public class ConvertControllerIntegrationTest {
   @Test
   void shouldConvert() throws URISyntaxException {
     // Given
-    final var request = new ConvertRequestDto("", UTIL, "com.test.SomeClass", null);
+    final var request =
+        new ConvertRequestDto(
+            "", UTIL, "com.test.SomeClass", ImmutableConversionRequestOptions.builder().build());
 
     // When
     final var response =

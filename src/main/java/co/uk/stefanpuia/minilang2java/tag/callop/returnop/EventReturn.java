@@ -14,6 +14,6 @@ public class EventReturn extends Return {
 
   @Override
   public List<String> convert() {
-    return List.of(String.format("return \"%s\";", getResponseCode()));
+    return List.of(String.format("return %s;", getResponseCode()));
   }
 }

@@ -38,7 +38,7 @@ class ConverterTest {
   void shouldConvertEmptySource() throws MinilangConversionException {
     doReturn(List.of()).when(reader).readTags(any());
     final String output = converter.convert(conversionInit());
-    then(output).isNotEmpty().contains("// INFO: Finished parsing");
+    then(output).isNotEmpty().contains("// TIMING: Finished parsing");
   }
 
   @Test
@@ -48,7 +48,7 @@ class ConverterTest {
 
     final String output = converter.convert(conversionInit());
 
-    then(output).isNotEmpty().contains(exceptionMessage).contains("// INFO: Finished parsing");
+    then(output).isNotEmpty().contains(exceptionMessage).contains("// TIMING: Finished parsing");
   }
 
   @Test
@@ -60,7 +60,7 @@ class ConverterTest {
 
     final String output = converter.convert(conversionInit());
 
-    then(output).isNotEmpty().contains(convertedTag).contains("// INFO: Finished parsing");
+    then(output).isNotEmpty().contains(convertedTag).contains("// TIMING: Finished parsing");
   }
 
   @Test
@@ -75,7 +75,7 @@ class ConverterTest {
     then(output)
         .isNotEmpty()
         .contains(convertedTag)
-        .contains("// INFO: Finished parsing")
+        .contains("// TIMING: Finished parsing")
         .matches(str -> str.split("\n").length == 3, "line numbers");
   }
 }
