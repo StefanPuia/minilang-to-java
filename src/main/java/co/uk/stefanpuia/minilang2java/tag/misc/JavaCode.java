@@ -19,7 +19,7 @@ public class JavaCode extends NonElementTag {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     return code.stream()
         .map(line -> line.replaceFirst(getIndentationString(), ""))
         .map(this::asComment)

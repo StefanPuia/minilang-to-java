@@ -1,5 +1,6 @@
 package co.uk.stefanpuia.minilang2java.core.convert.reader;
 
+import static co.uk.stefanpuia.minilang2java.core.xml.CommentElement.COMMENT_TAG_NAME;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import co.uk.stefanpuia.minilang2java.core.TagFactory;
@@ -8,6 +9,8 @@ import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.model.exception.MinilangConversionException;
 import co.uk.stefanpuia.minilang2java.core.validate.Validation;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
+import com.sun.org.apache.xerces.internal.dom.CoreDocumentImpl;
+import com.sun.org.apache.xerces.internal.dom.ElementImpl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +21,7 @@ import java.util.List;
 import java.util.function.Function;
 import javax.annotation.Nullable;
 import lombok.AllArgsConstructor;
+import org.w3c.dom.Comment;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -58,11 +62,21 @@ public class PositionalXmlReader {
         if (item instanceof Element) {
           tag.appendChild(wrapMinilangTag(tag).apply((Element) item));
         }
+        if (item instanceof Comment) {
+          tag.appendChild(wrapCommentTag((Comment) item, parent));
+        }
       }
 
       validation.validate(tag, context);
       return tag;
     };
+  }
+
+  private Tag wrapCommentTag(final Comment item, final Tag parent) {
+    final ElementImpl comment =
+        new ElementImpl((CoreDocumentImpl) item.getOwnerDocument(), COMMENT_TAG_NAME);
+    comment.setTextContent(item.getTextContent());
+    return tagFactory.createTag(COMMENT_TAG_NAME, new TagInit(context, comment, parent));
   }
 
   private SequenceInputStream wrapSource(final String source) {

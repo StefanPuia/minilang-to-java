@@ -25,7 +25,7 @@ public abstract class SimpleMethod extends Tag {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     final List<String> output = new ArrayList<>();
     final List<String> children =
         this.convertChildren().stream().map(this::prependIndentation).toList();

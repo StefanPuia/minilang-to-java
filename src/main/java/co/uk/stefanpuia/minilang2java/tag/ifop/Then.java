@@ -13,7 +13,7 @@ public class Then extends Tag implements ConditionalOp {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     return convertChildren();
   }
 }

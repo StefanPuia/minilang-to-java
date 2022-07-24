@@ -31,7 +31,7 @@ public class Iterate extends Tag {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     return combine(getForHeader(), convertTagsPrepend(this, getChildren()), "}");
   }
 

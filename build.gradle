@@ -155,6 +155,7 @@ jacocoTestCoverageVerification {
                         'co.uk.stefanpuia.minilang2java.tag.root.XmlRoot',
                         'co.uk.stefanpuia.minilang2java.tag.TagLoader',
                         // TODO
+                        'co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalXmlReader',
                         'co.uk.stefanpuia.minilang2java.core.validate.ParentTagNameValidator',
                         'co.uk.stefanpuia.minilang2java.core.validate.rule.ParentTagNameRule',
                         'co.uk.stefanpuia.minilang2java.tag.callop.returnop.*',

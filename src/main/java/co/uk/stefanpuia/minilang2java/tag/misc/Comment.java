@@ -15,7 +15,7 @@ public class Comment extends Tag {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     final var lines = this.element.getTextContent().split("\n");
     return lines.length > 1
         ? multiLineComment(lines)

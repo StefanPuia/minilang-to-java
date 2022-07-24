@@ -5,6 +5,8 @@ import com.sun.org.apache.xerces.internal.dom.CoreDocumentImpl;
 import org.w3c.dom.Document;
 
 public class CommentElement extends CommentImpl {
+
+  public static final String COMMENT_TAG_NAME = "!comment";
   private final String comment;
 
   public CommentElement(final String comment, final Document ownerDocument) {
@@ -18,6 +20,6 @@ public class CommentElement extends CommentImpl {
   }
 
   public String getTagName() {
-    return "!comment";
+    return COMMENT_TAG_NAME;
   }
 }

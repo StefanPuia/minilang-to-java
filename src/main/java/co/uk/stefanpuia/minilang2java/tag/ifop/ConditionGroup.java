@@ -12,7 +12,7 @@ public abstract class ConditionGroup extends Tag implements ConditionalOp, IfOp 
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     return List.of(convertCondition());
   }
 

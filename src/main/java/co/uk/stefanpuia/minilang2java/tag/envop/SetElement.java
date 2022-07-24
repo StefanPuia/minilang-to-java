@@ -65,7 +65,7 @@ public class SetElement extends Tag {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     final var lines = new ArrayList<>(getConvert());
     setVariable(new ContextVariable(attributes.getField().getField(), 1, attributes.getType()));
     addDefaultLines(lines);

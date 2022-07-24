@@ -39,7 +39,7 @@ public class Loop extends Tag {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     final String iterator = "i" + getIteratorCounter();
     setVariable(new ContextVariable(iterator, 1, VariableType.from("int")));
 

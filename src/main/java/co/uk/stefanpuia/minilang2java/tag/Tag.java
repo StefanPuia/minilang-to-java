@@ -36,7 +36,16 @@ public abstract class Tag {
     this.position = tagInit.getPosition();
   }
 
-  public abstract List<String> convert();
+  public List<String> convert() {
+    final List<String> convert = convertSelf();
+    postConvert();
+    return convert;
+  }
+
+  protected abstract List<String> convertSelf();
+
+  @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
+  public void postConvert() {}
 
   public List<String> convertChildren() {
     return this.children.stream()

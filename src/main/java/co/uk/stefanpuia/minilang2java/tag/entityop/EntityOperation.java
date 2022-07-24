@@ -16,6 +16,8 @@ import java.util.List;
 
 public abstract class EntityOperation<A extends EntityOpAttributes> extends Tag {
 
+  public static final VariableType GENERIC_VALUE = VariableType.from("GenericValue");
+
   public EntityOperation(final TagInit tagInit) {
     super(tagInit);
   }
@@ -29,9 +31,14 @@ public abstract class EntityOperation<A extends EntityOpAttributes> extends Tag 
   }
 
   @Override
-  public List<String> convert() {
-    setVariable(new ContextVariable(getDelegatorName(), 0, TYPE_DELEGATOR));
+  public List<String> convertSelf() {
     return getCustomDelegatorLines();
+  }
+
+  @Override
+  public void postConvert() {
+    super.postConvert();
+    setVariable(new ContextVariable(getDelegatorName(), 1, TYPE_DELEGATOR));
   }
 
   protected String getDelegatorName() {

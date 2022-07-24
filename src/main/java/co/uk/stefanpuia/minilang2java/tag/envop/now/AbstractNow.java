@@ -25,7 +25,7 @@ public abstract class AbstractNow extends Tag {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     context.addImport(VariableType.from("UtilDateTime"));
     final List<String> lines =
         getAttributes()

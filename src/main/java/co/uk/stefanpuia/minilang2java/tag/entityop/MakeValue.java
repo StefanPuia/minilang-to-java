@@ -5,23 +5,20 @@ import static co.uk.stefanpuia.minilang2java.util.ListUtil.combine;
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.field.FlexibleAccessor;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
-import co.uk.stefanpuia.minilang2java.core.validate.rule.ChildTagNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import co.uk.stefanpuia.minilang2java.core.value.FlexibleStringExpander;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
-import co.uk.stefanpuia.minilang2java.tag.entityop.ClearCacheLine.Attributes;
+import co.uk.stefanpuia.minilang2java.tag.entityop.MakeValue.Attributes;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-@MinilangTag("clear-cache-line")
-public class ClearCacheLine extends EntityOperation<Attributes> {
+@MinilangTag("make-value")
+public class MakeValue extends EntityOperation<Attributes> {
 
   private final Attributes attributes;
 
-  public ClearCacheLine(final TagInit tagInit) {
+  public MakeValue(final TagInit tagInit) {
     super(tagInit);
     this.attributes = new Attributes(this);
   }
@@ -36,32 +33,37 @@ public class ClearCacheLine extends EntityOperation<Attributes> {
     return super.getRules()
         .addRules(
             ImmutableAttributeNameRule.builder()
-                .addRequiredAll("entity-name")
+                .addRequiredAll("value-field", "entity-name")
                 .addOptional("map")
-                .build(),
-            ChildTagNameRule.noChildElements());
+                .build());
   }
 
   @Override
   public List<String> convertSelf() {
+    context.addImport(GENERIC_VALUE);
     return combine(
         super.convertSelf(),
-        "%s.clearCacheLine(%s);".formatted(getDelegatorName(), getArguments()));
+        attributes
+            .getValueField()
+            .makeSetter(
+                GENERIC_VALUE,
+                "%s.makeValidValue(%s)".formatted(getDelegatorName(), getArguments())));
   }
 
   private String getArguments() {
-    return Stream.of(
-            Optional.of(attributes.getEntityName().toString()),
-            attributes.getMap().map(FlexibleAccessor::makeGetter))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .collect(Collectors.joining(", "));
+    return String.join(
+        ", ",
+        combine(attributes.getEntityName(), attributes.getMap().map(FlexibleAccessor::makeGetter)));
   }
 
   protected static class Attributes extends EntityOpAttributes {
 
     protected Attributes(final Tag self) {
       super(self);
+    }
+
+    public FlexibleAccessor getValueField() {
+      return flexibleAccessor("value-field");
     }
 
     public FlexibleStringExpander getEntityName() {

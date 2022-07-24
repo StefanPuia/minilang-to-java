@@ -13,7 +13,7 @@ public class UtilReturn extends Return {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     return List.of("return;");
   }
 }

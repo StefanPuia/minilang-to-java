@@ -14,7 +14,7 @@ public class ServiceReturn extends Return {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     return List.of(String.format("return %s;", getReturnMethod()));
   }
 

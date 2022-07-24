@@ -20,7 +20,7 @@ public class CallBsh extends Tag {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     return List.of(String.format("%s();", methodName));
   }
 

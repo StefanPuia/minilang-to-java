@@ -27,10 +27,10 @@ public class While extends Tag {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     return combine(
         format("while (%s) {", getFirstChild(Condition.class).convertCondition()),
-        indent(this, getFirstChild(Then.class).convert()),
+        indent(this, getFirstChild(Then.class).convertSelf()),
         "}");
   }
 }

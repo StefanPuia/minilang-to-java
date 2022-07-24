@@ -1,0 +1,3 @@
+<simple-method method-name="conversionTest">
+    <make-value entity-name="Party" value-field="output"/>
+</simple-method>

@@ -13,7 +13,7 @@ public class UndefinedTag extends Tag {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     return children.size() > 0 ? multipleChildren() : singleLine();
   }
 

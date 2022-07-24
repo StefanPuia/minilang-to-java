@@ -23,7 +23,7 @@ public class ElseIf extends ConditionalTag implements ConditionalOp {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     return List.of();
   }
 

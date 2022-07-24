@@ -13,7 +13,7 @@ class NonElementTagTest {
         new NonElementTag(conversionContext(), null) {
 
           @Override
-          public List<String> convert() {
+          public List<String> convertSelf() {
             return null;
           }
         };

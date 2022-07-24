@@ -17,7 +17,7 @@ public class TagTestImpl extends Tag {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     return convert;
   }
 

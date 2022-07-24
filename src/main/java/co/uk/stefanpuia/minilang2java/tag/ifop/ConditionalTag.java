@@ -16,7 +16,7 @@ public abstract class ConditionalTag extends Tag {
   }
 
   @Override
-  public List<String> convert() {
+  public List<String> convertSelf() {
     final List<String> lines = new ArrayList<>();
     lines.add(format("if (%s) {", convertCondition()));
     lines.addAll(getThenLines());
