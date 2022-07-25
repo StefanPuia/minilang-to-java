@@ -40,4 +40,6 @@ public interface ConversionContext {
   List<Message> getMessages();
 
   String getPackageName();
+
+  boolean isOptimised();
 }

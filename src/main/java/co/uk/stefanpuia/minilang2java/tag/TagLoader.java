@@ -5,6 +5,7 @@ import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.model.MethodMode;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag.MinilangTags;
+import co.uk.stefanpuia.minilang2java.core.model.TagIdentifier;
 import java.lang.reflect.Constructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -37,11 +38,12 @@ public class TagLoader {
             final Constructor<Tag> constructor =
                 (Constructor<Tag>) tagClass.getConstructor(TagInit.class);
             if (tagAnnotation.mode() == MethodMode.ANY) {
-              TagFactory.register(tagAnnotation.value(), MethodMode.EVENT, constructor);
-              TagFactory.register(tagAnnotation.value(), MethodMode.SERVICE, constructor);
-              TagFactory.register(tagAnnotation.value(), MethodMode.UTIL, constructor);
+              TagFactory.register(getTagIdentifier(tagAnnotation, MethodMode.EVENT), constructor);
+              TagFactory.register(getTagIdentifier(tagAnnotation, MethodMode.SERVICE), constructor);
+              TagFactory.register(getTagIdentifier(tagAnnotation, MethodMode.UTIL), constructor);
             } else {
-              TagFactory.register(tagAnnotation.value(), tagAnnotation.mode(), constructor);
+              TagFactory.register(
+                  getTagIdentifier(tagAnnotation, tagAnnotation.mode()), constructor);
             }
           }
         }
@@ -51,5 +53,9 @@ public class TagLoader {
       LOGGER.error("Error loading tags", e);
       throw new IllegalStateException(e);
     }
+  }
+
+  private TagIdentifier getTagIdentifier(final MinilangTag tagAnnotation, final MethodMode event) {
+    return new TagIdentifier(tagAnnotation.value(), event, tagAnnotation.optimised());
   }
 }

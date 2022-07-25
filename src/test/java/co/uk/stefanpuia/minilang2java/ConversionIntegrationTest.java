@@ -77,7 +77,10 @@ public class ConversionIntegrationTest {
             xmlContent,
             getMode(fileName),
             "com.test.Test",
-            ImmutableConversionRequestOptions.builder().setLoggingTiming(false).build());
+            ImmutableConversionRequestOptions.builder()
+                .setLoggingTiming(false)
+                .setConverterReplicateMinilang(!isOptimised(fileName))
+                .build());
 
     // When
     final var response =
@@ -112,5 +115,9 @@ public class ConversionIntegrationTest {
       return MethodMode.valueOf(matcher.group("mode"));
     }
     return MethodMode.UTIL;
+  }
+
+  private boolean isOptimised(final String fileName) {
+    return Pattern.compile("\\.optimised$").matcher(fileName).find();
   }
 }

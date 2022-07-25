@@ -61,7 +61,7 @@ public class DefaultConversionContext implements ConversionContext {
 
   @Override
   public ErrorHandler getErrorHandler() {
-    return beanFactory.getBean(ErrorHandler.class, (ConversionContext) this);
+    return beanFactory.getBean(ErrorHandler.class, this);
   }
 
   @Override
@@ -102,5 +102,10 @@ public class DefaultConversionContext implements ConversionContext {
   @Override
   public String getPackageName() {
     return QualifiedClass.from(config.className()).getPackageName().orElse("com.minilang2java");
+  }
+
+  @Override
+  public boolean isOptimised() {
+    return !config.converterOptions().isReplicateMinilang();
   }
 }

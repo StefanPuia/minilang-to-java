@@ -87,7 +87,8 @@
                 <input type="checkbox" id="converter_authServices"/>
                 Authenticate services automatically
             </label>
-            <label for="converter_replicateMinilang">
+            <label for="converter_replicateMinilang"
+                   title="If left unchecked, some of the generated code will be optimised.">
                 <input
                     type="checkbox"
                     id="converter_replicateMinilang"

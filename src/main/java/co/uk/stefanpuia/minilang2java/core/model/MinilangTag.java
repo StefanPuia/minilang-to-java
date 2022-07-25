@@ -17,6 +17,8 @@ public @interface MinilangTag {
 
   MethodMode mode() default ANY;
 
+  boolean optimised() default false;
+
   @Target(ElementType.TYPE)
   @Retention(RetentionPolicy.RUNTIME)
   @interface MinilangTags {

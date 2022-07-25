@@ -9,6 +9,7 @@ import static org.mockito.Mockito.doReturn;
 import co.uk.stefanpuia.minilang2java.core.TagFactory;
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
+import co.uk.stefanpuia.minilang2java.core.model.TagIdentifier;
 import co.uk.stefanpuia.minilang2java.impl.TagTestImpl;
 import co.uk.stefanpuia.minilang2java.tag.root.method.UtilSimpleMethod;
 import com.sun.org.apache.xerces.internal.dom.AttrImpl;
@@ -34,8 +35,7 @@ class XmlRootTest {
   @BeforeEach
   void setUp() throws NoSuchMethodException {
     TagFactory.register(
-        "simple-method",
-        context.getMethodMode(),
+        new TagIdentifier("simple-method", context.getMethodMode(), false),
         UtilSimpleMethod.class.getConstructor(TagInit.class));
   }
 
