@@ -6,12 +6,12 @@ import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameR
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import co.uk.stefanpuia.minilang2java.tag.entityop.GenericValueMethod.GenericValueMethodAttributes;
 
-@MinilangTag("remove-value")
-public class RemoveValue extends GenericValueMethod<GenericValueMethodAttributes> {
+@MinilangTag("store-value")
+public class StoreValue extends GenericValueMethod<GenericValueMethodAttributes> {
 
   private final GenericValueMethodAttributes attributes;
 
-  public RemoveValue(final TagInit tagInit) {
+  public StoreValue(final TagInit tagInit) {
     super(tagInit);
     this.attributes = new GenericValueMethodAttributes(this);
   }
@@ -29,6 +29,6 @@ public class RemoveValue extends GenericValueMethod<GenericValueMethodAttributes
 
   @Override
   public String getMethod() {
-    return "remove";
+    return "store";
   }
 }
