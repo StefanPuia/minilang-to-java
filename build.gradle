@@ -120,6 +120,7 @@ docker {
     springBootApplication {
         baseImage = 'openjdk:17'
         images = ["${System.env.DOCKER_IMAGE_TAG}", "${System.env.DOCKER_IMAGE_TAG}:${System.env.BUILD_ID}"]
+        jvmArgs = ["--add-opens=${EXPORT_INTERNAL_DOM}", '-Dspring.profiles.active=production', '-Xms256m', '-Xmx256m']
     }
 }
 
