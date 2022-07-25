@@ -1,0 +1,3 @@
+<simple-method method-name="conversionTest">
+    <remove-list list="someList"/>
+</simple-method>

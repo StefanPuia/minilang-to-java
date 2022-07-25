@@ -1,0 +1,3 @@
+<simple-method method-name="conversionTest">
+    <remove-value value-field="someValue"/>
+</simple-method>
