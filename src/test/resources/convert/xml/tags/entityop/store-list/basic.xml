@@ -1,0 +1,3 @@
+<simple-method method-name="conversionTest">
+    <store-list list="someList"/>
+</simple-method>

@@ -3,15 +3,15 @@ package co.uk.stefanpuia.minilang2java.tag.entityop;
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
 
-@MinilangTag("remove-list")
-public class RemoveList extends GenericValueListMethod {
+@MinilangTag("store-list")
+public class StoreList extends GenericValueListMethod {
 
-  public RemoveList(final TagInit tagInit) {
+  public StoreList(final TagInit tagInit) {
     super(tagInit);
   }
 
   @Override
   protected String getMethod() {
-    return "removeAll";
+    return "storeAll";
   }
 }
