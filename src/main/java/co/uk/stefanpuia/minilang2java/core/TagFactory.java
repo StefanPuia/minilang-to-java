@@ -41,7 +41,11 @@ public final class TagFactory {
     tagInit
         .conversionContext()
         .addMessage(
-            ERROR, String.format("No parser defined for tag [%s]", tagName), tagInit.getPosition());
+            ERROR,
+            String.format(
+                "No parser defined for tag [%s] in %s mode",
+                tagName, tagInit.conversionContext().getMethodMode()),
+            tagInit.getPosition());
     return new UndefinedTag(tagInit);
   }
 
