@@ -69,7 +69,17 @@ public final class TagFactory {
         .orElseGet(() -> getUndefinedTag(tagName, tagInit));
   }
 
-  public Collection<String> getHandledTags() {
-    return TAGS.keySet().stream().map(TagIdentifier::tagName).collect(Collectors.toSet());
+  public Collection<HandledTag> getHandledTags() {
+    return TAGS.keySet().stream()
+        .collect(Collectors.groupingBy(TagIdentifier::tagName))
+        .entrySet()
+        .stream()
+        .map(
+            entry ->
+                new HandledTag(
+                    entry.getKey(), entry.getValue().stream().anyMatch(TagIdentifier::optimised)))
+        .toList();
   }
+
+  public record HandledTag(String tagName, boolean optimised) {}
 }

@@ -32,6 +32,7 @@
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+    position: relative;
 }
 
 #tags > .tag:hover {
@@ -41,6 +42,13 @@
 
 #tags > .tag.unhandled {
     border-color: #890000;
+}
+
+#tags > .tag.optimised::after {
+    content: '\2B50';
+    position: absolute;
+    top: calc(-0.5em - 2px);
+    right: calc(-0.5em - 2px);
 }
 
 #tags > .tag.unhandled:hover {

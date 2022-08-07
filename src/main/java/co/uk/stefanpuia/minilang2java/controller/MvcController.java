@@ -3,6 +3,7 @@ package co.uk.stefanpuia.minilang2java.controller;
 import co.uk.stefanpuia.minilang2java.controller.dto.TagDto;
 import co.uk.stefanpuia.minilang2java.controller.dto.TagsDto;
 import co.uk.stefanpuia.minilang2java.core.TagFactory;
+import co.uk.stefanpuia.minilang2java.core.TagFactory.HandledTag;
 import co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalParserHandler;
 import co.uk.stefanpuia.minilang2java.core.convert.reader.SimpleMethodsXmlReader;
 import co.uk.stefanpuia.minilang2java.core.model.SimpleMethodsElement;
@@ -31,7 +32,7 @@ public class MvcController {
 
   @GetMapping("/tags")
   public String getUnhandled(final Model model) throws SimpleMethodsElementsReadException {
-    final Collection<String> handledTags = tagFactory.getHandledTags();
+    final Collection<HandledTag> handledTags = tagFactory.getHandledTags();
     final List<SimpleMethodsElement> elements = methodsXmlReader.getElements(handler, xmlReader);
 
     model.addAttribute(
@@ -39,10 +40,19 @@ public class MvcController {
         new TagsDto(
             elements.stream()
                 .map(
-                    element -> {
-                      final boolean isHandled = handledTags.contains(element.name());
-                      return new TagDto(isHandled, element.name(), element.description());
-                    })
+                    element ->
+                        handledTags.stream()
+                            .filter(tag -> element.name().equals(tag.tagName()))
+                            .findFirst()
+                            .map(
+                                tag ->
+                                    new TagDto(
+                                        true,
+                                        tag.tagName(),
+                                        element.description(),
+                                        tag.optimised()))
+                            .orElse(
+                                new TagDto(false, element.name(), element.description(), false)))
                 .toList()));
     return "tags";
   }

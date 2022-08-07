@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/static/style.css"/>
     <link rel="stylesheet" href="/static/tags.css"/>
-    <title>OFBiz Minilang to Java - Unhandled Tags</title>
+    <title>OFBiz Minilang to Java - Handled Tags</title>
 </head>
 <body>
 <div id="container">
@@ -17,12 +17,13 @@
         <input type="text" id="search-input" placeholder="Search..."/>
     </div>
     <div>
-        Handled: ${tagsDto.getHandled()} / ${tagsDto.tags()?size}
+        Handled: ${tagsDto.handled} / ${tagsDto.tags()?size} (${tagsDto.optimised} Optimised)
     </div>
     <div id="tags">
         <#list tagsDto.tags() as tag>
-            <div class="tag ${tag.handled?string("", "unhandled")}"
-                 title="${tag.tooltip()}">${tag.name()}</div>
+            <div
+                class="tag ${tag.handled()?string("", "unhandled")} ${tag.optimised()?string("optimised", "")}"
+                title="${tag.tooltip()}">${tag.name()}</div>
         </#list>
     </div>
 </div>
