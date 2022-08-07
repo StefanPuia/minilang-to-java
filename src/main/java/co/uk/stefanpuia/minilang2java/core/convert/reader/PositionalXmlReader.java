@@ -1,6 +1,6 @@
 package co.uk.stefanpuia.minilang2java.core.convert.reader;
 
-import static co.uk.stefanpuia.minilang2java.core.xml.CommentElement.COMMENT_TAG_NAME;
+import static co.uk.stefanpuia.minilang2java.core.TagFactory.COMMENT_TAG_NAME;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import co.uk.stefanpuia.minilang2java.core.TagFactory;

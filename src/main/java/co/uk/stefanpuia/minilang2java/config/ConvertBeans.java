@@ -3,10 +3,7 @@ package co.uk.stefanpuia.minilang2java.config;
 import static javax.xml.XMLConstants.FEATURE_SECURE_PROCESSING;
 
 import co.uk.stefanpuia.minilang2java.core.TagFactory;
-import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalParserHandler;
-import co.uk.stefanpuia.minilang2java.core.handler.error.ErrorHandler;
-import co.uk.stefanpuia.minilang2java.core.handler.error.ErrorHandlerFactory;
 import co.uk.stefanpuia.minilang2java.core.validate.Validation;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -49,15 +46,10 @@ public class ConvertBeans {
   }
 
   @Bean
+  @RequestScope
   public Document document() throws ParserConfigurationException {
     final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
     final DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
     return docBuilder.newDocument();
-  }
-
-  @Bean
-  @RequestScope
-  public ErrorHandler errorHandler(final ConversionContext context) {
-    return ErrorHandlerFactory.newInstance(context);
   }
 }

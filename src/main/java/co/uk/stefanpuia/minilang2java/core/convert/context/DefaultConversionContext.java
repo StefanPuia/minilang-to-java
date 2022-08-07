@@ -1,6 +1,5 @@
 package co.uk.stefanpuia.minilang2java.core.convert.context;
 
-import co.uk.stefanpuia.minilang2java.core.handler.error.ErrorHandler;
 import co.uk.stefanpuia.minilang2java.core.model.ConversionInit;
 import co.uk.stefanpuia.minilang2java.core.model.MessageType;
 import co.uk.stefanpuia.minilang2java.core.model.MethodMode;
@@ -11,11 +10,9 @@ import co.uk.stefanpuia.minilang2java.core.qualify.QualifiedClass;
 import co.uk.stefanpuia.minilang2java.core.qualify.QualifiedStaticField;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.BeanFactory;
 
 @RequiredArgsConstructor
 public class DefaultConversionContext implements ConversionContext {
@@ -24,7 +21,6 @@ public class DefaultConversionContext implements ConversionContext {
   private final List<QualifiedStaticField> staticImports = new ArrayList<>();
 
   private final ConversionInit config;
-  private final BeanFactory beanFactory;
 
   @Override
   public String getClassName() {
@@ -60,28 +56,8 @@ public class DefaultConversionContext implements ConversionContext {
   }
 
   @Override
-  public ErrorHandler getErrorHandler() {
-    return beanFactory.getBean(ErrorHandler.class, this);
-  }
-
-  @Override
   public MethodMode getMethodMode() {
     return config.methodMode();
-  }
-
-  @Override
-  public String getReturnVariable() {
-    return null;
-  }
-
-  @Override
-  public String parseValue(final String value) {
-    return null;
-  }
-
-  @Override
-  public Optional<String> parseValueOrInitialize(final String type, final String value) {
-    return Optional.empty();
   }
 
   @Override

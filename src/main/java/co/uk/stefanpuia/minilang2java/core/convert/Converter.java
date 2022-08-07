@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 import org.springframework.web.context.annotation.RequestScope;
@@ -27,7 +26,6 @@ import org.xml.sax.XMLReader;
 @Slf4j
 @AllArgsConstructor
 public class Converter {
-  private final BeanFactory beanFactory;
   private PositionalParserHandler positionalParserHandler;
   private XMLReader xmlReader;
   private TagFactory tagFactory;
@@ -63,7 +61,7 @@ public class Converter {
   }
 
   private ConversionContext getConversionContext(final ConversionInit config) {
-    return new DefaultConversionContext(config, beanFactory);
+    return new DefaultConversionContext(config);
   }
 
   private String renderMessages(final ConversionContext context, final ConversionInit config) {

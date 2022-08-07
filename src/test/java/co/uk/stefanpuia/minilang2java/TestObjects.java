@@ -13,7 +13,6 @@ import co.uk.stefanpuia.minilang2java.core.model.MethodMode;
 import co.uk.stefanpuia.minilang2java.impl.AttributeElement;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import java.util.Map;
-import org.springframework.beans.factory.BeanFactory;
 import org.w3c.dom.Element;
 
 public class TestObjects {
@@ -45,16 +44,11 @@ public class TestObjects {
   }
 
   public static ConversionContext conversionContext() {
-    return new DefaultConversionContext(conversionInit(), null);
+    return new DefaultConversionContext(conversionInit());
   }
 
   public static ConversionContext conversionContext(final ConversionInit conversionInit) {
-    return new DefaultConversionContext(conversionInit, null);
-  }
-
-  public static ConversionContext conversionContext(
-      final ConversionInit conversionInit, final BeanFactory beanFactory) {
-    return new DefaultConversionContext(conversionInit(), beanFactory);
+    return new DefaultConversionContext(conversionInit);
   }
 
   private static AttributeElement attributeElement() {

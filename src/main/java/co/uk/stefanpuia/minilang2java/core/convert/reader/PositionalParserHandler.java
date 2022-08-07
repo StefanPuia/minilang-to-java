@@ -3,7 +3,6 @@ package co.uk.stefanpuia.minilang2java.core.convert.reader;
 import static co.uk.stefanpuia.minilang2java.core.convert.reader.PositionalXmlReader.LINE_NUMBER_KEY_NAME;
 
 import co.uk.stefanpuia.minilang2java.core.model.OptionalString;
-import co.uk.stefanpuia.minilang2java.core.xml.CommentElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -52,7 +51,7 @@ public class PositionalParserHandler extends DefaultHandler2 {
   @Override
   public void comment(final char[] chars, final int start, final int length) {
     final Element parentElement = elementStack.peek();
-    parentElement.appendChild(new CommentElement(new String(chars, start, length), document));
+    parentElement.appendChild(document.createComment(new String(chars, start, length)));
   }
 
   @Override

@@ -16,6 +16,7 @@ import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -31,12 +32,14 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest(
     classes = {Application.class},
     webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ConversionIntegrationTest {
+
   @Autowired protected TestRestTemplate template;
   @Autowired private ResourceLoader resourceLoader;
 
@@ -89,12 +92,20 @@ public class ConversionIntegrationTest {
             ConvertResponseDto.class);
 
     // Then
-    then(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    then(response).isNotNull().extracting(ResponseEntity::getStatusCode).isEqualTo(HttpStatus.OK);
     then(response.getBody())
         .extracting(ConvertResponseDto::output)
         .asInstanceOf(type(String.class))
         .extracting(this::normalizeContent)
         .isEqualTo(javaContent);
+  }
+
+  @Test
+  void shouldRenderHandledTags() throws URISyntaxException {
+    final ResponseEntity<Void> response =
+        template.exchange(RequestEntity.get(new URI("/tags")).build(), Void.class);
+
+    then(response).isNotNull().extracting(ResponseEntity::getStatusCode).isEqualTo(HttpStatus.OK);
   }
 
   private String normalizeContent(final InputStream inputStream) {

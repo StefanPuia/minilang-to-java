@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @SuppressWarnings("PMD.ClassNamingConventions")
 public final class TagFactory {
 
+  public static final String COMMENT_TAG_NAME = "!comment";
   private static final Map<TagIdentifier, Constructor<? extends Tag>> TAGS =
       new ConcurrentHashMap<>();
 
