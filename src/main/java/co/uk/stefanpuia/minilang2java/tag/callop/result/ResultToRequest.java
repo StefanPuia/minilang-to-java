@@ -35,7 +35,7 @@ public class ResultToRequest extends Result<Attributes> {
   protected List<String> convertSelf() {
     return List.of(
         "request.setAttribute(%s, %s);"
-            .formatted(getAttributes().getRequestName(), getResult().makeGetter()));
+            .formatted(getAttributes().getRequestName().toSafeString(), getResult().makeGetter()));
   }
 
   protected static class Attributes extends ResultAttributes {

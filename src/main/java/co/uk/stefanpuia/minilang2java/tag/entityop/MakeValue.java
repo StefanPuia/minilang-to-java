@@ -53,7 +53,9 @@ public class MakeValue extends EntityOperation<Attributes> {
   private String getArguments() {
     return String.join(
         ", ",
-        combine(attributes.getEntityName(), attributes.getMap().map(FlexibleAccessor::makeGetter)));
+        combine(
+            attributes.getEntityName().toSafeString(),
+            attributes.getMap().map(FlexibleAccessor::makeGetter)));
   }
 
   protected static class Attributes extends EntityOpAttributes {

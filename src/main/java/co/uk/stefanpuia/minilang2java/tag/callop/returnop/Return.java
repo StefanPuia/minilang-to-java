@@ -30,8 +30,8 @@ public abstract class Return extends Tag {
   protected String getResponseCode() {
     return attributes
         .getResponseCode()
-        .map(FlexibleStringExpander::toString)
-        .orElse(new FlexibleStringExpander(this, "success").toString());
+        .map(FlexibleStringExpander::toSafeString)
+        .orElse(new FlexibleStringExpander(this, "success").toSafeString());
   }
 
   protected static class Attributes extends TagAttributes {

@@ -75,7 +75,7 @@ public class SetElement extends Tag {
   private void addDefaultLines(final List<String> lines) {
     attributes
         .getDefault()
-        .map(FlexibleStringExpander::toString)
+        .map(FlexibleStringExpander::toSafeString)
         .ifPresent(
             defaultValue -> {
               getContext().addImport(VariableType.from("UtilValidate"));
@@ -134,7 +134,7 @@ public class SetElement extends Tag {
         .getFrom()
         .map(FlexibleAccessor::makeGetter)
         .orElseGet(
-            () -> attributes.getValue().map(FlexibleStringExpander::toString).orElse("null"));
+            () -> attributes.getValue().map(FlexibleStringExpander::toSafeString).orElse("null"));
   }
 
   private static class Attributes extends TagAttributes {
