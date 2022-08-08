@@ -7,7 +7,7 @@ plugins {
     id 'io.freefair.lombok' version '6.4.3'
     id 'org.springframework.boot' version '2.6.7'
     id 'com.bmuschko.docker-spring-boot-application' version '7.4.0'
-    id 'com.asarkar.gradle.build-time-tracker' version '4.2.0'
+    id 'com.asarkar.gradle.build-time-tracker' version '4.3.0'
 }
 
 group = 'co.uk.stefanpuia'
