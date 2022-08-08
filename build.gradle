@@ -5,7 +5,7 @@ plugins {
     id 'com.diffplug.spotless' version '6.9.0'
     id 'com.github.spotbugs' version '5.0.9'
     id 'io.freefair.lombok' version '6.5.0.3'
-    id 'org.springframework.boot' version '2.6.7'
+    id 'org.springframework.boot' version '2.7.2'
     id 'com.bmuschko.docker-spring-boot-application' version '7.4.0'
     id 'com.asarkar.gradle.build-time-tracker' version '4.3.0'
 }
