@@ -1,18 +1,18 @@
 [versions]
-assertjCore = "3.22.0"
+assertjCore = "3.23.1"
 commonsCollections4 = "4.4"
 commonsLang3 = "3.12.0"
 commonsLogging = "1.2"
 commonsText = "1.9"
 immutables = "2.9.0"
-junitJupiter = "5.8.2"
+junitJupiter = "5.9.0"
 lombokMapstructBinding = "0.2.0"
 mapstruct = "1.5.2.Final"
 mapstructSpringExtensions = "0.1.2"
-mockito = "4.5.1"
+mockito = "4.6.1"
 slf4j = "1.7.36"
-spotbugs = "4.6.0"
-springBoot = "2.6.7"
+spotbugs = "4.7.1"
+springBoot = "2.7.2"
 
 [libraries]
 assertj-core = { group = "org.assertj", name = "assertj-core", version.ref = "assertjCore" }
