@@ -99,3 +99,10 @@ button {
     display: flex;
     flex-direction: column;
 }
+
+a.alphaCta {
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    color: white;
+}
