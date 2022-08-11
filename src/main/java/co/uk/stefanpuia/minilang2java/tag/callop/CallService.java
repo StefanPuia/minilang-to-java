@@ -1,5 +1,6 @@
 package co.uk.stefanpuia.minilang2java.tag.callop;
 
+import static co.uk.stefanpuia.minilang2java.core.model.VariableType.DEFAULT_MAP_TYPE;
 import static co.uk.stefanpuia.minilang2java.util.ListUtil.combine;
 
 import co.uk.stefanpuia.minilang2java.core.TagInit;
@@ -63,7 +64,8 @@ public class CallService extends Tag {
       return List.of(makeDispatcherCall());
     }
     return combine(
-        FlexibleAccessor.from(this, getResultName()).makeSetter(makeDispatcherCall()),
+        FlexibleAccessor.from(this, getResultName())
+            .makeSetter(DEFAULT_MAP_TYPE, makeDispatcherCall()),
         convertChildren());
   }
 

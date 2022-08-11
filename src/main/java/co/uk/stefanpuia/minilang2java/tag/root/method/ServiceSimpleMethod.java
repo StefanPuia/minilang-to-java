@@ -39,6 +39,7 @@ public class ServiceSimpleMethod extends SimpleMethod {
   @Override
   protected void addMethodVariablesToContext() {
     serviceReturnMap = new ServiceReturnMap(context, this);
+    setVariable(serviceReturnMap.getName());
     methodContextVariables.add(serviceReturnMap);
     methodContextVariables.add(new ServiceDelegator(context, this));
     methodContextVariables.add(new ServiceDispatcher(context, this));

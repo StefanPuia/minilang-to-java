@@ -38,6 +38,7 @@ public class GuiceServiceSimpleMethod extends SimpleMethod {
   @Override
   protected void addMethodVariablesToContext() {
     guiceReturnMap = new GuiceReturnMap(context, this);
+    setVariable(guiceReturnMap.getName());
     methodContextVariables.add(guiceReturnMap);
   }
 

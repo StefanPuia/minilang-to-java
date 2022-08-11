@@ -11,7 +11,7 @@ import co.uk.stefanpuia.minilang2java.tag.callop.result.ResultToRequest.Attribut
 import java.util.List;
 
 @MinilangTag(value = "result-to-request", mode = MethodMode.EVENT)
-public class ResultToRequest extends Result<Attributes> {
+public class ResultToRequest extends NamedResult<Attributes> {
 
   private final Attributes attributes;
 
