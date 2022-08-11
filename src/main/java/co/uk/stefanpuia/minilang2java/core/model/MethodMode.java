@@ -1,5 +1,7 @@
 package co.uk.stefanpuia.minilang2java.core.model;
 
+import java.util.List;
+
 public enum MethodMode {
   UTIL,
   EVENT,
@@ -7,5 +9,5 @@ public enum MethodMode {
   GUICE_SERVICE,
   ANY;
 
-  public static final MethodMode[] MODES = {UTIL, EVENT, SERVICE, GUICE_SERVICE};
+  public static final List<MethodMode> MODES = List.of(UTIL, EVENT, SERVICE, GUICE_SERVICE);
 }

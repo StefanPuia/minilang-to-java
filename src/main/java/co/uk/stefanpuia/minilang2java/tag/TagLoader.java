@@ -21,7 +21,7 @@ public class TagLoader {
 
   @Order(60)
   @EventListener(ApplicationReadyEvent.class)
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "PMD.CognitiveComplexity"})
   public void loadTags() {
     LOGGER.info("Loading tags...");
     try {
