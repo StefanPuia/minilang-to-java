@@ -21,7 +21,7 @@ public class TagLoader {
 
   @Order(60)
   @EventListener(ApplicationReadyEvent.class)
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "PMD.CognitiveComplexity"})
   public void loadTags() {
     LOGGER.info("Loading tags...");
     try {
@@ -38,9 +38,11 @@ public class TagLoader {
             final Constructor<Tag> constructor =
                 (Constructor<Tag>) tagClass.getConstructor(TagInit.class);
             if (tagAnnotation.mode() == MethodMode.ANY) {
-              TagFactory.register(getTagIdentifier(tagAnnotation, MethodMode.EVENT), constructor);
-              TagFactory.register(getTagIdentifier(tagAnnotation, MethodMode.SERVICE), constructor);
-              TagFactory.register(getTagIdentifier(tagAnnotation, MethodMode.UTIL), constructor);
+              for (final MethodMode mode : MethodMode.MODES) {
+                if (!TagFactory.isRegistered(getTagIdentifier(tagAnnotation, mode))) {
+                  TagFactory.register(getTagIdentifier(tagAnnotation, mode), constructor);
+                }
+              }
             } else {
               TagFactory.register(
                   getTagIdentifier(tagAnnotation, tagAnnotation.mode()), constructor);

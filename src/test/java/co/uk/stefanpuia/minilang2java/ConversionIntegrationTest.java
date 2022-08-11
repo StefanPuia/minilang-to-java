@@ -121,7 +121,7 @@ public class ConversionIntegrationTest {
   }
 
   private MethodMode getMode(final String fileName) {
-    final var matcher = Pattern.compile("_(?<mode>[A-Z]+)$").matcher(fileName);
+    final var matcher = Pattern.compile("_(?<mode>[A-Z_]+)$").matcher(fileName);
     if (matcher.find()) {
       return MethodMode.valueOf(matcher.group("mode"));
     }

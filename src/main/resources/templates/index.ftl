@@ -31,6 +31,7 @@
         />
         <select id="mode" class="padded">
             <option value="SERVICE">Service Methods</option>
+            <option value="GUICE_SERVICE">Guice Service Methods</option>
             <option value="EVENT">Events</option>
             <option value="UTIL">Utility Methods</option>
         </select>

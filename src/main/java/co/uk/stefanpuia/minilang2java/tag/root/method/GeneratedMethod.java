@@ -27,6 +27,7 @@ public class GeneratedMethod {
       case UTIL -> new UtilSimpleMethod(tagInit);
       case EVENT -> new EventSimpleMethod(tagInit);
       case SERVICE -> new ServiceSimpleMethod(tagInit);
+      case GUICE_SERVICE -> new GuiceServiceSimpleMethod(tagInit);
       default -> throw new TagInstantiationException("Wrong method mode");
     };
   }

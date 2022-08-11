@@ -51,6 +51,11 @@ public class UtilSimpleMethod extends SimpleMethod {
   }
 
   @Override
+  protected List<String> getReturn() {
+    return List.of();
+  }
+
+  @Override
   protected List<String> getDefaultAssignments() {
     return List.of();
   }

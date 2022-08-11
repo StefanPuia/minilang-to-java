@@ -8,7 +8,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import co.uk.stefanpuia.minilang2java.tag.root.XmlRoot;
+import co.uk.stefanpuia.minilang2java.tag.root.Root;
 import co.uk.stefanpuia.minilang2java.tag.root.method.SimpleMethod;
 import com.sun.org.apache.xerces.internal.dom.AttrImpl;
 import com.sun.org.apache.xerces.internal.dom.CoreDocumentImpl;
@@ -36,7 +36,7 @@ class CallBshTest {
   @Test
   void shouldAddMethodToRoot() {
     doReturn(make()).when(element).getTextContent();
-    final var root = mock(XmlRoot.class);
+    final var root = mock(Root.class);
     new CallBsh(tagInit(element, root));
     verify(root).appendChild(any(SimpleMethod.class));
   }
@@ -46,7 +46,7 @@ class CallBshTest {
     final String generatedMethodName = "generatedMethod_" + make();
     doReturn(generatedMethodName).when(methodNameAttr).getValue();
     doReturn(make() + "\n" + make() + "\n" + make()).when(element).getTextContent();
-    final var callBsh = new CallBsh(tagInit(element, mock(XmlRoot.class)));
+    final var callBsh = new CallBsh(tagInit(element, mock(Root.class)));
     then(callBsh.convert())
         .allMatch(str -> str.contains(generatedMethodName + "();"), "method call");
   }

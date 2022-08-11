@@ -3,19 +3,19 @@ package co.uk.stefanpuia.minilang2java.core.handler.method.variable;
 import co.uk.stefanpuia.minilang2java.core.convert.context.ConversionContext;
 import co.uk.stefanpuia.minilang2java.core.model.ContextVariable;
 import co.uk.stefanpuia.minilang2java.core.model.VariableType;
-import co.uk.stefanpuia.minilang2java.tag.root.method.SimpleMethod;
+import co.uk.stefanpuia.minilang2java.tag.Tag;
 
 public abstract class MethodContextVariable {
   protected final ConversionContext context;
-  protected final SimpleMethod method;
+  protected final Tag root;
 
-  public MethodContextVariable(final ConversionContext context, final SimpleMethod method) {
+  public MethodContextVariable(final ConversionContext context, final Tag root) {
     this.context = context;
-    this.method = method;
+    this.root = root;
   }
 
-  private boolean isUsed() {
-    final var variable = method.getVariable(getName());
+  public boolean isUsed() {
+    final var variable = root.getVariable(getName());
     return variable.map(ContextVariable::count).orElse(0) > 0;
   }
 
