@@ -4,7 +4,7 @@ import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import co.uk.stefanpuia.minilang2java.tag.misc.JavaCode;
-import co.uk.stefanpuia.minilang2java.tag.root.XmlRoot;
+import co.uk.stefanpuia.minilang2java.tag.root.Root;
 import co.uk.stefanpuia.minilang2java.tag.root.method.GeneratedMethod;
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +25,7 @@ public class CallBsh extends Tag {
   }
 
   private void addMethodToRoot() {
-    final var root = getParent(XmlRoot.class).orElseThrow();
+    final var root = getParent(Root.class).orElseThrow();
     final var method = GeneratedMethod.createTag(context, root, getElement().getOwnerDocument());
     this.methodName = method.getMethodName();
     method.appendChild(new JavaCode(context, method, getCode()));

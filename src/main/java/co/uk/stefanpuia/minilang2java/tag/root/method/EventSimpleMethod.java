@@ -32,6 +32,11 @@ public class EventSimpleMethod extends SimpleMethod {
   }
 
   @Override
+  protected List<String> getReturn() {
+    return List.of("return \"success\";");
+  }
+
+  @Override
   protected String getReturnType() {
     return "String";
   }

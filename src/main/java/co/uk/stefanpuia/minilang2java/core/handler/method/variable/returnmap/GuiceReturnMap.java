@@ -5,9 +5,9 @@ import co.uk.stefanpuia.minilang2java.core.handler.method.variable.VariableAssig
 import co.uk.stefanpuia.minilang2java.core.model.VariableType;
 import co.uk.stefanpuia.minilang2java.tag.root.method.SimpleMethod;
 
-public class ServiceReturnMap extends ReturnMap implements VariableAssignment {
+public class GuiceReturnMap extends ReturnMap implements VariableAssignment {
 
-  public ServiceReturnMap(final ConversionContext context, final SimpleMethod method) {
+  public GuiceReturnMap(final ConversionContext context, final SimpleMethod method) {
     super(context, method);
   }
 
