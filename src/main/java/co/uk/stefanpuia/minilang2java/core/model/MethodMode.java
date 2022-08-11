@@ -4,5 +4,8 @@ public enum MethodMode {
   UTIL,
   EVENT,
   SERVICE,
-  ANY,
+  GUICE_SERVICE,
+  ANY;
+
+  public static final MethodMode[] MODES = {UTIL, EVENT, SERVICE, GUICE_SERVICE};
 }

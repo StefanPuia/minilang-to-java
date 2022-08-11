@@ -45,6 +45,10 @@ public final class TagFactory {
     return new UndefinedTag(tagInit);
   }
 
+  public static boolean isRegistered(final TagIdentifier tagIdentifier) {
+    return TAGS.containsKey(tagIdentifier);
+  }
+
   public Tag createTag(final String tagName, final TagInit tagInit) {
     final MethodMode methodMode = tagInit.conversionContext().getMethodMode();
     final boolean optimised = tagInit.conversionContext().isOptimised();

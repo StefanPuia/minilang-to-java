@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class ServiceSimpleMethod extends SimpleMethod {
   private final List<MethodContextVariable> parameters =
       List.of(new DispatchContext(context, this), new ServiceParameters(context, this));
+  private ServiceReturnMap serviceReturnMap;
 
   public ServiceSimpleMethod(final TagInit tagInit) {
     super(tagInit);
@@ -37,12 +38,13 @@ public class ServiceSimpleMethod extends SimpleMethod {
 
   @Override
   protected void addMethodVariablesToContext() {
+    serviceReturnMap = new ServiceReturnMap(context, this);
+    methodContextVariables.add(serviceReturnMap);
     methodContextVariables.add(new ServiceDelegator(context, this));
     methodContextVariables.add(new ServiceDispatcher(context, this));
     methodContextVariables.add(new ServiceUserLogin(context, this));
     methodContextVariables.add(new ServiceLocale(context, this));
     methodContextVariables.add(new ServiceTimeZone(context, this));
-    methodContextVariables.add(new ServiceReturnMap(context, this));
     methodContextVariables.add(new ServiceSecurity(context, this));
     methodContextVariables.stream().map(MethodContextVariable::asUnused).forEach(this::setVariable);
   }
@@ -52,6 +54,11 @@ public class ServiceSimpleMethod extends SimpleMethod {
     return parameters.stream()
         .map(MethodContextVariable::convert)
         .collect(Collectors.joining(", "));
+  }
+
+  @Override
+  protected List<String> getReturn() {
+    return List.of("return %s;".formatted(serviceReturnMap.getName()));
   }
 
   @Override

@@ -1,11 +1,11 @@
 package co.uk.stefanpuia.minilang2java.tag.root;
 
 import static co.uk.stefanpuia.minilang2java.core.model.MessageType.WARNING;
+import static co.uk.stefanpuia.minilang2java.util.ConvertUtil.indent;
 import static co.uk.stefanpuia.minilang2java.util.ListUtil.combine;
 import static java.lang.String.format;
 
 import co.uk.stefanpuia.minilang2java.core.TagInit;
-import co.uk.stefanpuia.minilang2java.core.model.MinilangTag;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import co.uk.stefanpuia.minilang2java.tag.misc.Comment;
 import co.uk.stefanpuia.minilang2java.tag.root.method.GeneratedMethod;
@@ -13,14 +13,13 @@ import co.uk.stefanpuia.minilang2java.tag.root.method.SimpleMethod;
 import java.util.ArrayList;
 import java.util.List;
 
-@MinilangTag("xml-root")
-public class XmlRoot extends Tag {
+public abstract class Root extends Tag {
 
-  public XmlRoot(final TagInit tagInit) {
+  public Root(final TagInit tagInit) {
     super(tagInit);
   }
 
-  private void wrapWithSimpleMethod() {
+  protected void wrapWithSimpleMethod() {
     if (children.stream().anyMatch(this::tagIsNotRootAllowedElement)) {
       context.addMessage(
           WARNING,
@@ -56,9 +55,16 @@ public class XmlRoot extends Tag {
     output.addAll(getStaticImports());
     output.add("");
     output.add(getClassLine());
+    output.add("");
+    output.addAll(indent(this, getClassMembers()));
+    output.add("");
     output.addAll(children);
     output.add("}");
     return output;
+  }
+
+  protected List<String> getClassMembers() {
+    return List.of();
   }
 
   private List<String> getStaticImports() {
@@ -76,7 +82,7 @@ public class XmlRoot extends Tag {
     return format("package %s;%n", context.getPackageName());
   }
 
-  private String getClassLine() {
+  protected String getClassLine() {
     return format("public class %s {", context.getClassName());
   }
 

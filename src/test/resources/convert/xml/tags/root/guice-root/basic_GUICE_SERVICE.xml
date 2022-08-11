@@ -1,0 +1,3 @@
+<simple-method method-name="test">
+    <make-value entity-name="Person" value-field="person"/>
+</simple-method>

@@ -25,7 +25,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class XmlRootTest {
+class DefaultRootTest {
   @Spy private ConversionContext context = conversionContext();
 
   @Mock private CoreDocumentImpl document;
@@ -41,7 +41,7 @@ class XmlRootTest {
 
   @Test
   void shouldHaveOwnContext() {
-    final var xmlRoot = new XmlRoot(tagInit(context, element));
+    final var xmlRoot = new DefaultRoot(tagInit(context, element));
     then(xmlRoot.hasOwnContext()).isTrue();
   }
 
@@ -49,7 +49,7 @@ class XmlRootTest {
   void shouldAddPackage() {
     final var packageName = make();
     doReturn(packageName).when(context).getPackageName();
-    final var xmlRoot = new XmlRoot(tagInit(context, element));
+    final var xmlRoot = new DefaultRoot(tagInit(context, element));
 
     then(xmlRoot.convert())
         .anyMatch(str -> str.contains(String.format("package %s;", packageName)));
@@ -59,7 +59,7 @@ class XmlRootTest {
   void shouldAddImports() {
     final var importName = make();
     doReturn(Set.of(importName)).when(context).getImports();
-    final var xmlRoot = new XmlRoot(tagInit(context, element));
+    final var xmlRoot = new DefaultRoot(tagInit(context, element));
 
     then(xmlRoot.convert()).anyMatch(str -> str.contains(String.format("import %s;", importName)));
   }
@@ -68,7 +68,7 @@ class XmlRootTest {
   void shouldAddStaticImports() {
     final var importName = make();
     doReturn(Set.of(importName)).when(context).getStaticImports();
-    final var xmlRoot = new XmlRoot(tagInit(context, element));
+    final var xmlRoot = new DefaultRoot(tagInit(context, element));
 
     then(xmlRoot.convert())
         .anyMatch(str -> str.contains(String.format("import static %s;", importName)));
@@ -78,7 +78,7 @@ class XmlRootTest {
   void shouldAddClassName() {
     final var className = make();
     doReturn(className).when(context).getClassName();
-    final var xmlRoot = new XmlRoot(tagInit(context, element));
+    final var xmlRoot = new DefaultRoot(tagInit(context, element));
 
     then(xmlRoot.convert())
         .anyMatch(str -> str.contains(String.format("public class %s {", className)));
@@ -86,7 +86,7 @@ class XmlRootTest {
 
   @Test
   void shouldNotAddSimpleMethodWrapperIfNoChildren() {
-    final var xmlRoot = new XmlRoot(tagInit(context, element));
+    final var xmlRoot = new DefaultRoot(tagInit(context, element));
     then(xmlRoot.convert()).noneMatch(str -> str.contains("() {"));
   }
 
@@ -97,7 +97,7 @@ class XmlRootTest {
     final String generatedMethodName = "generatedMethod_" + make();
     doReturn(generatedMethodName).when(methodNameAttr).getValue();
     doReturn(document).when(element).getOwnerDocument();
-    final var xmlRoot = new XmlRoot(tagInit(context, element));
+    final var xmlRoot = new DefaultRoot(tagInit(context, element));
     xmlRoot.appendChild(new TagTestImpl(tagInit(context, xmlRoot), List.of("converted")));
     then(xmlRoot.convert())
         .anyMatch(str -> str.contains("public void " + generatedMethodName + "() {"));

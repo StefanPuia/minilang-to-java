@@ -12,10 +12,14 @@ import co.uk.stefanpuia.minilang2java.core.model.exception.TagInstantiationExcep
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import com.sun.org.apache.xerces.internal.dom.AttrImpl;
 import com.sun.org.apache.xerces.internal.dom.CoreDocumentImpl;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -44,31 +48,26 @@ class GeneratedMethodTest {
     @Mock private CoreDocumentImpl document;
     @Mock private AttrImpl methodNameAttr;
 
+    public static Stream<Arguments> supplyMethodFactory() {
+      return Stream.of(
+          Arguments.of(MethodMode.UTIL, UtilSimpleMethod.class),
+          Arguments.of(MethodMode.EVENT, EventSimpleMethod.class),
+          Arguments.of(MethodMode.SERVICE, ServiceSimpleMethod.class),
+          Arguments.of(MethodMode.GUICE_SERVICE, GuiceServiceSimpleMethod.class));
+    }
+
     @BeforeEach
     void setUp() {
       doReturn(methodNameAttr).when(document).createAttribute("method-name");
       doReturn("method-name").when(methodNameAttr).getNodeName();
     }
 
-    @Test
-    void shouldGetUtilMethod() {
-      final var context = conversionContext(conversionInit(MethodMode.UTIL, converterOptions()));
+    @ParameterizedTest
+    @MethodSource("supplyMethodFactory")
+    void shouldGetMethod(final MethodMode mode, final Class<SimpleMethod> methodClass) {
+      final var context = conversionContext(conversionInit(mode, converterOptions()));
       final var method = GeneratedMethod.createTag(context, tag, document);
-      then(method).isInstanceOf(UtilSimpleMethod.class);
-    }
-
-    @Test
-    void shouldGetEventMethod() {
-      final var context = conversionContext(conversionInit(MethodMode.EVENT, converterOptions()));
-      final var method = GeneratedMethod.createTag(context, tag, document);
-      then(method).isInstanceOf(EventSimpleMethod.class);
-    }
-
-    @Test
-    void shouldGetServiceMethod() {
-      final var context = conversionContext(conversionInit(MethodMode.SERVICE, converterOptions()));
-      final var method = GeneratedMethod.createTag(context, tag, document);
-      then(method).isInstanceOf(ServiceSimpleMethod.class);
+      then(method).isInstanceOf(methodClass);
     }
 
     @Test
