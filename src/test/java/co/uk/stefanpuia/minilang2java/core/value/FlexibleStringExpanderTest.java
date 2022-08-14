@@ -50,7 +50,7 @@ class FlexibleStringExpanderTest {
 
   @Test
   void shouldConvertScript() {
-    then(new FlexibleStringExpander(tag, "${groovy: getSomeStuff()}").toSafeString())
-        .isEqualTo("\"${groovy: getSomeStuff()}\"");
+    then(new FlexibleStringExpander(tag, "${groovy: getSomeStuff()}").toString())
+        .isEqualTo("${groovy: getSomeStuff()}");
   }
 }

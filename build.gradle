@@ -160,7 +160,7 @@ jacocoTestCoverageVerification {
                         'co.uk.stefanpuia.minilang2java.core.validate.ParentTagNameValidator',
                         'co.uk.stefanpuia.minilang2java.core.validate.rule.ParentTagNameRule',
                         'co.uk.stefanpuia.minilang2java.core.handler.method.variable.*',
-                        'co.uk.stefanpuia.minilang2java.tag.callop.returnop.*',
+                        'co.uk.stefanpuia.minilang2java.tag.callop.*',
                         'co.uk.stefanpuia.minilang2java.tag.envop.Break',
                         'co.uk.stefanpuia.minilang2java.tag.envop.Continue',
                         'co.uk.stefanpuia.minilang2java.tag.envop.now.*',

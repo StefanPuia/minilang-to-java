@@ -66,12 +66,13 @@ public abstract class AbstractCallService extends Tag {
     final List<String> output = new ArrayList<>(getAuthentication());
     if (getChildren(Result.class).isEmpty()) {
       output.add(makeDispatcherCall());
-    } else
+    } else {
       output.addAll(
           combine(
               FlexibleAccessor.from(this, getResultName())
                   .makeSetter(DEFAULT_MAP_TYPE, makeDispatcherCall()),
               convertChildren()));
+    }
 
     return output;
   }
@@ -118,14 +119,13 @@ public abstract class AbstractCallService extends Tag {
   }
 
   private Optional<String> getTransactionArguments() {
-    if (attributes.isRequireNewTransaction() || attributes.getTransactionTimeout().isPresent()) {
-      return Optional.of(
-          String.join(
-              ", ",
-              attributes.getTransactionTimeout().map(String::valueOf).orElse("60"),
-              String.valueOf(attributes.isRequireNewTransaction())));
-    }
-    return Optional.empty();
+    return attributes.isRequireNewTransaction() || attributes.getTransactionTimeout().isPresent()
+        ? Optional.of(
+            String.join(
+                ", ",
+                attributes.getTransactionTimeout().map(String::valueOf).orElse("60"),
+                String.valueOf(attributes.isRequireNewTransaction())))
+        : Optional.empty();
   }
 
   public String getResultName() {
