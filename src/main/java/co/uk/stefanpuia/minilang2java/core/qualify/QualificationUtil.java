@@ -11,6 +11,7 @@ public final class QualificationUtil {
 
   static {
     QUALIFICATION_MAP = new ConcurrentHashMap<>();
+    QUALIFICATION_MAP.put("AbstractGuiceService", "com.stannah.service.engine");
     QUALIFICATION_MAP.put("ArrayList", "java.util");
     QUALIFICATION_MAP.put("BigDecimal", "java.math");
     QUALIFICATION_MAP.put("Boolean", "java.lang");
@@ -32,6 +33,7 @@ public final class QualificationUtil {
     QUALIFICATION_MAP.put("HashMap", "java.util");
     QUALIFICATION_MAP.put("HttpServletRequest", "javax.servlet.http");
     QUALIFICATION_MAP.put("HttpServletResponse", "javax.servlet.http");
+    QUALIFICATION_MAP.put("Inject", "com.google.inject");
     QUALIFICATION_MAP.put("Integer", "java.lang");
     QUALIFICATION_MAP.put("java.util.Date", "java.util");
     QUALIFICATION_MAP.put("List", "java.util");
@@ -47,6 +49,7 @@ public final class QualificationUtil {
     QUALIFICATION_MAP.put("Object", "java.lang");
     QUALIFICATION_MAP.put("ObjectType", "org.ofbiz.base.util");
     QUALIFICATION_MAP.put("Optional", "java.util");
+    QUALIFICATION_MAP.put("Override", "java.lang");
     QUALIFICATION_MAP.put("Pattern", "java.util.regex");
     QUALIFICATION_MAP.put("PatternFactory", "org.ofbiz.base.util");
     QUALIFICATION_MAP.put("RoundingMode", "java.math");

@@ -84,4 +84,9 @@ public class DefaultConversionContext implements ConversionContext {
   public boolean isOptimised() {
     return !config.converterOptions().isReplicateMinilang();
   }
+
+  @Override
+  public boolean isAuthenticateServices() {
+    return config.converterOptions().isAuthServices();
+  }
 }
