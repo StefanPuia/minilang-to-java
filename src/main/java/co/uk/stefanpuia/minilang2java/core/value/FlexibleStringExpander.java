@@ -15,6 +15,11 @@ public record FlexibleStringExpander(Tag tag, @Nullable String value) {
     return format("\"%s\"", value);
   }
 
+  /** Wraps string value in quotes */
+  public String toSafeString() {
+    return parseValue(value);
+  }
+
   @Override
   public String toString() {
     return OptionalString.of(value())
@@ -28,15 +33,12 @@ public record FlexibleStringExpander(Tag tag, @Nullable String value) {
   }
 
   private Optional<String> getScript(final String value) {
-    return value.contains("$") ? Optional.of(wrapQuotes(value)) : Optional.empty();
+    return value.contains("$") ? Optional.of(value) : Optional.empty();
   }
 
   private String getVariableOrString(final String value) {
     final var accessor = FlexibleAccessor.from(tag(), value);
-    return tag()
-        .getVariable(accessor.getField())
-        .map(str -> accessor.makeGetter())
-        .orElse(parseValue(value));
+    return tag().getVariable(accessor.getField()).map(str -> accessor.makeGetter()).orElse(value);
   }
 
   @SuppressWarnings("PMD.OnlyOneReturn")

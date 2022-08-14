@@ -32,4 +32,6 @@ public interface ConversionContext {
   String getPackageName();
 
   boolean isOptimised();
+
+  boolean isAuthenticateServices();
 }

@@ -22,7 +22,7 @@ class FlexibleStringExpanderTest {
 
   @Test
   void shouldConvertNonEmptyValue() {
-    then(new FlexibleStringExpander(tag, "someValue").toString()).isEqualTo("\"someValue\"");
+    then(new FlexibleStringExpander(tag, "someValue").toString()).isEqualTo("someValue");
   }
 
   @Test
@@ -51,6 +51,6 @@ class FlexibleStringExpanderTest {
   @Test
   void shouldConvertScript() {
     then(new FlexibleStringExpander(tag, "${groovy: getSomeStuff()}").toString())
-        .isEqualTo("\"${groovy: getSomeStuff()}\"");
+        .isEqualTo("${groovy: getSomeStuff()}");
   }
 }

@@ -45,18 +45,20 @@ public abstract class Root extends Tag {
   @Override
   public List<String> convertSelf() {
     wrapWithSimpleMethod();
-    final List<String> output = new ArrayList<>();
     final List<String> children =
         this.convertChildren().stream().map(this::prependIndentation).toList();
+    final String classLine = getClassLine();
+    final List<String> classMembers = indent(this, getClassMembers());
+    final List<String> output = new ArrayList<>();
     output.add(getPackage());
     output.add("");
     output.addAll(getImports());
     output.add("");
     output.addAll(getStaticImports());
     output.add("");
-    output.add(getClassLine());
+    output.add(classLine);
     output.add("");
-    output.addAll(indent(this, getClassMembers()));
+    output.addAll(classMembers);
     output.add("");
     output.addAll(children);
     output.add("}");

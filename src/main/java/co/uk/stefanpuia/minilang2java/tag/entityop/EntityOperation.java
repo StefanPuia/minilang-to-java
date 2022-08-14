@@ -59,7 +59,8 @@ public abstract class EntityOperation<A extends EntityOpAttributes> extends Tag 
               final String delegatorField = makeDelegatorName(delegatorName);
               return FlexibleAccessor.from(this, delegatorField)
                   .makeSetter(
-                      TYPE_DELEGATOR, "DelegatorFactory.getDelegator(%s)".formatted(delegatorName));
+                      TYPE_DELEGATOR,
+                      "DelegatorFactory.getDelegator(%s)".formatted(delegatorName.toSafeString()));
             })
         .orElse(List.of());
   }

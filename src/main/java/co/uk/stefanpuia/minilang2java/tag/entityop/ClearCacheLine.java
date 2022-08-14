@@ -51,7 +51,7 @@ public class ClearCacheLine extends EntityOperation<Attributes> {
 
   private String getArguments() {
     return Stream.of(
-            Optional.of(attributes.getEntityName().toString()),
+            Optional.of(attributes.getEntityName().toSafeString()),
             attributes.getMap().map(FlexibleAccessor::makeGetter))
         .filter(Optional::isPresent)
         .map(Optional::get)

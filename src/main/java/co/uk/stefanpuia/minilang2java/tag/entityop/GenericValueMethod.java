@@ -2,7 +2,7 @@ package co.uk.stefanpuia.minilang2java.tag.entityop;
 
 import co.uk.stefanpuia.minilang2java.core.TagInit;
 import co.uk.stefanpuia.minilang2java.core.field.FlexibleAccessor;
-import co.uk.stefanpuia.minilang2java.core.validate.rule.ImmutableAttributeNameRule;
+import co.uk.stefanpuia.minilang2java.core.validate.rule.AttributeNameRule;
 import co.uk.stefanpuia.minilang2java.core.validate.rule.RuleList;
 import co.uk.stefanpuia.minilang2java.tag.Tag;
 import co.uk.stefanpuia.minilang2java.tag.entityop.GenericValueMethod.GenericValueMethodAttributes;
@@ -18,8 +18,7 @@ public abstract class GenericValueMethod<T extends GenericValueMethodAttributes>
 
   @Override
   public RuleList getRules() {
-    return super.getRules()
-        .addRules(ImmutableAttributeNameRule.builder().addRequiredAll("value-field").build());
+    return super.getRules().addRules(AttributeNameRule.requiredAll("value-field"));
   }
 
   @Override

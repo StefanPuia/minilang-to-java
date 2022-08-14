@@ -33,7 +33,7 @@ public abstract class MapAccessor extends FlexibleAccessor {
 
   @Override
   public String makeGetter() {
-    return format("%s.get(\"%s\")", getMapName(), getProperty());
+    return format("%s.get(\"%s\")", getMapName(), getProperty().replaceAll("^\"(.*)\"$", "$1"));
   }
 
   @Override

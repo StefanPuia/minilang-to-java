@@ -30,17 +30,21 @@ public abstract class TagAttributes {
             String.format("All of [%s] attributes is empty", String.join(", ", attributes)));
   }
 
+  protected Optional<String> get(final String attribute) {
+    return self.getAttribute(attribute);
+  }
+
   protected FlexibleAccessor flexibleAccessor(final String attribute) {
     return optionalFlexibleAccessor(attribute).orElseThrow(attributeIsEmptyException(attribute));
   }
 
   protected Optional<FlexibleAccessor> optionalFlexibleAccessor(final String attribute) {
-    return self.getAttribute(attribute).map(attr -> FlexibleAccessor.from(self, attr));
+    return get(attribute).map(attr -> FlexibleAccessor.from(self, attr));
   }
 
   protected Optional<FlexibleAccessor> optionalFlexibleAccessor(final String... attributes) {
     return Arrays.stream(attributes)
-        .map(self::getAttribute)
+        .map(this::get)
         .filter(Optional::isPresent)
         .map(Optional::get)
         .findFirst()
@@ -57,12 +61,12 @@ public abstract class TagAttributes {
   }
 
   protected Optional<FlexibleStringExpander> optionalStringExpander(final String attribute) {
-    return self.getAttribute(attribute).map(entity -> new FlexibleStringExpander(self, entity));
+    return get(attribute).map(entity -> new FlexibleStringExpander(self, entity));
   }
 
   protected Optional<FlexibleStringExpander> optionalStringExpander(final String... attributes) {
     return Arrays.stream(attributes)
-        .map(self::getAttribute)
+        .map(this::get)
         .filter(Optional::isPresent)
         .map(Optional::get)
         .findFirst()
@@ -74,19 +78,19 @@ public abstract class TagAttributes {
   }
 
   protected Optional<VariableType> optionalVariableType(final String attribute) {
-    return self.getAttribute(attribute).map(VariableType::from);
+    return get(attribute).map(VariableType::from);
   }
 
   protected String string(final String attribute) {
-    return self.getAttribute(attribute).orElseThrow(attributeIsEmptyException(attribute));
+    return get(attribute).orElseThrow(attributeIsEmptyException(attribute));
   }
 
   protected boolean bool(final String attribute) {
-    return self.getAttribute(attribute).map(StringBoolean::parse).orElse(false);
+    return get(attribute).map(StringBoolean::parse).orElse(false);
   }
 
   protected Operator getOperator() {
-    final Optional<String> operatorAttr = self.getAttribute("operator");
+    final Optional<String> operatorAttr = get("operator");
     return operatorAttr
         .flatMap(Operator::find)
         .orElseGet(
