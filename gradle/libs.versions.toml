@@ -11,7 +11,7 @@ mapstruct = "1.5.2.Final"
 mapstructSpringExtensions = "0.1.2"
 mockito = "4.7.0"
 slf4j = "1.7.36"
-spotbugs = "4.7.1"
+spotbugs = "4.7.2"
 springBoot = "2.7.3"
 
 [libraries]
