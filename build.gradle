@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'pmd'
     id 'jacoco'
-    id 'com.diffplug.spotless' version '6.12.1'
+    id 'com.diffplug.spotless' version '6.13.0'
     id 'com.github.spotbugs' version '5.0.13'
     id 'io.freefair.lombok' version '6.6.1'
     id 'org.springframework.boot' version '2.7.7'
