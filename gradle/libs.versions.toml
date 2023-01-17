@@ -1,5 +1,5 @@
 [versions]
-assertjCore = "3.24.1"
+assertjCore = "3.24.2"
 commonsCollections4 = "4.4"
 commonsLang3 = "3.12.0"
 commonsLogging = "1.2"
