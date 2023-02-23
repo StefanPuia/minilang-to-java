@@ -12,7 +12,7 @@ mapstructSpringExtensions = "1.0.0"
 mockito = "5.1.1"
 slf4j = "1.7.36"
 spotbugs = "4.7.3"
-springBoot = "2.7.8"
+springBoot = "2.7.9"
 
 [libraries]
 assertj-core = { group = "org.assertj", name = "assertj-core", version.ref = "assertjCore" }
