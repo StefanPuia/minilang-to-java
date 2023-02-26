@@ -51,5 +51,5 @@ public enum MessageType {
   },
   ;
 
-  public abstract boolean isEnabled(final LoggingConfig loggingConfig);
+  public abstract boolean isEnabled(LoggingConfig loggingConfig);
 }
