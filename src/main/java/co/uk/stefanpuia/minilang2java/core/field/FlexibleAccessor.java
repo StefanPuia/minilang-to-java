@@ -30,9 +30,9 @@ public abstract class FlexibleAccessor {
 
   public abstract String getField();
 
-  public abstract List<String> makeSetter(final String assignment);
+  public abstract List<String> makeSetter(String assignment);
 
-  public abstract List<String> makeSetter(final VariableType type, final String assignment);
+  public abstract List<String> makeSetter(VariableType type, String assignment);
 
-  public abstract List<String> makeSplitSetter(final VariableType type, final String assignment);
+  public abstract List<String> makeSplitSetter(VariableType type, String assignment);
 }
