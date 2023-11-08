@@ -6,7 +6,7 @@ plugins {
     id 'com.github.spotbugs' version '5.2.3'
     id 'io.freefair.lombok' version '8.4'
     id 'org.springframework.boot' version '2.7.17'
-    id 'com.bmuschko.docker-spring-boot-application' version '9.3.6'
+    id 'com.bmuschko.docker-spring-boot-application' version '9.3.7'
     id 'com.asarkar.gradle.build-time-tracker' version '4.3.0'
 }
 
