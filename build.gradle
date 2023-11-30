@@ -3,7 +3,7 @@ plugins {
     id 'pmd'
     id 'jacoco'
     id 'com.diffplug.spotless' version '6.23.2'
-    id 'com.github.spotbugs' version '5.2.4'
+    id 'com.github.spotbugs' version '5.2.5'
     id 'io.freefair.lombok' version '8.4'
     id 'org.springframework.boot' version '2.7.18'
     id 'com.bmuschko.docker-spring-boot-application' version '9.4.0'
