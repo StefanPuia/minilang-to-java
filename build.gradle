@@ -4,7 +4,7 @@ plugins {
     id 'jacoco'
     id 'com.diffplug.spotless' version '6.25.0'
     id 'com.github.spotbugs' version '5.2.5'
-    id 'io.freefair.lombok' version '8.4'
+    id 'io.freefair.lombok' version '8.6'
     id 'org.springframework.boot' version '2.7.18'
     id 'com.bmuschko.docker-spring-boot-application' version '9.4.0'
     id 'com.asarkar.gradle.build-time-tracker' version '4.3.0'
