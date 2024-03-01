@@ -10,7 +10,7 @@ lombokMapstructBinding = "0.2.0"
 mapstruct = "1.5.5.Final"
 mapstructSpringExtensions = "1.1.1"
 mockito = "5.11.0"
-slf4j = "1.7.36"
+slf4j = "2.0.12"
 spotbugs = "4.8.3"
 springBoot = "2.7.18"
 
